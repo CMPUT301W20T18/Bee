@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.bee;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        System.out.println("mustttttttttttttttttttttttttttttttttt");
         if (isServicesOK()) {
             init();
         }
@@ -30,13 +29,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void init(){
         //Button btnMap = (Button) findViewById(R.id.btnMap);
-        final Button transferBtn = findViewById(R.id.transfer_to_map);
+        final Button transfer_request_Btn = findViewById(R.id.transfer_to_request);
+        final Button enter_address_Btn = findViewById(R.id.enter_address);
 
-        transferBtn.setOnClickListener(new View.OnClickListener() {
+        transfer_request_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, accept_request.class);
+                Intent intent = new Intent(MainActivity.this, rider_after_accept_request.class);
                 startActivityForResult(intent, 1);
+            }
+        });
+
+        enter_address_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, EnterAddressMap.class));
+                finish();
             }
         });
 

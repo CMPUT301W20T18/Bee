@@ -17,7 +17,11 @@
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key"/>
 
+<!--        <meta-data android:name="com.google.android.geo.API_KEY"-->
+<!--            android:value="@string/google_maps_key"/>-->
+
         <activity android:name=".EnterAddressMap"></activity>
+        <activity android:name=".rider_after_accept_request"></activity>
 
         <activity android:name=".MainActivity">
             <intent-filter>
