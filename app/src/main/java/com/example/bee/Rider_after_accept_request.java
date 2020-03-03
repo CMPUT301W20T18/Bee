@@ -5,10 +5,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -22,13 +25,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class rider_after_accept_request extends FragmentActivity implements OnMapReadyCallback {
+public class Rider_after_accept_request extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = "accept_request_activity";
     private static final float DEFAULT_ZOOM = 15f;
 
     GoogleMap request_accepted_map;
     private FusedLocationProviderClient client_device;
+    Button pop_up;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +40,23 @@ public class rider_after_accept_request extends FragmentActivity implements OnMa
         setContentView(R.layout.activity_rider_after_accept_request);
         initMap();
 
+        pop_up = findViewById(R.id.pop_up_button);
+
+        pop_up.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),Pop_up_paired_driver_activity.class);
+                startActivity(i);
+            }
+        });
+
     }
 
     private void initMap(){
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_requestAccepted);
-        mapFragment.getMapAsync(rider_after_accept_request.this);
+        mapFragment.getMapAsync(Rider_after_accept_request.this);
     }
 
 
@@ -65,7 +79,7 @@ public class rider_after_accept_request extends FragmentActivity implements OnMa
 
                     }else{
                         Log.d(TAG, "onComplete: current location is null");
-                        Toast.makeText(rider_after_accept_request.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Rider_after_accept_request.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -101,4 +115,5 @@ public class rider_after_accept_request extends FragmentActivity implements OnMa
 
 
     }
+
 }
