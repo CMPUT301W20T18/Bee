@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -57,6 +59,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     LatLng p1;
     LatLng p2;
     Boolean drew = false;
+    double dist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,24 +80,58 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideSoftKeyboard(EnterAddressMap.this);
                 String fromString = fromEditText.getText().toString();
                 String toString = toEditText.getText().toString();
                 if (!fromString.isEmpty() && !toString.isEmpty()){
-                    map.clear();
+                    if (map != null) {
+                        map.clear();
+                    }
                     drew = getPoints(fromString, toString);
                     if (!drew){
                         String text = "Invalid Address";
                         Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
+                        confirmBtn.setVisibility(View.GONE);
                     } else {
                         confirmBtn.setVisibility(View.VISIBLE);
                     }
+                } else {
+                    String text = "Please fill in the address";
+                    Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
+            }
+        });
+
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SetCost(dist*2).show(getSupportFragmentManager(), "set_cost");
             }
         });
     }
 
+    /*
+    StackOverflow post by Navneeth G https://stackoverflow.com/users/1135909/navneeth-g
+    Answer https://stackoverflow.com/a/11656129
+
+    Hides keyboard after pressing show routes button
+     */
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        View focusedView = activity.getCurrentFocus();
+        if (focusedView != null) {
+            inputMethodManager.hideSoftInputFromWindow(
+                    activity.getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    // Using Geocoder to convert address to latitude and longitude
     private boolean getPoints(String fromString, String toString) {
         Geocoder coder = new Geocoder(this);
         List<Address> fromAddress;
@@ -114,22 +151,21 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
             Address fromLocation = fromAddress.get(0);
             Address toLocation = toAddress.get(0);
             p1 = new LatLng(fromLocation.getLatitude(), fromLocation.getLongitude());
-
             map.addMarker(new MarkerOptions()
                     .position(p1)
-                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
+                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_red_placeholder)));
             p2 = new LatLng(toLocation.getLatitude(), toLocation.getLongitude());
             map.addMarker(new MarkerOptions()
                     .position(p2)
-                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_red_placeholder)));
-
+                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
             LatLngBounds latLngBounds = new LatLngBounds.Builder()
                     .include(p1)
                     .include(p2)
                     .build();
+
             // Move camera to include both points
-            map.setPadding(     0,      350,      0,     0);
             map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
+
             drawRoute(p1, p2);
 
         } catch (IOException ex) {
@@ -144,7 +180,12 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
 
     }
 
-    // Convert vector drawable to bitmap
+    /*
+    StackOverflow post by Leo Droidcoder https://stackoverflow.com/users/5730321/leo-droidcoder
+    Answer https://stackoverflow.com/a/45564994
+
+    Convert vector drawable to bitmap
+     */
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
         vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
@@ -154,6 +195,10 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
+    /*
+    Github libray by Akexorcist https://github.com/akexorcist
+    Library page: https://github.com/akexorcist/Android-GoogleDirectionLibrary
+     */
     private void drawRoute(LatLng p1, LatLng p2) {
         GoogleDirection.withServerKey(getString(R.string.web_api_key))
                 .from(p1)
@@ -168,7 +213,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                             ArrayList<LatLng> pointList = leg.getDirectionPoint();
                             Info distanceInfo = leg.getDistance();
                             String distance = distanceInfo.getText();
-                            Toast.makeText(EnterAddressMap.this, distance, Toast.LENGTH_SHORT).show();
+                            dist = Double.parseDouble(distance.substring(0, distance.length() - 3));
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(EnterAddressMap.this, pointList, 5,
                                             getResources().getColor(R.color.yellow));
@@ -217,6 +262,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        map.setPadding(     0,      400,      0,     50);
         map.setMyLocationEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
