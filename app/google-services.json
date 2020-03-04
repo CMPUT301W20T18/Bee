@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "448818202698",
+    "firebase_url": "https://bee-t18.firebaseio.com",
+    "project_id": "bee-t18",
+    "storage_bucket": "bee-t18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448818202698:android:2a7c589ee68ff0f36d3eb3",
+        "android_client_info": {
+          "package_name": "com.example.bee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "448818202698-18ltarg4forvnh8spomf38m4rpvivlkg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbnR-pfo8_gtv_pSZewGmL7tpUHtZJTYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "448818202698-18ltarg4forvnh8spomf38m4rpvivlkg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
