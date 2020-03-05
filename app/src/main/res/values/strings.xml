@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">bee</string>
     <string name="usernameReg">Username</string>
     <string name="emailReg">Email</string>
@@ -10,5 +11,8 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="signup_redirect">Don\'t have an account? Register here!</string>
 
+
+
+    <string name="title_activity_enter_address_map">Map</string>
 
 </resources>
