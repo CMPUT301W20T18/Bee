@@ -17,11 +17,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/from_address"
         android:padding="10dp"
-        android:elevation="6dp"
+        android:elevation="10dp"
         android:layout_margin="10dp"
         android:inputType="text"
         android:hint="Pickup location"
-        android:background="@drawable/address_box" />
+        android:background="@drawable/rounded_corner" />
 
 
     <EditText
@@ -29,23 +29,23 @@
         android:layout_height="wrap_content"
         android:id="@+id/to_address"
         android:padding="10dp"
-        android:elevation="6dp"
+        android:elevation="10dp"
         android:layout_alignLeft="@+id/from_address"
         android:layout_alignRight="@+id/from_address"
         android:layout_below="@+id/from_address"
         android:hint="Destination"
         android:inputType="text"
         android:imeOptions="actionDone"
-        android:background="@drawable/address_box" />
+        android:background="@drawable/rounded_corner" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/show_route"
         android:layout_below="@+id/to_address"
-        android:background="@drawable/address_box"
+        android:background="@drawable/rounded_corner"
         android:layout_margin="10dp"
-        android:elevation="6dp"
+        android:elevation="10dp"
         android:text="SHOW ROUTE" />
 
     <Button
@@ -53,10 +53,10 @@
         android:id="@+id/confirm_route"
         android:layout_height="wrap_content"
         android:text="CONFIRM"
-        android:background="@drawable/address_box"
+        android:background="@drawable/rounded_corner"
         android:backgroundTint="@color/yellow"
         android:layout_alignParentBottom="true"
-        android:elevation="5dp"
+        android:elevation="10dp"
         android:layout_centerHorizontal="true"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"

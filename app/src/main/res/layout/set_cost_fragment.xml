@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Your Estimated Cost is"
+        android:text="Your estimated cost is"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -35,25 +35,23 @@
         android:text="Enter your bid:"
         android:layout_gravity="center" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
 
         <EditText
             android:id="@+id/enter_cost"
-            android:layout_width="150dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignBaseline="@+id/dollar_sign"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="000.00"
             android:paddingTop="10dp"
             android:backgroundTint="@android:color/transparent"
-            android:paddingLeft="40dp"
             android:paddingBottom="10dp"
             android:layout_gravity="center"
             android:ems="10"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
-            android:padding="10dp"
             android:textAlignment="center"
             android:textColor="@color/black" />
 
@@ -61,16 +59,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dollar_sign"
-            android:layout_toLeftOf="@+id/enter_cost"
+            android:layout_gravity="start"
             android:text="$"
             android:textColor="@color/black"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:textStyle="bold"
-            android:gravity="center"
             android:textSize="20sp" />
 
-    </RelativeLayout>
+    </FrameLayout>
 
     <View android:layout_width="match_parent"
         android:layout_height="1dp"

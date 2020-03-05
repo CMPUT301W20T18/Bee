@@ -26,7 +26,7 @@ public class SetCost extends DialogFragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void confirmedAmount(double cost);
+        void postRequest(double cost);
     }
 
     @NonNull
@@ -57,7 +57,7 @@ public class SetCost extends DialogFragment {
                             toast.setGravity(Gravity.TOP, 0, 0);
                             toast.show();
                         } else {
-                            listener.confirmedAmount(newCost);
+                            listener.postRequest(newCost);
                         }
                     } catch (Exception e) {
                         String text = "Invalid Amount";
