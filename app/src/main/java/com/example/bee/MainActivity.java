@@ -1,69 +1,31 @@
-
 package com.example.bee;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-
-import androidx.appcompat.app.AppCompatActivity;import android.app.Dialog;
-
-import android.os.Bundle;
 import android.util.Log;
-
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import android.app.Dialog;
-import android.content.Intent;
-import android.os.Bundle;
-
-import android.view.View;
-
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
-    private Button btnLogout;
-    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        btnLogout = findViewById(R.id.btnLogout);
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                firebaseAuth.signOut();
-                finish();
-                startActivity(new Intent(MainActivity.this,LoginActivity.class));
-            }
-                  setContentView(R.layout.activity_main);
         if (isServicesOK()) {
             init();
         }
-        });
-
     }
-}
-
-
 
     private void init(){
         //Button btnMap = (Button) findViewById(R.id.btnMap);
@@ -115,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
-
 
 
 
