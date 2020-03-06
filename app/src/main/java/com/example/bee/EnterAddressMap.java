@@ -214,14 +214,14 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     Library page: https://github.com/akexorcist/Android-GoogleDirectionLibrary
      */
     private void drawRoute(LatLng p1, LatLng p2) {
-        GoogleDirection.withServerKey(getString(R.string.web_api_key))
+        GoogleDirection.withServerKey(getString(R.string.google_maps_key))
                 .from(p1)
                 .to(p2)
                 .transportMode(TransportMode.DRIVING)
                 .execute(new DirectionCallback() {
                     @Override
                     public void onDirectionSuccess(Direction direction) {
-                        if(direction.isOK()) {
+                        if (direction.isOK()) {
                             Route route = direction.getRouteList().get(0);
                             Leg leg = route.getLegList().get(0);
                             ArrayList<LatLng> pointList = leg.getDirectionPoint();
