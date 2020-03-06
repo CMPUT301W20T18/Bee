@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -53,7 +54,7 @@ import java.util.ArrayList;
 /**
  *  This class takes user input of addresses and show the route on the map
  */
-public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallback {
+public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallback, SetCost.OnFragmentInteractionListener{
 
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -113,10 +114,11 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SetCost(dist*2.40).show(getSupportFragmentManager(), "set_cost");
+                new SetCost(dist*2.30).show(getSupportFragmentManager(), "set_cost");
             }
         });
     }
+
 
 
 
@@ -292,5 +294,11 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                 break;
             }
         }
+    }
+
+    @Override
+    public void postRequest(double cost) {
+        Intent intent = new Intent(EnterAddressMap.this, WaitingForDriver.class);
+        startActivity(intent);
     }
 }

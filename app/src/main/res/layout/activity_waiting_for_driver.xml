@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WaitingForDriver" >
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Finding driver...     "
+        android:textSize="40dp"
+        android:textStyle="bold"
+        android:layout_above="@+id/show_to"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/black"
+        android:id="@+id/finding_driver" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/show_from"
+        android:textSize="25dp"
+        android:textColor="@android:color/black"
+        android:id="@+id/show_to"
+        android:textStyle="bold"
+        android:paddingTop="100dp"
+        android:layout_alignLeft="@id/finding_driver"
+        android:text="To:" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:layout_alignLeft="@+id/finding_driver"
+        android:paddingTop="20dp"
+        android:layout_centerInParent="true"
+        android:text="From:                  "
+        android:textColor="@android:color/black"
+        android:id="@+id/show_from" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:layout_alignLeft="@+id/show_from"
+        android:paddingTop="20dp"
+        android:layout_below="@+id/show_from"
+        android:text="Amount: $"
+        android:textColor="@android:color/black"
+        android:id="@+id/show_cost" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cancel_request"
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="@color/yellow"
+        android:text="Cancel Request"
+        android:layout_alignParentBottom="true"
+        android:elevation="10dp"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_marginBottom="60dp" />
+
+
+
+</RelativeLayout>
