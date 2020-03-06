@@ -114,6 +114,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     Toast.makeText(RegistrationActivity.this, "User Created.", Toast.LENGTH_SHORT).show();
                     userID = firebaseAuth.getCurrentUser().getUid();
+
                     DocumentReference documentReference = db.collection("users").document(userID);
                     HashMap<String,Object> user = new HashMap<>();
                     user.put("Name",inputName);
