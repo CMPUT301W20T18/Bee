@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         transfer_request_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Rider_after_accept_request.class);
+                Intent intent = new Intent(MainActivity.this, RiderAfterAcceptRequest.class);
                 startActivityForResult(intent, 1);
             }
         });

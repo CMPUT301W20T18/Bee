@@ -13,15 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Pop_up_paired_driver_activity"
-            android:theme = "@style/AppTheme.PopMe"></activity>
+        <activity android:name=".DriverBasicInformation"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <activity android:name=".EnterAddressMap" />
-        <activity android:name=".Rider_after_accept_request" />
+        <activity android:name=".RiderAfterAcceptRequest" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
