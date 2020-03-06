@@ -6,15 +6,25 @@ public class UserProfile {
 
     private String username;
     private String password;
+    private String phone;
     public UserProfile() {
         //firebase constructor
     }
 
 
-    public UserProfile(String username, String password) {
+    public UserProfile(String username, String phone, String password) {
 
         this.username = username;
+        this.phone = phone;
         this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getUsername() {

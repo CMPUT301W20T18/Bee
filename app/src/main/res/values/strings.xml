@@ -3,6 +3,7 @@
     <string name="app_name">bee</string>
     <string name="usernameReg">Username</string>
     <string name="emailReg">Email</string>
+    <string name="phoneNum">phone number</string>
     <string name="passwordReg">Password</string>
     <string name="sign_upReg">Sign up</string>
     <string name="sign_inLog_rider">Sign in as Rider</string>

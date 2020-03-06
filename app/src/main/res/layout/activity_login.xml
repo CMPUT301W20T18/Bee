@@ -85,13 +85,13 @@
 
 
             <Button
-            android:id="@+id/btnSignInRider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/button"
-            android:text="@string/sign_inLog_rider"
-            android:textColor="@color/white" />
+                android:id="@+id/btnSignInRider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/button"
+                android:text="@string/sign_inLog_rider"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/btnSignInDriver"

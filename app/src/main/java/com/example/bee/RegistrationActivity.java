@@ -1,14 +1,17 @@
 package com.example.bee;
 
-
+import java.util.HashMap;
+import java.util.Map;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,22 +19,34 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firestore.v1.WriteResult;
+import com.google.protobuf.Api;
 
 public class RegistrationActivity extends AppCompatActivity {
-
+    public static final String TAG = "TAG";
     private ImageView logo;
-    private AutoCompleteTextView username, email, password;
+    private AutoCompleteTextView username, email, password, phone;
     private Button signup;
     private TextView signin;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
-
+    FirebaseFirestore db;
+    String userID;
+    ProgressBar progressBar;
 
 
 
@@ -43,36 +58,42 @@ public class RegistrationActivity extends AppCompatActivity {
 
         initializeGUI();
 
+
+
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 final String inputName = username.getText().toString().trim();
+                final String inputPhone = phone.getText().toString().trim();
                 final String inputPw = password.getText().toString().trim();
                 final String inputEmail = email.getText().toString().trim();
 
-                if(validateInput(inputName, inputPw, inputEmail))
-                    registerUser(inputName, inputPw, inputEmail);
+                if (validateInput(inputName, inputPw, inputPhone, inputEmail))
+                    registerUser(inputName, inputPw, inputPhone, inputEmail);
 
             }
+
         });
 
 
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(RegistrationActivity.this,LoginActivity.class));
+                startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
             }
         });
 
     }
 
 
-    private void initializeGUI(){
+
+    private void initializeGUI() {
 
         logo = findViewById(R.id.ivRegLogo);
         username = findViewById(R.id.atvUsernameReg);
-        email =  findViewById(R.id.atvEmailReg);
+        phone = findViewById(R.id.phoneNum);
+        email = findViewById(R.id.atvEmailReg);
         password = findViewById(R.id.atvPasswordReg);
         signin = findViewById(R.id.tvSignIn);
         signup = findViewById(R.id.btnSignUp);
@@ -81,44 +102,56 @@ public class RegistrationActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
-    private void registerUser(final String inputName, final String inputPw, String inputEmail) {
+
+    private void registerUser(final String inputName, final String inputPw, final String phone, final String inputEmail) {
 
         progressDialog.setMessage("Verificating...");
         progressDialog.show();
-
 
         firebaseAuth.createUserWithEmailAndPassword(inputEmail,inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    progressDialog.dismiss();
-                    sendUserData(inputName, inputPw);
-                    Toast.makeText(RegistrationActivity.this,"You've been registered successfully.",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(RegistrationActivity.this,MainActivity.class));
-                }
-                else{
-                    progressDialog.dismiss();
-                    Toast.makeText(RegistrationActivity.this,"Email already exists.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegistrationActivity.this, "User Created.", Toast.LENGTH_SHORT).show();
+                    userID = firebaseAuth.getCurrentUser().getUid();
+                    DocumentReference documentReference = db.collection("users").document(userID);
+                    HashMap<String,Object> user = new HashMap<>();
+                    user.put("Name",inputName);
+                    user.put("email",inputEmail);
+                    user.put("phone",phone);
+                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "onSuccess: user Profile is created for "+ userID);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "onFailure: " + e.toString());
+                        }
+                    });
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+
+                }else {
+                    Toast.makeText(RegistrationActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         });
-
     }
 
 
-    private void sendUserData(String username, String password){
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference users = firebaseDatabase.getReference("users");
-        UserProfile user = new UserProfile(username, password);
-        users.push().setValue(user);
 
-    }
-
-    private boolean validateInput(String inName, String inPw, String inEmail){
+    private boolean validateInput(String inName, String inPw, String inPhone, String inEmail){
 
         if(inName.isEmpty()){
             username.setError("Username is empty.");
+            return false;
+        }
+
+        if(inPhone.isEmpty()){
+            password.setError("Phone number is empty.");
             return false;
         }
         if(inPw.isEmpty()){
@@ -132,6 +165,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
         return true;
     }
+
+
 
 
 }
