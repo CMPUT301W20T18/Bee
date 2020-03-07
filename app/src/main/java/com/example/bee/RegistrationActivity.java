@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,7 +32,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firestore.v1.WriteResult;
 import com.google.protobuf.Api;
 
@@ -107,6 +112,28 @@ public class RegistrationActivity extends AppCompatActivity {
 
         progressDialog.setMessage("Verificating...");
         progressDialog.show();
+//
+//        final DocumentReference documentReference = db.collection("users").document(inputName);
+//        HashMap<String,Object> user = new HashMap<>();
+//        user.put("Name",inputName);
+//        user.put("email",inputEmail);
+//        user.put("phone",phone);
+//
+//        documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Log.d(TAG, "onSuccess: user Profile is created for "+ inputName);
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.d(TAG, "onFailure: " + e.toString());
+//            }
+//        });
+
+
+
+
 
         firebaseAuth.createUserWithEmailAndPassword(inputEmail,inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -140,6 +167,8 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 
 

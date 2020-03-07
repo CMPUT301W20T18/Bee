@@ -26,16 +26,23 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if (user != null) {
+            // currently have a user signed in
+            btnLogout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                firebaseAuth.signOut();
-                finish();
-                startActivity(new Intent(MainActivity.this,LoginActivity.class));
-            }
-        });
+                    firebaseAuth.signOut();
+                    finish();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+
+
+                }
+            });
+
+        } else {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        }
 
     }
-
 }
