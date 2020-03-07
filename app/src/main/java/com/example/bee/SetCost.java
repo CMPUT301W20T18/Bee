@@ -72,8 +72,7 @@ public class SetCost extends DialogFragment {
                             listener.postRequest(newCost);
                         }
                     } catch (Exception e) {
-                        String text = "Invalid Amount";
-                        Toast toast = Toast.makeText(SetCost.this.getActivity(), text, Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(SetCost.this.getActivity(), e.toString(), Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.TOP, 0, 0);
                         toast.show();
                     }

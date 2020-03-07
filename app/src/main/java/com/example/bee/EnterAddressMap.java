@@ -1,5 +1,6 @@
 package com.example.bee;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -15,6 +16,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -42,26 +44,43 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *  This class takes user input of addresses and show the route on the map
  */
-public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallback, SetCost.OnFragmentInteractionListener{
-
-    Location currentLocation;
-    FusedLocationProviderClient fusedLocationProviderClient;
-    GoogleMap map;
+public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallback,
+        SetCost.OnFragmentInteractionListener, Serializable {
+    private static final String TAG = "TAG";
     private static final int REQUEST_CODE = 100;
-    Boolean drew = false;
-    double dist;
+    private Location currentLocation;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private GoogleMap map;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+    private FirebaseFirestore db;
+    private PolylineOptions polylineOptions;
+    private String originAddress;
+    private String destAddress;
+    private LatLng p1;
+    private LatLng p2;
+    private Boolean drew = false;
+    private double dist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,15 +101,15 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 hideSoftKeyboard(EnterAddressMap.this);
-                String fromString = fromEditText.getText().toString();
-                String toString = toEditText.getText().toString();
-                if (!fromString.isEmpty() && !toString.isEmpty()){
+                originAddress = fromEditText.getText().toString();
+                destAddress = toEditText.getText().toString();
+                if (!originAddress.isEmpty() && !destAddress.isEmpty()){
                     if (map != null) {
                         map.clear();
                     }
 
                     // drew is true if no exception is shown and the route is drawn
-                    drew = getPoints(fromString, toString);
+                    drew = getPoints(originAddress, destAddress);
                     if (!drew){
                         String text = "Invalid Address";
                         Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_SHORT);
@@ -143,24 +162,22 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     Github library for Google Maps API Web Services by Google Maps https://github.com/googlemaps
     Library page: https://github.com/googlemaps/google-maps-services-java
      */
-    private boolean getPoints(String fromString, String toString) {
+    private boolean getPoints(String originAddress, String destAddress) {
         GeocodingResult[] fromAddress;
         GeocodingResult[] toAddress;
-        LatLng p1;
-        LatLng p2;
 
         try {
             GeoApiContext context = new GeoApiContext.Builder()
                     .apiKey(getString(R.string.google_maps_key))
                     .build();
             fromAddress = GeocodingApi.geocode(context,
-                    fromString).await();
+                    originAddress).await();
             if (fromAddress == null) {
                 return false;
             }
 
             toAddress = GeocodingApi.geocode(context,
-                    toString).await();
+                    destAddress).await();
             if (toAddress == null) {
                 return false;
             }
@@ -228,7 +245,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                             Info distanceInfo = leg.getDistance();
                             String distance = distanceInfo.getText();
                             dist = Double.parseDouble(distance.substring(0, distance.length() - 3));
-                            PolylineOptions polylineOptions = DirectionConverter
+                            polylineOptions = DirectionConverter
                                     .createPolyline(EnterAddressMap.this, pointList, 5,
                                             getResources().getColor(R.color.route));
                             map.addPolyline(polylineOptions);
@@ -298,7 +315,25 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
 
     @Override
     public void postRequest(double cost) {
-        Intent intent = new Intent(EnterAddressMap.this, WaitingForDriver.class);
-        startActivity(intent);
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = LoginActivity.getAuth();
+        user = firebaseAuth.getCurrentUser();
+        String userID = user.getUid();
+        DocumentReference documentReference = db.collection("requests").document(userID);
+        HashMap<String, Object> request = new HashMap<>();
+        request.put(userID, new Request(userID, originAddress, destAddress, p1, p2, polylineOptions, cost));
+        documentReference.set(request).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "onSuccess: posted request for "+ userID);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: " + e.toString());
+            }
+        });
+
+        startActivity(new Intent(EnterAddressMap.this, WaitingForDriver.class));
     }
 }

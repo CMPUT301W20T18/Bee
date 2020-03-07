@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView email, password;
     private TextView forgotPass, signUp;
     private Button btnSignInRider, btnSignInDriver;
-    private FirebaseAuth firebaseAuth;
+    private static FirebaseAuth firebaseAuth;
     private FirebaseUser user;
     private ProgressDialog progressDialog;
 
@@ -146,6 +146,10 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    public static FirebaseAuth getAuth() {
+        return  firebaseAuth;
     }
 
 }

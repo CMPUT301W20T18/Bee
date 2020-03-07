@@ -105,8 +105,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void registerUser(final String inputName, final String inputPw, final String phone, final String inputEmail) {
 
-        /*progressDialog.setMessage("Verifying...");
-        progressDialog.show();*/
+        progressDialog.setMessage("Verifying...");
+        progressDialog.show();
 
         firebaseAuth.createUserWithEmailAndPassword(inputEmail,inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
