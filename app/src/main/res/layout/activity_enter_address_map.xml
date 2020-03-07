@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:text="CONFIRM"
         android:background="@drawable/rounded_corner"
-        android:backgroundTint="@color/yellow"
+        android:backgroundTint="@color/button"
         android:layout_alignParentBottom="true"
         android:elevation="10dp"
         android:layout_centerHorizontal="true"

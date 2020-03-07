@@ -230,7 +230,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                             dist = Double.parseDouble(distance.substring(0, distance.length() - 3));
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(EnterAddressMap.this, pointList, 5,
-                                            getResources().getColor(R.color.yellow));
+                                            getResources().getColor(R.color.route));
                             map.addPolyline(polylineOptions);
                         } else {
                             String text = direction.getStatus();

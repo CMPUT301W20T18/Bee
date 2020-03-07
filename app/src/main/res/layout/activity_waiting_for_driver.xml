@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/cancel_request"
         android:background="@drawable/rounded_corner"
-        android:backgroundTint="@color/yellow"
+        android:backgroundTint="@color/button"
         android:text="Cancel Request"
         android:layout_alignParentBottom="true"
         android:elevation="10dp"
