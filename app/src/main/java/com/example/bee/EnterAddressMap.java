@@ -8,14 +8,14 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -43,40 +43,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
-import com.google.maps.model.GeocodingResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
-/**
- *  This class takes user input of addresses and show the route on the map
- */
-public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallback, SetCost.OnFragmentInteractionListener {
-    private static final String TAG = "TAG";
+public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallback {
+
+    Location currentLocation;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    GoogleMap map;
     private static final int REQUEST_CODE = 100;
-    private Location currentLocation;
-    private FusedLocationProviderClient fusedLocationProviderClient;
-    private GoogleMap map;
-    private FirebaseUser user;
-    private FirebaseFirestore db;
-    private String originAddress;
-    private String destAddress;
-    private LatLng p1;
-    private LatLng p2;
-    private ArrayList<LatLng> pointList;
-    private Boolean drew = false;
-    private double dist;
+    LatLng p1;
+    LatLng p2;
+    Boolean drew = false;
+    double dist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,19 +76,18 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         confirmBtn.setVisibility(View.GONE);
         Button showBtn = findViewById(R.id.show_route);
 
+
         showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideSoftKeyboard(EnterAddressMap.this);
-                originAddress = fromEditText.getText().toString();
-                destAddress = toEditText.getText().toString();
-                if (!originAddress.isEmpty() && !destAddress.isEmpty()){
+                String fromString = fromEditText.getText().toString();
+                String toString = toEditText.getText().toString();
+                if (!fromString.isEmpty() && !toString.isEmpty()){
                     if (map != null) {
                         map.clear();
                     }
-
-                    // drew is true if no exception is shown and the route is drawn
-                    drew = getPoints(originAddress, destAddress);
+                    drew = getPoints(fromString, toString);
                     if (!drew){
                         String text = "Invalid Address";
                         Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_SHORT);
@@ -116,7 +98,6 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                         confirmBtn.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    // At least one of the editText is empty
                     String text = "Please fill in the address";
                     Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
@@ -125,17 +106,13 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
             }
         });
 
-        // Confirm button for confirming route, invokes set cost dialog
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SetCost(dist*2.30).show(getSupportFragmentManager(), "set_cost");
+                new SetCost(dist*2).show(getSupportFragmentManager(), "set_cost");
             }
         });
     }
-
-
-
 
     /*
     StackOverflow post by Navneeth G https://stackoverflow.com/users/1135909/navneeth-g
@@ -143,7 +120,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
 
     Hides keyboard after pressing show routes button
      */
-    private static void hideSoftKeyboard(Activity activity) {
+    public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
                         Activity.INPUT_METHOD_SERVICE);
@@ -154,36 +131,30 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
-    /*
-    Github library for Google Maps API Web Services by Google Maps https://github.com/googlemaps
-    Library page: https://github.com/googlemaps/google-maps-services-java
-     */
-    private boolean getPoints(String originAddress, String destAddress) {
-        GeocodingResult[] fromAddress;
-        GeocodingResult[] toAddress;
+    // Using Geocoder to convert address to latitude and longitude
+    private boolean getPoints(String fromString, String toString) {
+        Geocoder coder = new Geocoder(this);
+        List<Address> fromAddress;
+        List<Address> toAddress;
 
         try {
-            GeoApiContext context = new GeoApiContext.Builder()
-                    .apiKey(getString(R.string.google_maps_key))
-                    .build();
-            fromAddress = GeocodingApi.geocode(context,
-                    originAddress).await();
+            // May throw an IOException
+            fromAddress = coder.getFromLocationName(fromString, 5);
             if (fromAddress == null) {
                 return false;
             }
-
-            toAddress = GeocodingApi.geocode(context,
-                    destAddress).await();
+            toAddress = coder.getFromLocationName(toString, 5);
             if (toAddress == null) {
                 return false;
             }
 
-            p1 = new LatLng(fromAddress[0].geometry.location.lat, fromAddress[0].geometry.location.lng);
-            p2 = new LatLng(toAddress[0].geometry.location.lat, toAddress[0].geometry.location.lng);
+            Address fromLocation = fromAddress.get(0);
+            Address toLocation = toAddress.get(0);
+            p1 = new LatLng(fromLocation.getLatitude(), fromLocation.getLongitude());
             map.addMarker(new MarkerOptions()
                     .position(p1)
                     .icon(bitmapDescriptorFromVector(this, R.drawable.ic_red_placeholder)));
-
+            p2 = new LatLng(toLocation.getLatitude(), toLocation.getLongitude());
             map.addMarker(new MarkerOptions()
                     .position(p2)
                     .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
@@ -194,6 +165,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
 
             // Move camera to include both points
             map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
+
             drawRoute(p1, p2);
 
         } catch (IOException ex) {
@@ -201,17 +173,18 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
             return false;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
 
         return true;
-    }
 
+    }
 
     /*
     StackOverflow post by Leo Droidcoder https://stackoverflow.com/users/5730321/leo-droidcoder
     Answer https://stackoverflow.com/a/45564994
 
-    Convert vector drawable to bitmap for markers
+    Convert vector drawable to bitmap
      */
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
@@ -223,27 +196,27 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     }
 
     /*
-    Github libray by Akexorcist https://github.com/akexorcist
+    Github library by Akexorcist https://github.com/akexorcist
     Library page: https://github.com/akexorcist/Android-GoogleDirectionLibrary
      */
     private void drawRoute(LatLng p1, LatLng p2) {
-        GoogleDirection.withServerKey(getString(R.string.google_maps_key))
+        GoogleDirection.withServerKey(getString(R.string.web_api_key))
                 .from(p1)
                 .to(p2)
                 .transportMode(TransportMode.DRIVING)
                 .execute(new DirectionCallback() {
                     @Override
                     public void onDirectionSuccess(Direction direction) {
-                        if (direction.isOK()) {
+                        if(direction.isOK()) {
                             Route route = direction.getRouteList().get(0);
                             Leg leg = route.getLegList().get(0);
-                            pointList = leg.getDirectionPoint();
+                            ArrayList<LatLng> pointList = leg.getDirectionPoint();
                             Info distanceInfo = leg.getDistance();
                             String distance = distanceInfo.getText();
                             dist = Double.parseDouble(distance.substring(0, distance.length() - 3));
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(EnterAddressMap.this, pointList, 5,
-                                            getResources().getColor(R.color.route));
+                                            getResources().getColor(R.color.yellow));
                             map.addPolyline(polylineOptions);
                         } else {
                             String text = direction.getStatus();
@@ -307,28 +280,5 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                 break;
             }
         }
-    }
-
-    @Override
-    public void postRequest(double cost) {
-        db = FirebaseFirestore.getInstance();
-        user = LoginActivity.getUser();
-        String userID = user.getUid();
-        DocumentReference documentReference = db.collection("requests").document(userID);
-        HashMap<String, Object> request = new HashMap<>();
-        request.put(userID, new Request(userID, originAddress, destAddress, p1, p2, pointList, cost));
-        documentReference.set(request).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "onSuccess: posted request for "+ userID);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onFailure: " + e.toString());
-            }
-        });
-
-        startActivity(new Intent(EnterAddressMap.this, WaitingForDriver.class));
     }
 }

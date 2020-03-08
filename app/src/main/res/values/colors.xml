@@ -3,18 +3,6 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-<<<<<<< Updated upstream
     <color name="yellow">#f3bd37</color>
     <color name="black">#000000</color>
-=======
-    <color name="yellow">#fff5f504</color>
-    <color name="black">#000000</color>
-    <color name="white">#ffffffff</color>
-    <color name="red">#B71C1C</color>
-    <color name="gray">#5b5b5b</color>
-    <color name="background">#FFF0C9</color>
-    <color name="button">#FFCF62</color>
-    <color name="route">#62D9D7</color>
-
->>>>>>> Stashed changes
 </resources>

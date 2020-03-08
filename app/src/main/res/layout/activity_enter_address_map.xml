@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EnterAddressMap">
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rider_initial_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/from_address"
+        android:padding="10dp"
+        android:elevation="6dp"
+        android:layout_margin="10dp"
+        android:inputType="text"
+        android:hint="Pickup location"
+        android:background="@drawable/address_box" />
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/to_address"
+        android:padding="10dp"
+        android:elevation="6dp"
+        android:layout_alignLeft="@+id/from_address"
+        android:layout_alignRight="@+id/from_address"
+        android:layout_below="@+id/from_address"
+        android:hint="Destination"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:background="@drawable/address_box" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/show_route"
+        android:layout_below="@+id/to_address"
+        android:background="@drawable/address_box"
+        android:layout_margin="10dp"
+        android:elevation="6dp"
+        android:text="SHOW ROUTE" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:id="@+id/confirm_route"
+        android:layout_height="wrap_content"
+        android:text="CONFIRM"
+        android:background="@drawable/address_box"
+        android:backgroundTint="@color/yellow"
+        android:layout_alignParentBottom="true"
+        android:elevation="5dp"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:layout_marginBottom="20dp" />
+
+
+
+
+
+
+
+</RelativeLayout>
