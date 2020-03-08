@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Bee</string>
+<<<<<<< Updated upstream
     <string name="title_activity_enter_address_map">Map</string>
     <string name="web_api_key">AIzaSyA1pZXDykCcu5E8XwRX18m0QI4eTvjd_0c</string>
+=======
+    <string name="title_activity_maps">Map</string>
+>>>>>>> Stashed changes
 </resources>
