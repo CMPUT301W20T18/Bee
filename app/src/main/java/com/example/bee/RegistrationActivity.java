@@ -112,24 +112,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
         progressDialog.setMessage("Verificating...");
         progressDialog.show();
-//
-//        final DocumentReference documentReference = db.collection("users").document(inputName);
-//        HashMap<String,Object> user = new HashMap<>();
-//        user.put("Name",inputName);
-//        user.put("email",inputEmail);
-//        user.put("phone",phone);
-//
-//        documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                Log.d(TAG, "onSuccess: user Profile is created for "+ inputName);
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Log.d(TAG, "onFailure: " + e.toString());
-//            }
-//        });
 
 
 
@@ -142,12 +124,15 @@ public class RegistrationActivity extends AppCompatActivity {
                     Toast.makeText(RegistrationActivity.this, "User Created.", Toast.LENGTH_SHORT).show();
                     userID = firebaseAuth.getCurrentUser().getUid();
 
-                    DocumentReference documentReference = db.collection("users").document(userID);
+                    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference ref = database.getReference("users");
+                    DatabaseReference usersRef = ref.child(userID);
+
                     HashMap<String,Object> user = new HashMap<>();
                     user.put("Name",inputName);
                     user.put("email",inputEmail);
                     user.put("phone",phone);
-                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    usersRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d(TAG, "onSuccess: user Profile is created for "+ userID);
