@@ -25,8 +25,8 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView email, password;
     private TextView forgotPass, signUp;
     private Button btnSignInRider, btnSignInDriver;
-    private static FirebaseAuth firebaseAuth;
-    private FirebaseUser user;
+    private FirebaseAuth firebaseAuth;
+    private static FirebaseUser user;
     private ProgressDialog progressDialog;
 
 
@@ -93,9 +93,9 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void signUser(String email, String password, String role){
-
         progressDialog.setMessage("Verifying...");
         progressDialog.show();
+        user = firebaseAuth.getCurrentUser();
 
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -148,8 +148,8 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    public static FirebaseAuth getAuth() {
-        return  firebaseAuth;
+    public static FirebaseUser getUser() {
+        return  user;
     }
 
 }

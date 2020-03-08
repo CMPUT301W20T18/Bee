@@ -3,6 +3,8 @@ package com.example.bee;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
+
 /**
  * This class represents a request. It contains information needed from both driver and rider.
  */
@@ -14,19 +16,21 @@ public class Request {
     private String dest;
     private LatLng originLatlng;
     private LatLng destLatlng;
-    private PolylineOptions routes;
+    private ArrayList<LatLng> pointList;
     private double cost;
+    private boolean status;
 
     public Request(String riderID, String origin, String dest, LatLng originLatlng, LatLng destLatlng,
-                   PolylineOptions routes, double cost) {
+                   ArrayList<LatLng> pointList, double cost) {
         this.riderID = riderID;
         this.origin = origin;
         this.dest = dest;
         this.originLatlng = originLatlng;
         this.destLatlng = destLatlng;
-        this.routes = routes;
+        this.pointList = pointList;
         this.cost = cost;
         this.driverID = null;
+        this.status = false;
     }
 
     /**
@@ -81,8 +85,8 @@ public class Request {
      * Returns the polylineOptions to draw the routes
      * @return routes
      */
-    public PolylineOptions getRoutes() {
-        return routes;
+    public ArrayList<LatLng> getPoints() {
+        return pointList;
     }
 
     /**
@@ -94,10 +98,26 @@ public class Request {
     }
 
     /**
+     * Returns true if the rider accepted the driver's offer
+     * @return status
+     */
+    public boolean getStatus() {
+        return status;
+    }
+
+    /**
      * Sets the driverID of the request
      * @param driverID
      */
     public void setDriverID(String driverID) {
         this.driverID = driverID;
+    }
+
+    /**
+     * Sets the status of the request
+     * @param status
+     */
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

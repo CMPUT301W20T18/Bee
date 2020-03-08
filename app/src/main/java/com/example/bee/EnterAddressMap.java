@@ -1,6 +1,5 @@
 package com.example.bee;
 
-import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -57,28 +56,25 @@ import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  *  This class takes user input of addresses and show the route on the map
  */
-public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallback,
-        SetCost.OnFragmentInteractionListener, Serializable {
+public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallback, SetCost.OnFragmentInteractionListener {
     private static final String TAG = "TAG";
     private static final int REQUEST_CODE = 100;
     private Location currentLocation;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private GoogleMap map;
-    private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
     private FirebaseFirestore db;
-    private PolylineOptions polylineOptions;
     private String originAddress;
     private String destAddress;
     private LatLng p1;
     private LatLng p2;
+    private ArrayList<LatLng> pointList;
     private Boolean drew = false;
     private double dist;
 
@@ -241,11 +237,11 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                         if (direction.isOK()) {
                             Route route = direction.getRouteList().get(0);
                             Leg leg = route.getLegList().get(0);
-                            ArrayList<LatLng> pointList = leg.getDirectionPoint();
+                            pointList = leg.getDirectionPoint();
                             Info distanceInfo = leg.getDistance();
                             String distance = distanceInfo.getText();
                             dist = Double.parseDouble(distance.substring(0, distance.length() - 3));
-                            polylineOptions = DirectionConverter
+                            PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(EnterAddressMap.this, pointList, 5,
                                             getResources().getColor(R.color.route));
                             map.addPolyline(polylineOptions);
@@ -316,12 +312,11 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void postRequest(double cost) {
         db = FirebaseFirestore.getInstance();
-        firebaseAuth = LoginActivity.getAuth();
-        user = firebaseAuth.getCurrentUser();
+        user = LoginActivity.getUser();
         String userID = user.getUid();
         DocumentReference documentReference = db.collection("requests").document(userID);
         HashMap<String, Object> request = new HashMap<>();
-        request.put(userID, new Request(userID, originAddress, destAddress, p1, p2, polylineOptions, cost));
+        request.put(userID, new Request(userID, originAddress, destAddress, p1, p2, pointList, cost));
         documentReference.set(request).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
