@@ -48,6 +48,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -69,7 +71,6 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     private FusedLocationProviderClient fusedLocationProviderClient;
     private GoogleMap map;
     private FirebaseUser user;
-    private FirebaseFirestore db;
     private String originAddress;
     private String destAddress;
     private LatLng p1;
@@ -311,16 +312,28 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
 
     @Override
     public void postRequest(double cost) {
-        db = FirebaseFirestore.getInstance();
-        user = LoginActivity.getUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         String userID = user.getUid();
-        DocumentReference documentReference = db.collection("requests").document(userID);
-        HashMap<String, Object> request = new HashMap<>();
-        request.put(userID, new Request(userID, originAddress, destAddress, p1, p2, pointList, cost));
-        documentReference.set(request).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("requests");
+        DatabaseReference requestRef = ref.child(userID);
+
+        HashMap<String,Request> request = new HashMap<>();
+
+        // Convert ArrayList of Latlng to ArrayList of String
+        ArrayList<String> points = new ArrayList<>();
+        for (LatLng latLng : pointList ){
+            points.add(latLng.latitude+","+latLng.longitude);
+        }
+        // Convert Latlng to String
+        String p1Latlng = String.format("%f,%f",p1.latitude,p1.longitude);
+        String p2Latlng = String.format("%f,%f",p2.latitude,p2.longitude);
+        request.put("request", new Request(userID, originAddress, destAddress, p1Latlng, p2Latlng, points, cost));
+        requestRef.setValue(request).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "onSuccess: posted request for "+ userID);
+                Log.d(TAG, "onSuccess: request posted for"+ userID);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

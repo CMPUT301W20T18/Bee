@@ -24,16 +24,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firestore.v1.WriteResult;
-import com.google.protobuf.Api;
+
 
 public class RegistrationActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
@@ -43,12 +37,9 @@ public class RegistrationActivity extends AppCompatActivity {
     private TextView signin;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
-    private FirebaseDatabase firebaseDatabase;
     FirebaseFirestore db;
     String userID;
     ProgressBar progressBar;
-
-
 
 
     @Override
@@ -57,8 +48,6 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
         initializeGUI();
-
-
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +62,6 @@ public class RegistrationActivity extends AppCompatActivity {
                     registerUser(inputName, inputPw, inputPhone, inputEmail);
 
             }
-
         });
 
 
@@ -108,19 +96,24 @@ public class RegistrationActivity extends AppCompatActivity {
         progressDialog.setMessage("Verifying...");
         progressDialog.show();
 
+
         firebaseAuth.createUserWithEmailAndPassword(inputEmail,inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
                 if(task.isSuccessful()){
                     Toast.makeText(RegistrationActivity.this, "User Created.", Toast.LENGTH_SHORT).show();
                     userID = firebaseAuth.getCurrentUser().getUid();
 
-                    DocumentReference documentReference = db.collection("users").document(userID);
+                    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference ref = database.getReference("users");
+                    DatabaseReference usersRef = ref.child(userID);
+
                     HashMap<String,Object> user = new HashMap<>();
                     user.put("Name",inputName);
                     user.put("email",inputEmail);
                     user.put("phone",phone);
-                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    usersRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d(TAG, "onSuccess: user Profile is created for "+ userID);
@@ -135,14 +128,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
                 }else {
                     Toast.makeText(RegistrationActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
+                    //progressBar.setVisibility(View.GONE);
+                    Log.d(TAG, "onFailure: " + task.getException().getMessage());
                 }
             }
         });
     }
-
-
-
 
     private boolean validateInput(String inName, String inPw, String inPhone, String inEmail){
 
@@ -166,8 +157,5 @@ public class RegistrationActivity extends AppCompatActivity {
 
         return true;
     }
-
-
-
 
 }

@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView forgotPass, signUp;
     private Button btnSignInRider, btnSignInDriver;
     private FirebaseAuth firebaseAuth;
-    private static FirebaseUser user;
+    private FirebaseUser user;
     private ProgressDialog progressDialog;
 
 
@@ -85,8 +85,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this,PWresetActivity.class));
             }
         });
-
-
 
     }
 
@@ -148,8 +146,5 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    public static FirebaseUser getUser() {
-        return  user;
-    }
 
 }

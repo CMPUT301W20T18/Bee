@@ -1,32 +1,29 @@
 package com.example.bee;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class WaitingForDriver extends AppCompatActivity {
     private static final String TAG = "TAG";
-    private FirebaseFirestore db;
+    private FirebaseDatabase database;
     private FirebaseUser user;
-    private String originAddress;
-    private String destAddress;
     private String userID;
-    private Request request;
+    private String origin;
+    private String dest;
+    private double cost;
     TextView toText;
     TextView fromText;
     TextView costText;
@@ -39,29 +36,41 @@ public class WaitingForDriver extends AppCompatActivity {
         fromText = findViewById(R.id.show_from);
         costText = findViewById(R.id.show_cost);
 
-        user = LoginActivity.getUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
 
-        DocumentReference docRef = db.collection("requests").document(userID);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("requests").child(userID).child("request");
+
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document != null) {
-                        request = task.getResult().toObject(Request.class);
-                    } else {
-                        Log.d(TAG, "can't access");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                /*for (DataSnapshot s: dataSnapshot.getChildren()) {
+                    origin = s.child("origin").getValue(String.class);
+                    dest = s.child("dest").getValue(String.class);
+                    cost = s.child("cost").getValue(Double.class);
+                    Toast.makeText(WaitingForDriver.this, dest, Toast.LENGTH_SHORT).show();
+                }*/
+                origin = dataSnapshot.child("origin").getValue(String.class);
+                dest = dataSnapshot.child("dest").getValue(String.class);
+                cost = dataSnapshot.child("cost").getValue(Double.class);
+                Toast.makeText(WaitingForDriver.this, dest, Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, databaseError.toString());
             }
         });
 
-        toText.setText(request.getOrigin());
-        fromText.setText(request.getDest());
-        costText.setText(Double.toString(request.getCost()));
+        try {
+            Toast.makeText(WaitingForDriver.this, dest, Toast.LENGTH_SHORT).show();
+            toText.setText(dest);
+            fromText.setText(origin);
+            costText.setText(String.format("%.2f", cost));
+        } catch (Exception e) {
+            Log.d("Tag", e.toString());
+        }
+
 
     }
 

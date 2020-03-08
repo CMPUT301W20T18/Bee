@@ -1,7 +1,6 @@
 package com.example.bee;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
@@ -14,14 +13,17 @@ public class Request {
     private String driverID;
     private String origin;
     private String dest;
-    private LatLng originLatlng;
-    private LatLng destLatlng;
-    private ArrayList<LatLng> pointList;
+    private String originLatlng;
+    private String destLatlng;
+    private ArrayList<String> pointList;
     private double cost;
     private boolean status;
+    private boolean finished;
 
-    public Request(String riderID, String origin, String dest, LatLng originLatlng, LatLng destLatlng,
-                   ArrayList<LatLng> pointList, double cost) {
+    public Request() {}
+
+    public Request(String riderID, String origin, String dest, String originLatlng, String destLatlng,
+                   ArrayList<String> pointList, double cost) {
         this.riderID = riderID;
         this.origin = origin;
         this.dest = dest;
@@ -31,6 +33,7 @@ public class Request {
         this.cost = cost;
         this.driverID = null;
         this.status = false;
+        this.finished = false;
     }
 
     /**
@@ -69,7 +72,7 @@ public class Request {
      * Returns the pick up address's latitude and longitude
      * @return originLatlng
      */
-    public LatLng getOriginLatlng() {
+    public String getOriginLatlng() {
         return originLatlng;
     }
 
@@ -77,7 +80,7 @@ public class Request {
      * Returns destination latitude and longitude
      * @return destLatlng
      */
-    public LatLng getDestLatlng() {
+    public String getDestLatlng() {
         return destLatlng;
     }
 
@@ -85,7 +88,7 @@ public class Request {
      * Returns the polylineOptions to draw the routes
      * @return routes
      */
-    public ArrayList<LatLng> getPoints() {
+    public ArrayList<String> getPoints() {
         return pointList;
     }
 
@@ -106,6 +109,14 @@ public class Request {
     }
 
     /**
+     * Returns true if the driver pressed the finished button
+     * @return finished
+     */
+    public boolean getFinished() {
+        return finished;
+    }
+
+    /**
      * Sets the driverID of the request
      * @param driverID
      */
@@ -119,5 +130,13 @@ public class Request {
      */
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    /**
+     * Sets whether or not the ride is finished
+     * @param finished
+     */
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 }
