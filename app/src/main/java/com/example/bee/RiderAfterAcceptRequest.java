@@ -78,9 +78,10 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(RiderAfterAcceptRequest.this, DriverBasicInformation.class);
-                startActivityForResult(intent, 1);
+                startActivity(intent);
             }
         });
+
 
 
     }
@@ -177,10 +178,10 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             LatLng to_position = to.getPosition();
 
             request_accepted_map.addMarker(from
-                    .position(from.getPosition())
+                    .position(from_position)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             request_accepted_map.addMarker(to
-                    .position(to.getPosition())
+                    .position(to_position)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
 
             LatLngBounds latLngBounds = new LatLngBounds.Builder()
@@ -210,7 +211,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 //    }
 
     private void drawRoute(LatLng p1, LatLng p2) {
-        GoogleDirection.withServerKey(getString(R.string.web_api_key))
+        GoogleDirection.withServerKey(getString(R.string.google_maps_key))
                 .from(p1)
                 .to(p2)
                 .transportMode(TransportMode.DRIVING)
@@ -221,16 +222,11 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                             Route route = direction.getRouteList().get(0);
                             Leg leg = route.getLegList().get(0);
                             ArrayList<LatLng> pointList = leg.getDirectionPoint();
-                            Info distanceInfo = leg.getDistance();
-                            String distance = distanceInfo.getText();
-                            Toast.makeText(RiderAfterAcceptRequest.this, distance, Toast.LENGTH_SHORT).show();
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(RiderAfterAcceptRequest.this, pointList, 5,
                                             getResources().getColor(R.color.yellow));
                             request_accepted_map.addPolyline(polylineOptions);
                         } else {
-                            //wen ti chu zai zhe li
-                            System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
                             String text = direction.getStatus();
                             Toast toast = Toast.makeText(RiderAfterAcceptRequest.this, text, Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);

@@ -42,7 +42,8 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="80dp"
-            android:src = "@drawable/ic_phone_call"/>
+            android:src = "@drawable/ic_phone_call"
+            android:id = "@+id/phone"/>
 
         <ImageView
             android:layout_width="80dp"
@@ -50,7 +51,8 @@
             android:layout_marginTop="150dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="80dp"
-            android:src="@drawable/ic_email" />
+            android:src="@drawable/ic_email"
+            android:id = "@+id/mail"/>
         <TextView
             android:layout_marginTop="340dp"
             android:layout_marginStart="90dp"
