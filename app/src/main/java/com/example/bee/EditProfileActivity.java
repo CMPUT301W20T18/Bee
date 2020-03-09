@@ -61,6 +61,17 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                if (isNumeric(phone.getText().toString()) == false || phone.getText().toString().length()!= 10 ){
+                    Toast.makeText(EditProfileActivity.this,"invalid phone number",Toast.LENGTH_SHORT).show();
+                    return;
+
+                }
+                if (email.getText().toString().contains("@") == false ){
+                    Toast.makeText(EditProfileActivity.this,"invalid email",Toast.LENGTH_SHORT).show();
+                    return;
+
+                }
+
                 ref.child(userID).child("phone").setValue(phone.getText().toString());
                 ref.child(userID).child("email").setValue(email.getText().toString());
 
@@ -105,52 +116,16 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
-    private void EditUser(final String inputName, final String inputPw, final String phone, final String inputEmail) {
-
-        progressDialog.setMessage("Verificating...");
-        progressDialog.show();
 
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference ref = database.getReference("users");
-
-
-        firebaseAuth.createUserWithEmailAndPassword(inputEmail, inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(EditProfileActivity.this, "User Created.", Toast.LENGTH_SHORT).show();
-                    userID = firebaseAuth.getCurrentUser().getUid();
-
-
-                    final DatabaseReference usersRef = ref.child(userID);
-
-                    HashMap<String, Object> user = new HashMap<>();
-
-                    user.put("Name", inputName);
-                    user.put("email", inputEmail);
-                    user.put("phone", phone);
-                    usersRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "onSuccess: user Profile is created for " + userID);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "onFailure: " + e.toString());
-                        }
-                    });
-                    startActivity(new Intent(getApplicationContext(), DrawerActivity.class));
-
-                } else {
-                    Toast.makeText(EditProfileActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                }
+    public static boolean isNumeric(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            System.out.println(str.charAt(i));
+            if (!Character.isDigit(str.charAt(i))) {
+                return false;
             }
-        });
-
-
+        }
+        return true;
     }
 }
 

@@ -197,16 +197,16 @@ public class RegistrationActivity extends AppCompatActivity {
             return false;
         }
 
-        if(inPhone.isEmpty()){
-            password.setError("Phone number is empty.");
+        if(isNumeric(inPhone)==false||inPhone.length()!=10){
+            password.setError("Invalid Phone number ");
             return false;
         }
-        if(inPw.isEmpty()){
-            password.setError("Password is empty.");
+        if(inPw.length()!= 6){
+            password.setError("Invalid Password ");
             return false;
         }
-        if(inEmail.isEmpty()){
-            email.setError("Email is empty.");
+        if(inEmail.contains("@")==false){
+            email.setError("Invalid Email");
             return false;
         }
 
@@ -227,6 +227,16 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    public static boolean isNumeric(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            System.out.println(str.charAt(i));
+            if (!Character.isDigit(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
 

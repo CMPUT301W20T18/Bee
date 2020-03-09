@@ -7,7 +7,7 @@
     <string name="btRider">TO RIDE</string>
     <string name="btDriver">TO DRIVE</string>
     <string name="phoneNum">Phone</string>
-    <string name="passwordReg">Password</string>
+    <string name="passwordReg">Password (6 digit)</string>
     <string name="sign_upReg">Sign up</string>
     <string name="sign_inLog_rider">Sign in as Rider</string>
     <string name="sign_inLog_driver">Sign in as Driver</string>

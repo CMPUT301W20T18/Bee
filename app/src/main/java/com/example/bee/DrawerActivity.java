@@ -191,7 +191,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-                btnLogout = findViewById(R.id.btnLogout);
+        btnLogout = findViewById(R.id.btnLogout);
         firebaseAuth = FirebaseAuth.getInstance();
 
             btnLogout.setOnClickListener(new View.OnClickListener() {
