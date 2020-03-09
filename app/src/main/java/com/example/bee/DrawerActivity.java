@@ -220,7 +220,8 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         switch (menuItem.getItemId()){
             case R.id.profile:
                 Toast.makeText(DrawerActivity.this, "Profile Selected", Toast.LENGTH_SHORT).show();
-                break;
+                startActivity(new Intent(DrawerActivity.this, EditProfileActivity.class));
+                return true;
             case R.id.contact:
                 Toast.makeText(DrawerActivity.this, "Contact us Selected", Toast.LENGTH_SHORT).show();
                 break;
