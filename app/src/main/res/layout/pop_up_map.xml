@@ -1,19 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="500dp"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+
     android:orientation="vertical">
 
-
-    <Button
-        android:id="@+id/accept_button"
-        android:layout_width="49dp"
-        android:layout_height="162dp"
-        android:text="Button" />
-
-    <Button
-        android:id="@+id/cancel_button"
+    <ImageView
+        android:id="@+id/rider_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel" />
-</LinearLayout>
+        android:src="@mipmap/ic_launcher" />
+
+    <fragment
+        android:id="@+id/map_pop"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="603dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="54dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+
+    <TextView
+        android:id="@+id/rider_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="11dp"
+        android:text="RiderName"
+        android:textColor="#000"
+        android:textSize="21sp" />
+
+    <TextView
+        android:id="@+id/request_money_amount1"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="350dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="21dp"
+        android:text="$"
+        android:textColor="#000"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="302dp"
+
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        android:layout_gravity="bottom">
+
+        <Button
+            android:id="@+id/accept_button"
+            android:layout_width="114dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+
+            android:text="Accept" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="101dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+
+            android:text="Cancel" />
+    </LinearLayout>
+
+
+
+</RelativeLayout>
+
