@@ -3,6 +3,7 @@ package com.example.bee;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -55,17 +56,19 @@ public class EditProfileActivity extends AppCompatActivity {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference ref = database.getReference("users");
 
+        phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+
 
 
         saveBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (isNumeric(phone.getText().toString()) == false || phone.getText().toString().length()!= 10 ){
-                    Toast.makeText(EditProfileActivity.this,"invalid phone number",Toast.LENGTH_SHORT).show();
-                    return;
-
-                }
+//                if (isNumeric(phone.getText().toString()) == false || phone.getText().toString().length()!= 10 ){
+//                    Toast.makeText(EditProfileActivity.this,"invalid phone number",Toast.LENGTH_SHORT).show();
+//                    return;
+//
+//                }
                 if (email.getText().toString().contains("@") == false ){
                     Toast.makeText(EditProfileActivity.this,"invalid email",Toast.LENGTH_SHORT).show();
                     return;
@@ -117,16 +120,16 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-
-    public static boolean isNumeric(String str) {
-        for (int i = 0; i < str.length(); i++) {
-            System.out.println(str.charAt(i));
-            if (!Character.isDigit(str.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+//
+//    public static boolean isNumeric(String str) {
+//        for (int i = 0; i < str.length(); i++) {
+//            System.out.println(str.charAt(i));
+//            if (!Character.isDigit(str.charAt(i))) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 }
 
 

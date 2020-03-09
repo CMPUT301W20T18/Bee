@@ -16,10 +16,8 @@
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bee/DrawerActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bee/DrawerActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bee/EditProfileActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bee/EditProfileActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bee/RegistrationActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bee/RegistrationActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_editprofile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_editprofile.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/build/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -52,69 +50,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/RegistrationActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="434">
-              <caret line="213" column="5" lean-forward="true" selection-start-line="213" selection-start-column="5" selection-end-line="213" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <marker date="1583750394545" expanded="true" signature="6426:6646" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/header.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="25" column="8" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
-            </state>
-          </provider>
-          <provider editor-type-id="android-designer2" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_item.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
-            </state>
-          </provider>
-          <provider editor-type-id="android-designer2" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/EditProfileActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="120" selection-start-line="120" selection-end-line="128" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1996#2927#0" expanded="true" />
-                <element signature="e#2926#2927#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/MainActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="56" selection-start-line="14" selection-start-column="56" selection-end-line="14" selection-end-column="56" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_editprofile.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
+            <state relative-caret-position="531">
+              <caret line="59" column="45" lean-forward="true" selection-start-line="59" selection-start-column="45" selection-end-line="59" selection-end-column="45" />
               <folding>
                 <element signature="e#2502#2520#0" expanded="true" />
                 <element signature="e#2818#2840#0" expanded="true" />
@@ -124,11 +63,31 @@
           <provider editor-type-id="android-designer2" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/RegistrationActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="335">
+              <caret line="113" column="62" selection-start-line="113" selection-start-column="62" selection-end-line="113" selection-end-column="62" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1806#2456#0" expanded="true" />
+                <element signature="e#2455#2456#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_pwreset.xml">
+          <provider editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="android-designer2" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_registration.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="127">
-              <caret line="95" column="29" lean-forward="true" selection-start-line="95" selection-start-column="29" selection-end-line="95" selection-end-column="29" />
+            <state relative-caret-position="278">
+              <caret line="66" column="59" selection-start-line="66" selection-start-column="59" selection-end-line="66" selection-end-column="59" />
               <folding>
                 <element signature="e#3842#3863#0" expanded="true" />
               </folding>
@@ -138,27 +97,61 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/UserProfile.java">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/header.xml">
+          <provider editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="25" column="8" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
+            </state>
+          </provider>
+          <provider selected="true" editor-type-id="android-designer2" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+            <state relative-caret-position="300">
+              <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+        <entry file="file://$PROJECT_DIR$/app/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="510">
+              <caret line="34" column="75" selection-start-line="34" selection-start-column="75" selection-end-line="34" selection-end-column="75" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/test/java/com/example/bee/ExampleUnitTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
-              <caret line="9" column="49" selection-start-line="9" selection-start-column="49" selection-end-line="9" selection-end-column="49" />
+              <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml">
-          <provider editor-type-id="text-editor" />
-          <provider selected="true" editor-type-id="android-designer2" />
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/PWresetActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/EditProfileActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="179">
+              <caret line="58" column="74" selection-start-line="58" selection-start-column="74" selection-end-line="58" selection-end-column="74" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
@@ -233,16 +226,17 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/header.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_editprofile.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/DrawerActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/EditProfileActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/RegistrationActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/RegistrationActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_registration.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_editprofile.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/EditProfileActivity.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-53" />
+    <option name="x" value="-245" />
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="809" />
@@ -275,6 +269,12 @@
               <item name="Bee" type="1abcf292:AndroidViewProjectNode" />
               <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+            </path>
+            <path>
+              <item name="Bee" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="bee" type="cbb59c9e:AndroidPsiDirectoryNode" />
             </path>
             <path>
               <item name="Bee" type="1abcf292:AndroidViewProjectNode" />
@@ -471,7 +471,21 @@
       <option name="project" value="LOCAL" />
       <updated>1583749319965</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="update edit contact info">
+      <created>1583750405519</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1583750405520</updated>
+    </task>
+    <task id="LOCAL-00007" summary="update unique username enforcement">
+      <created>1583779842431</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1583779842431</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView">
@@ -484,10 +498,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-53" y="23" width="1440" height="809" extended-state="0" />
+    <frame x="70" y="23" width="1440" height="809" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" sideWeight="0.50151974" side_tool="true" weight="0.21530758" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.49848023" visible="true" weight="0.18526466" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.49848023" visible="true" weight="0.16309012" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Designer" order="4" />
@@ -501,7 +516,7 @@
       <window_info anchor="bottom" id="Event Log" order="3" sideWeight="0.676681" side_tool="true" weight="0.08228731" />
       <window_info anchor="bottom" id="Logcat" order="4" sideWeight="0.8118741" weight="0.044630405" />
       <window_info anchor="bottom" id="Android Profiler" order="5" />
-      <window_info anchor="bottom" id="Build" order="6" sideWeight="0.32331902" visible="true" weight="0.18828452" />
+      <window_info anchor="bottom" id="Build" order="6" sideWeight="0.32331902" visible="true" weight="0.041841004" />
       <window_info anchor="bottom" id="Run" order="7" sideWeight="0.6392882" weight="0.6402367" />
       <window_info anchor="bottom" id="Debug" order="8" />
       <window_info anchor="bottom" id="Find" order="9" sideWeight="0.49760437" weight="0.637378" />
@@ -510,7 +525,7 @@
       <window_info anchor="right" id="Palette&#9;" order="2" />
       <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
       <window_info anchor="right" id="Gradle" order="4" weight="0.02053388" />
-      <window_info active="true" anchor="right" id="Preview" order="5" visible="true" weight="0.31402004" />
+      <window_info anchor="right" id="Preview" order="5" weight="0.31402004" />
       <window_info anchor="right" id="StringPreview" order="6" />
     </layout>
     <layout-to-restore>
@@ -591,10 +606,10 @@
     <MESSAGE value="update DrawerActivity" />
     <MESSAGE value="update menu links activity" />
     <MESSAGE value="update edit contact info" />
-    <option name="LAST_COMMIT_MESSAGE" value="update edit contact info" />
+    <MESSAGE value="update unique username enforcement" />
+    <option name="LAST_COMMIT_MESSAGE" value="update unique username enforcement" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="android-dummy://C:/Users/missi/Desktop/Axian/UA/3yearwinter/CMPUT301/project/Bee/app/Translations Editor" />
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/myapplication/MainActivity.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/myapplication/accept_request.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml">
@@ -612,13 +627,6 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/pop_bg.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_enter_address_map.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_pop_up_paired_driver.xml" />
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/Pop_up_paired_driver_activity.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/driver_card.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/EnterAddressMap.java" />
@@ -632,13 +640,6 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_driver_basic_information.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/RiderAfterAcceptRequest.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_selfprofile.xml" />
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="448">
-          <caret line="34" column="75" selection-start-line="34" selection-start-column="75" selection-end-line="34" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_background.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -646,19 +647,8 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_red_placeholder.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_pwreset.xml">
-      <provider editor-type-id="text-editor" />
-      <provider selected="true" editor-type-id="android-designer2" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/DrawerActivity.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/menu_item.xml" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/PWresetActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_drawer.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
@@ -719,26 +709,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="40" column="52" selection-start-line="40" selection-start-column="52" selection-end-line="40" selection-end-column="52" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-manifest" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_item.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/header.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="25" column="8" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
         </state>
       </provider>
       <provider editor-type-id="android-designer2" />
@@ -771,29 +745,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/EditProfileActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="120" selection-start-line="120" selection-end-line="128" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1996#2927#0" expanded="true" />
-            <element signature="e#2926#2927#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/RegistrationActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="434">
-          <caret line="213" column="5" lean-forward="true" selection-start-line="213" selection-start-column="5" selection-end-line="213" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1583750394545" expanded="true" signature="6426:6646" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/UserProfile.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="250">
@@ -805,10 +756,88 @@
       <provider editor-type-id="text-editor" />
       <provider selected="true" editor-type-id="android-designer2" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="49" selection-start-line="9" selection-start-column="49" selection-end-line="9" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="40" column="52" selection-start-line="40" selection-start-column="52" selection-end-line="40" selection-end-column="52" />
+        </state>
+      </provider>
+      <provider editor-type-id="android-manifest" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="34" column="75" selection-start-line="34" selection-start-column="75" selection-end-line="34" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/example/bee/ExampleUnitTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_pwreset.xml">
+      <provider editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="android-designer2" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/header.xml">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="8" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer2" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/PWresetActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/RegistrationActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="113" column="62" selection-start-line="113" selection-start-column="62" selection-end-line="113" selection-end-column="62" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1806#2456#0" expanded="true" />
+            <element signature="e#2455#2456#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_registration.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="66" column="59" selection-start-line="66" selection-start-column="59" selection-end-line="66" selection-end-column="59" />
+          <folding>
+            <element signature="e#3842#3863#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_editprofile.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
+        <state relative-caret-position="531">
+          <caret line="59" column="45" lean-forward="true" selection-start-line="59" selection-start-column="45" selection-end-line="59" selection-end-column="45" />
           <folding>
             <element signature="e#2502#2520#0" expanded="true" />
             <element signature="e#2818#2840#0" expanded="true" />
@@ -817,23 +846,15 @@
       </provider>
       <provider editor-type-id="android-designer2" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/EditProfileActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="49" selection-start-line="9" selection-start-column="49" selection-end-line="9" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_registration.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="95" column="29" lean-forward="true" selection-start-line="95" selection-start-column="29" selection-end-line="95" selection-end-column="29" />
+        <state relative-caret-position="179">
+          <caret line="58" column="74" selection-start-line="58" selection-start-column="74" selection-end-line="58" selection-end-column="74" />
           <folding>
-            <element signature="e#3842#3863#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
-      <provider editor-type-id="android-designer2" />
     </entry>
   </component>
 </project>
