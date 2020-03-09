@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,8 +22,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -30,71 +35,77 @@ import java.util.HashMap;
 public class EditProfileActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     private ImageView logo;
-    private AutoCompleteTextView username, email, password, phone;
-    private Button signup;
-    private TextView signin;
+    private EditText username, email, phone;
+    private Button saveBt;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     FirebaseFirestore db;
     String userID;
     ProgressBar progressBar;
-
-
+    FirebaseUser mUser;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration);
+        setContentView(R.layout.activity_editprofile);
 
         initializeGUI();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference ref = database.getReference("users");
 
 
 
-        signup.setOnClickListener(new View.OnClickListener() {
+        saveBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                final String inputName = username.getText().toString().trim();
-                final String inputPhone = phone.getText().toString().trim();
-                final String inputPw = password.getText().toString().trim();
-                final String inputEmail = email.getText().toString().trim();
+                ref.child(userID).child("phone").setValue(phone.getText().toString());
+                ref.child(userID).child("email").setValue(email.getText().toString());
 
-                if (validateInput(inputName, inputPw, inputPhone, inputEmail))
-                    registerUser(inputName, inputPw, inputPhone, inputEmail);
-
-            }
-
-        });
-
-
-        signin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(EditProfileActivity.this, LoginActivity.class));
+                startActivity(new Intent(EditProfileActivity.this, DrawerActivity.class));
             }
         });
 
     }
-
 
 
     private void initializeGUI() {
 
         logo = findViewById(R.id.ivRegLogo);
-        username = findViewById(R.id.atvUsernameReg);
-        phone = findViewById(R.id.phoneNum);
-        email = findViewById(R.id.atvEmailReg);
-        password = findViewById(R.id.atvPasswordReg);
-        signin = findViewById(R.id.tvSignIn);
-        signup = findViewById(R.id.btnSignUp);
+        username = findViewById(R.id.inputName);
+        phone = findViewById(R.id.inputPhone);
+        email = findViewById(R.id.inputEmail);
+
+        saveBt = findViewById(R.id.btnSave);
         progressDialog = new ProgressDialog(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        userID = firebaseAuth.getCurrentUser().getUid();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference ref = database.getReference("users");
+        ref.child(userID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snap: dataSnapshot.getChildren()){
+                    username.setText(dataSnapshot.child("Name").getValue().toString());
+                    phone.setText(dataSnapshot.child("phone").getValue().toString());
+                    email.setText(dataSnapshot.child("email").getValue().toString());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
-    private void registerUser(final String inputName, final String inputPw, final String phone, final String inputEmail) {
+    private void EditUser(final String inputName, final String inputPw, final String phone, final String inputEmail) {
 
         progressDialog.setMessage("Verificating...");
         progressDialog.show();
@@ -104,28 +115,25 @@ public class EditProfileActivity extends AppCompatActivity {
         final DatabaseReference ref = database.getReference("users");
 
 
-
-
-
-        firebaseAuth.createUserWithEmailAndPassword(inputEmail,inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseAuth.createUserWithEmailAndPassword(inputEmail, inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Toast.makeText(EditProfileActivity.this, "User Created.", Toast.LENGTH_SHORT).show();
                     userID = firebaseAuth.getCurrentUser().getUid();
 
 
                     final DatabaseReference usersRef = ref.child(userID);
 
-                    HashMap<String,Object> user = new HashMap<>();
+                    HashMap<String, Object> user = new HashMap<>();
 
-                    user.put("Name",inputName);
-                    user.put("email",inputEmail);
-                    user.put("phone",phone);
+                    user.put("Name", inputName);
+                    user.put("email", inputEmail);
+                    user.put("phone", phone);
                     usersRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "onSuccess: user Profile is created for "+ userID);
+                            Log.d(TAG, "onSuccess: user Profile is created for " + userID);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -135,7 +143,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     });
                     startActivity(new Intent(getApplicationContext(), DrawerActivity.class));
 
-                }else {
+                } else {
                     Toast.makeText(EditProfileActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }
@@ -143,39 +151,8 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
-
-    }
-
-
-
-
-
-
-    private boolean validateInput(String inName, String inPw, String inPhone, String inEmail){
-
-        if(inName.isEmpty()){
-            username.setError("Username is empty.");
-            return false;
-        }
-
-        if(inPhone.isEmpty()){
-            password.setError("Phone number is empty.");
-            return false;
-        }
-        if(inPw.isEmpty()){
-            password.setError("Password is empty.");
-            return false;
-        }
-        if(inEmail.isEmpty()){
-            email.setError("Email is empty.");
-            return false;
-        }
-
-        return true;
     }
 }
+
+
+

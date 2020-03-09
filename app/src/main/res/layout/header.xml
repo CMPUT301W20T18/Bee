@@ -23,14 +23,13 @@
             app:civ_border_width="6dp"
             app:civ_border_color="@color/yellow" />
 
-        <TextView
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Farhan"
             android:textSize="14dp"
             android:gravity="center"
             android:layout_marginTop="10dp"
-            android:textColor="#fff"
+            android:textColor="@color/gray"
             android:textStyle="bold"/>
 
     </LinearLayout>

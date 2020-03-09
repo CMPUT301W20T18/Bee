@@ -6,7 +6,7 @@
     <string name="saveBt">SAVE</string>
     <string name="btRider">TO RIDE</string>
     <string name="btDriver">TO DRIVE</string>
-    <string name="phoneNum">phone number</string>
+    <string name="phoneNum">Phone</string>
     <string name="passwordReg">Password</string>
     <string name="sign_upReg">Sign up</string>
     <string name="sign_inLog_rider">Sign in as Rider</string>
@@ -16,6 +16,7 @@
     <string name="signup_redirect">Don\'t have an account? Register here!</string>
     <string name="drawerOpen">drawerOpen</string>
     <string name="drawerClose">drawerClose</string>
+    <string name="contactEmail">contact Email</string>
 
 
 

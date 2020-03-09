@@ -35,69 +35,66 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/logo" />
 
-            <TextView
-                android:id="@+id/tvUsername"
-                android:layout_width="wrap_content"
+
+
+                <EditText
+                    android:id="@+id/inputName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:text="@string/signin_redirect"
-                android:textColor="@color/gray" />
+                android:layout_marginStart="8dp"
+                android:orientation="horizontal">
 
-            <AutoCompleteTextView
-                android:id="@+id/phoneNum"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/phoneNum"
+                    android:textSize="16sp"
+                    />
+
+
+                <EditText
+                    android:id="@+id/inputPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="10dp"
-                android:drawableStart="@drawable/icon_person"
-                android:drawableLeft="@drawable/icon_person"
-                android:drawablePadding="10dp"
-                android:hint="@string/phoneNum"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/gray"
-                android:textSize="15sp" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contactEmail"
+                    android:textSize="16sp"
+                    />
 
 
-            <AutoCompleteTextView
-                android:id="@+id/atvEmailReg"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="10dp"
-                android:drawableStart="@drawable/icon_mail"
-                android:drawableLeft="@drawable/icon_mail"
-                android:drawablePadding="10dp"
-                android:hint="@string/emailReg"
-                android:inputType="textEmailAddress"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/gray"
-                android:background="@drawable/rounded_rect"
-                android:textSize="15sp" />
-
-
-            <AutoCompleteTextView
-                android:id="@+id/atvPasswordReg"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="10dp"
-                android:drawableStart="@drawable/icon_password"
-                android:drawableLeft="@drawable/icon_password"
-                android:drawablePadding="10dp"
-                android:hint="@string/passwordReg"
-                android:inputType="textPassword"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:textColor="@color/white"
-                android:background="@drawable/rounded_rect"
-                android:textColorHint="@color/gray"
-                android:textSize="15sp" />
+                <EditText
+                    android:id="@+id/inputEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    />
+            </LinearLayout>
 
 
             <Button
-                android:id="@+id/btnSignUp"
+                android:id="@+id/btnSave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
