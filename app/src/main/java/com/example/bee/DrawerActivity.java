@@ -222,8 +222,8 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 Toast.makeText(DrawerActivity.this, "Profile Selected", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(DrawerActivity.this, EditProfileActivity.class));
                 return true;
-            case R.id.contact:
-                Toast.makeText(DrawerActivity.this, "Contact us Selected", Toast.LENGTH_SHORT).show();
+            case R.id.rating:
+                Toast.makeText(DrawerActivity.this, "My Rating Selected", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.about:
                 Toast.makeText(DrawerActivity.this, "About us Selected", Toast.LENGTH_SHORT).show();

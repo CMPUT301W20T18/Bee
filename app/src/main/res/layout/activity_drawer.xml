@@ -72,7 +72,7 @@
         app:headerLayout="@layout/header"
         android:background="@color/background"
         android:layout_gravity="start"
-        app:itemTextColor="#fff"/>
+        app:itemTextColor="@color/gray"/>
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

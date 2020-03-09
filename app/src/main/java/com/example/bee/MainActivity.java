@@ -10,16 +10,25 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
+    private FirebaseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentUser = mAuth.getCurrentUser();
-        if (currentUser == null){
+        setContentView(R.layout.activity_main);
+
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
+
+        if (user == null){
+
             startActivity(new Intent(MainActivity.this, LoginActivity.class));}
         else{
             startActivity(new Intent(MainActivity.this, DrawerActivity.class));
         }
+        finish();
+
     }
 
 

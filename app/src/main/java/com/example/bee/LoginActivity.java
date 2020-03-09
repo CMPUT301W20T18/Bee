@@ -38,10 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
         user = firebaseAuth.getCurrentUser();
 
-        if(user != null) {
-            finish();
-            startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
-        }
+
 
         btnSignInRider.setOnClickListener(new View.OnClickListener() {
             @Override

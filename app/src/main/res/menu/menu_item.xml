@@ -5,8 +5,8 @@
         android:title="Profile"/>
 
     <item
-        android:id="@+id/contact"
-        android:title="Contact us"/>
+        android:id="@+id/rating"
+        android:title="My Rating"/>
 
     <item
         android:id="@+id/about"
