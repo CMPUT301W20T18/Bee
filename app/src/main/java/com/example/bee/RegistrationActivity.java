@@ -55,6 +55,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
 
+
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,8 +65,11 @@ public class RegistrationActivity extends AppCompatActivity {
                 final String inputPw = password.getText().toString().trim();
                 final String inputEmail = email.getText().toString().trim();
 
-                if (validateInput(inputName, inputPw, inputPhone, inputEmail))
+                if (validateInput(inputName, inputPw, inputPhone, inputEmail)&& isUsernameExists(inputName))
                     registerUser(inputName, inputPw, inputPhone, inputEmail);
+//                else{
+//                    Toast.makeText(RegistrationActivity.this, "Invalid Input.", Toast.LENGTH_SHORT).show();
+//                }
 
             }
 
@@ -106,29 +110,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference ref = database.getReference("users");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(checkIfUsernameExists(inputName, dataSnapshot)== false){
-                    Toast.makeText(RegistrationActivity.this,"new",Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(RegistrationActivity.this,"old",Toast.LENGTH_SHORT).show();
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(checkIfUsernameExists(inputName,dataSnapshot)== false){
 
                     firebaseAuth.createUserWithEmailAndPassword(inputEmail,inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -164,19 +145,6 @@ public class RegistrationActivity extends AppCompatActivity {
                             }
                         }
                     });
-//                }
-//                else{
-//                    Toast.makeText(RegistrationActivity.this, "Username Already Exists", Toast.LENGTH_SHORT).show();
-//                    progressBar.setVisibility(View.GONE);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
 
 
 
@@ -213,23 +181,34 @@ public class RegistrationActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean checkIfUsernameExists(String username, DataSnapshot datasnapshot){
-        Log.d(TAG, "checkIfUsernameExists: checking if " + username + " already exists.");
 
-        UserProfile user = new UserProfile();
+    public boolean isUsernameExists(final String enteredUsername) {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference ref = database.getReference("users");
+        final Boolean[] isExist = {false};
+        ref.child("users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    String existingUsername = (String) userSnapshot.child("Name").getValue();
+                    if (existingUsername.equals(enteredUsername)) {
+                        isExist[0] = true;
+                    }
+                }
 
-        for (DataSnapshot ds: datasnapshot.getChildren()){
-            String dataUser = ds.child("Name").getValue(String.class);
-
-            if(user.getUsername().equals(dataUser)){
-                Log.d(TAG, "checkIfUsernameExists: FOUND A MATCH: " + user.getUsername());
-                return true;
             }
-        }
-        return false;
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        username.setError("Username Taken");
+        return isExist[0];
     }
 
-    public static boolean isNumeric(String str) {
+        public static boolean isNumeric(String str) {
         for (int i = 0; i < str.length(); i++) {
             System.out.println(str.charAt(i));
             if (!Character.isDigit(str.charAt(i))) {

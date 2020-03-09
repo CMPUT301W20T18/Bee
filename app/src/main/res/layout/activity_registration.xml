@@ -64,6 +64,7 @@
                 android:paddingEnd="10dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/gray"
+                android:background="@drawable/rounded_rect"
                 android:textSize="15sp" />
 
 
