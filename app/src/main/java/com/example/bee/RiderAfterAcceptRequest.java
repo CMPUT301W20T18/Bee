@@ -65,6 +65,13 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     private FusedLocationProviderClient client_device;
     TextView driver_name;
 
+    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+
+    //vars
+    private Boolean mLocationPermissionsGranted = false;
+
     MarkerOptions place1, place2;
     Boolean drew = false;
 
@@ -72,7 +79,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_after_accept_request);
-        initMap();
+        getLocationPermission();
         driver_name = (TextView)findViewById(R.id.driver_name);
         driver_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,25 +107,74 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         client_device = LocationServices.getFusedLocationProviderClient(this);
 
         try{
-            final Task location = client_device.getLastLocation();
-            location.addOnCompleteListener(new OnCompleteListener() {
-                @Override
-                public void onComplete(@NonNull Task task) {
-                    if(task.isSuccessful()){
-                        Log.d(TAG, "onComplete: found location!");
-                        Location currentLocation = (Location) task.getResult();
+            if(mLocationPermissionsGranted){
 
-                        moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                DEFAULT_ZOOM);
+                final Task location = client_device.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "onComplete: found location!");
+                            Location currentLocation = (Location) task.getResult();
 
-                    }else{
-                        Log.d(TAG, "onComplete: current location is null");
-                        Toast.makeText(RiderAfterAcceptRequest.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+//                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+//                                    DEFAULT_ZOOM);
+
+                        }else{
+                            Log.d(TAG, "onComplete: current location is null");
+                            Toast.makeText(RiderAfterAcceptRequest.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            });
+                });
+            }
         }catch (SecurityException e){
             Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
+        }
+    }
+
+    private void getLocationPermission(){
+        Log.d(TAG, "getLocationPermission: getting location permissions");
+        String[] permissions = {FINE_LOCATION, COARSE_LOCATION};
+
+        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                    COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                mLocationPermissionsGranted = true;
+                initMap();
+            }else{
+                ActivityCompat.requestPermissions(this,
+                        permissions,
+                        LOCATION_PERMISSION_REQUEST_CODE);
+            }
+        }else{
+            ActivityCompat.requestPermissions(this,
+                    permissions,
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d(TAG, "onRequestPermissionsResult: called.");
+        mLocationPermissionsGranted = false;
+
+        switch(requestCode){
+            case LOCATION_PERMISSION_REQUEST_CODE:{
+                if(grantResults.length > 0){
+                    for(int i = 0; i < grantResults.length; i++){
+                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                            mLocationPermissionsGranted = false;
+                            Log.d(TAG, "onRequestPermissionsResult: permission failed");
+                            return;
+                        }
+                    }
+                    Log.d(TAG, "onRequestPermissionsResult: permission granted");
+                    mLocationPermissionsGranted = true;
+                    //initialize our map
+                    initMap();
+                }
+            }
         }
     }
 
@@ -136,28 +192,19 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         request_accepted_map = googleMap;
 
 
-//        getDeviceLocation();
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-//                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            return;
-//        }
-//        request_accepted_map.setMyLocationEnabled(true);
-//        request_accepted_map.getUiSettings().setCompassEnabled(true);
+        getDeviceLocation();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        request_accepted_map.setMyLocationEnabled(true);
+        //request_accepted_map.getUiSettings().setCompassEnabled(true);
 
         LatLng place1_postion = new LatLng(53.523220,-113.526321);
         place1 = new MarkerOptions().position(place1_postion).title("Orientation");
-
-//        place1.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-//        request_accepted_map.addMarker(place1);
-//        request_accepted_map.moveCamera(CameraUpdateFactory.newLatLng(place1_postion));
-
         LatLng place2_postion = new LatLng(53.484300,-113.517250);
         place2 = new MarkerOptions().position(place2_postion).title("Destination");
-//        place2.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
-//        request_accepted_map.addMarker(place2);
-
-        //request_accepted_map.clear();
         drew = getPoints(place1, place2);
 
         if (!drew){
@@ -179,10 +226,10 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
             request_accepted_map.addMarker(from
                     .position(from_position)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
             request_accepted_map.addMarker(to
                     .position(to_position)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_red_placeholder)));
 
             LatLngBounds latLngBounds = new LatLngBounds.Builder()
                     .include(from_position)
@@ -197,18 +244,18 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             e.printStackTrace();
             return false;
         }
-            return true; }
+        return true; }
 
 
-//    // Convert vector drawable to bitmap
-//    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-//        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-//        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-//        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-//        Canvas canvas = new Canvas(bitmap);
-//        vectorDrawable.draw(canvas);
-//        return BitmapDescriptorFactory.fromBitmap(bitmap);
-//    }
+    // Convert vector drawable to bitmap
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
 
     private void drawRoute(LatLng p1, LatLng p2) {
         GoogleDirection.withServerKey(getString(R.string.google_maps_key))
