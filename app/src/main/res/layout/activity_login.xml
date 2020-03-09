@@ -68,8 +68,7 @@
                 android:inputType="textPassword"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:imeOptions="actionDone"
-                android:textColor="@color/gray"
+                android:textColor="@color/white"
                 android:textColorHint="@color/gray"
                 android:textSize="15sp" />
 

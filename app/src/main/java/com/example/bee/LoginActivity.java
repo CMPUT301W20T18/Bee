@@ -36,12 +36,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         initializeGUI();
 
-        /*user = firebaseAuth.getCurrentUser();
+        user = firebaseAuth.getCurrentUser();
 
         if(user != null) {
             finish();
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
-        }*/
+            startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
+        }
 
         btnSignInRider.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                 String inPassword = password.getText().toString();
 
                 if(validateInput(inEmail, inPassword)){
-                    signUser(inEmail, inPassword, "rider");
+                    signUser(inEmail, inPassword);
                 }
 
             }
@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                 String inPassword = password.getText().toString();
 
                 if(validateInput(inEmail, inPassword)){
-                    signUser(inEmail, inPassword, "driver");
+                    signUser(inEmail, inPassword);
                 }
 
             }
@@ -86,14 +86,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
 
 
 
-    public void signUser(String email, String password, String role){
-        progressDialog.setMessage("Verifying...");
+    public void signUser(String email, String password){
+
+        progressDialog.setMessage("Verificating...");
         progressDialog.show();
-        user = firebaseAuth.getCurrentUser();
 
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -101,11 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
-                    if (role.equals("rider")) {
-                        startActivity(new Intent(LoginActivity.this, EnterAddressMap.class));
-                    } else {
-                        // startActivity(new Intent(LoginActivity.this, Driverblahblah.class));
-                    }
+                    startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
                 }
                 else{
                     progressDialog.dismiss();
@@ -145,6 +143,5 @@ public class LoginActivity extends AppCompatActivity {
 
         return true;
     }
-
 
 }
