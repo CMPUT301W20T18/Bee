@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if(user != null) {
             finish();
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
         }
 
         btnSignInRider.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
                 }
                 else{
                     progressDialog.dismiss();

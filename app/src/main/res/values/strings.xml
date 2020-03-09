@@ -4,6 +4,8 @@
     <string name="usernameReg">Username</string>
     <string name="emailReg">Email</string>
     <string name="saveBt">SAVE</string>
+    <string name="btRider">TO RIDE</string>
+    <string name="btDriver">TO DRIVE</string>
     <string name="phoneNum">phone number</string>
     <string name="passwordReg">Password</string>
     <string name="sign_upReg">Sign up</string>
@@ -12,6 +14,8 @@
     <string name="signin_redirect">Already a member? Sign in!</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="signup_redirect">Don\'t have an account? Register here!</string>
+    <string name="drawerOpen">drawerOpen</string>
+    <string name="drawerClose">drawerClose</string>
 
 
 

@@ -1,7 +1,6 @@
 package com.example.bee;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,15 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firestore.v1.WriteResult;
-import com.google.protobuf.Api;
 
 public class RegistrationActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
@@ -114,43 +104,85 @@ public class RegistrationActivity extends AppCompatActivity {
         progressDialog.show();
 
 
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference ref = database.getReference("users");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
 
-
-
-        firebaseAuth.createUserWithEmailAndPassword(inputEmail,inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(RegistrationActivity.this, "User Created.", Toast.LENGTH_SHORT).show();
-                    userID = firebaseAuth.getCurrentUser().getUid();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(checkIfUsernameExists(inputName, dataSnapshot)== false){
+                    Toast.makeText(RegistrationActivity.this,"new",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(RegistrationActivity.this,"old",Toast.LENGTH_SHORT).show();
 
-                    final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference ref = database.getReference("users");
-                    DatabaseReference usersRef = ref.child(userID);
-
-                    HashMap<String,Object> user = new HashMap<>();
-                    user.put("Name",inputName);
-                    user.put("email",inputEmail);
-                    user.put("phone",phone);
-                    usersRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "onSuccess: user Profile is created for "+ userID);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "onFailure: " + e.toString());
-                        }
-                    });
-                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
-
-                }else {
-                    Toast.makeText(RegistrationActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
                 }
             }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
         });
+
+
+//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(checkIfUsernameExists(inputName,dataSnapshot)== false){
+
+                    firebaseAuth.createUserWithEmailAndPassword(inputEmail,inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(RegistrationActivity.this, "User Created.", Toast.LENGTH_SHORT).show();
+                                userID = firebaseAuth.getCurrentUser().getUid();
+
+
+                                final DatabaseReference usersRef = ref.child(userID);
+
+                                HashMap<String,Object> user = new HashMap<>();
+
+                                user.put("Name",inputName);
+                                user.put("email",inputEmail);
+                                user.put("phone",phone);
+                                usersRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "onSuccess: user Profile is created for "+ userID);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d(TAG, "onFailure: " + e.toString());
+                                    }
+                                });
+                                startActivity(new Intent(getApplicationContext(), DrawerActivity.class));
+
+                            }else {
+                                Toast.makeText(RegistrationActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+//                }
+//                else{
+//                    Toast.makeText(RegistrationActivity.this, "Username Already Exists", Toast.LENGTH_SHORT).show();
+//                    progressBar.setVisibility(View.GONE);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
+
+
+
+
+
+
     }
 
 
@@ -181,7 +213,21 @@ public class RegistrationActivity extends AppCompatActivity {
         return true;
     }
 
+    public boolean checkIfUsernameExists(String username, DataSnapshot datasnapshot){
+        Log.d(TAG, "checkIfUsernameExists: checking if " + username + " already exists.");
 
+        UserProfile user = new UserProfile();
+
+        for (DataSnapshot ds: datasnapshot.getChildren()){
+            String dataUser = ds.child("Name").getValue(String.class);
+
+            if(user.getUsername().equals(dataUser)){
+                Log.d(TAG, "checkIfUsernameExists: FOUND A MATCH: " + user.getUsername());
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 }
