@@ -16,6 +16,8 @@ public class Request {
     private String originLatlng;
     private String destLatlng;
     private ArrayList<String> pointList;
+    private String distance;
+    private String time;
     private double cost;
     private boolean status;
     private boolean finished;
@@ -23,13 +25,15 @@ public class Request {
     public Request() {}
 
     public Request(String riderID, String origin, String dest, String originLatlng, String destLatlng,
-                   ArrayList<String> pointList, double cost) {
+                   ArrayList<String> pointList, String distance, String time, double cost) {
         this.riderID = riderID;
         this.origin = origin;
         this.dest = dest;
         this.originLatlng = originLatlng;
         this.destLatlng = destLatlng;
         this.pointList = pointList;
+        this.distance = distance;
+        this.time = time;
         this.cost = cost;
         this.driverID = null;
         this.status = false;
@@ -90,6 +94,22 @@ public class Request {
      */
     public ArrayList<String> getPoints() {
         return pointList;
+    }
+
+    /**
+     * Returns the total distance of the ride
+     * @return distance
+     */
+    public String getDistance() {
+        return distance;
+    }
+
+    /**
+     * Returns the duration of the ride
+     * @return time
+     */
+    public String getTime() {
+        return time;
     }
 
     /**

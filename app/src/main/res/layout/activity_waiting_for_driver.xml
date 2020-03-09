@@ -25,7 +25,6 @@
         android:textSize="20dp"
         android:textColor="@android:color/black"
         android:id="@+id/to_text"
-        android:textStyle="bold"
         android:layout_marginTop="100dp"
         android:layout_alignLeft="@id/finding_driver"
         android:text="To: " />
@@ -37,7 +36,6 @@
         android:layout_toRightOf="@+id/to_text"
         android:layout_alignBaseline="@+id/to_text"
         android:textSize="20dp"
-        android:textStyle="bold"
         android:textColor="@android:color/black" />
 
 
@@ -45,7 +43,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:textStyle="bold"
         android:layout_alignLeft="@+id/finding_driver"
         android:layout_marginTop="20dp"
         android:layout_centerVertical="true"
@@ -59,7 +56,6 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/from_text"
         android:layout_alignBaseline="@+id/from_text"
-        android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="@android:color/black" />
 
@@ -67,7 +63,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:textStyle="bold"
         android:layout_alignLeft="@+id/from_text"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/show_from"
@@ -81,7 +76,6 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/amount_text"
         android:layout_alignBaseline="@+id/amount_text"
-        android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="@android:color/black" />
 

@@ -77,6 +77,8 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     private LatLng p2;
     private ArrayList<LatLng> pointList;
     private Boolean drew = false;
+    private String distance;
+    private String time;
     private double dist;
 
     @Override
@@ -134,8 +136,6 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
             }
         });
     }
-
-
 
 
     /*
@@ -202,6 +202,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
             return false;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
 
         return true;
@@ -240,8 +241,12 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                             Leg leg = route.getLegList().get(0);
                             pointList = leg.getDirectionPoint();
                             Info distanceInfo = leg.getDistance();
-                            String distance = distanceInfo.getText();
-                            dist = Double.parseDouble(distance.substring(0, distance.length() - 3));
+                            Info durationInfo = leg.getDuration();
+                            distance = distanceInfo.getText();
+                            time = durationInfo.getText();
+                            // distance in double, remove comma if there's any, remove km
+                            String temp = distance.replaceAll(",", "");
+                            dist = Double.parseDouble(temp.substring(0, temp.length() - 3));
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(EnterAddressMap.this, pointList, 5,
                                             getResources().getColor(R.color.route));
@@ -329,7 +334,8 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         // Convert Latlng to String
         String p1Latlng = String.format("%f,%f",p1.latitude,p1.longitude);
         String p2Latlng = String.format("%f,%f",p2.latitude,p2.longitude);
-        request.put("request", new Request(userID, originAddress, destAddress, p1Latlng, p2Latlng, points, cost));
+        request.put("request", new Request(userID, originAddress, destAddress, p1Latlng, p2Latlng,
+                points, distance, time, cost));
         requestRef.setValue(request).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

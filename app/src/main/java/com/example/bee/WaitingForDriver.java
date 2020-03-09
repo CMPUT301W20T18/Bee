@@ -18,8 +18,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class WaitingForDriver extends AppCompatActivity {
     private static final String TAG = "TAG";
-    private FirebaseDatabase database;
     private FirebaseUser user;
+    private DatabaseReference ref;
     private String userID;
     private String origin;
     private String dest;
@@ -39,39 +39,40 @@ public class WaitingForDriver extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
 
-        database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("requests").child(userID).child("request");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        ref = database.getReference("requests").child(userID).child("request");
 
+        displayInfo();
+
+    }
+
+    private void displayInfo() {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                /*for (DataSnapshot s: dataSnapshot.getChildren()) {
-                    origin = s.child("origin").getValue(String.class);
-                    dest = s.child("dest").getValue(String.class);
-                    cost = s.child("cost").getValue(Double.class);
-                    Toast.makeText(WaitingForDriver.this, dest, Toast.LENGTH_SHORT).show();
-                }*/
                 origin = dataSnapshot.child("origin").getValue(String.class);
                 dest = dataSnapshot.child("dest").getValue(String.class);
                 cost = dataSnapshot.child("cost").getValue(Double.class);
-                Toast.makeText(WaitingForDriver.this, dest, Toast.LENGTH_SHORT).show();
+
+                toText.setText(dest);
+                fromText.setText(origin);
+                costText.setText(String.format("%.2f", cost));
+
+                /*Request request = dataSnapshot.getValue(Request.class);
+                if (request != null) {
+                    toText.setText(request.getDest());
+                    fromText.setText(request.getOrigin());
+                    costText.setText(String.format("%.2f", request.getCost()));
+                } else {
+                    Toast.makeText(WaitingForDriver.this, "null", Toast.LENGTH_SHORT).show();
+                }*/
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(TAG, databaseError.toString());
             }
         });
-
-        try {
-            Toast.makeText(WaitingForDriver.this, dest, Toast.LENGTH_SHORT).show();
-            toText.setText(dest);
-            fromText.setText(origin);
-            costText.setText(String.format("%.2f", cost));
-        } catch (Exception e) {
-            Log.d("Tag", e.toString());
-        }
-
-
     }
 
 
