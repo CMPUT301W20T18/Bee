@@ -1,7 +1,6 @@
 package com.example.bee;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -24,10 +23,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 
 public class RegistrationActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
@@ -37,9 +38,12 @@ public class RegistrationActivity extends AppCompatActivity {
     private TextView signin;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
     FirebaseFirestore db;
     String userID;
     ProgressBar progressBar;
+
+
 
 
     @Override
@@ -48,6 +52,9 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
         initializeGUI();
+
+
+
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,10 +65,14 @@ public class RegistrationActivity extends AppCompatActivity {
                 final String inputPw = password.getText().toString().trim();
                 final String inputEmail = email.getText().toString().trim();
 
-                if (validateInput(inputName, inputPw, inputPhone, inputEmail))
+                if (validateInput(inputName, inputPw, inputPhone, inputEmail)&& isUsernameExists(inputName))
                     registerUser(inputName, inputPw, inputPhone, inputEmail);
+//                else{
+//                    Toast.makeText(RegistrationActivity.this, "Invalid Input.", Toast.LENGTH_SHORT).show();
+//                }
 
             }
+
         });
 
 
@@ -93,47 +104,59 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void registerUser(final String inputName, final String inputPw, final String phone, final String inputEmail) {
 
-        progressDialog.setMessage("Verifying...");
+        progressDialog.setMessage("Verificating...");
         progressDialog.show();
 
 
-        firebaseAuth.createUserWithEmailAndPassword(inputEmail,inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference ref = database.getReference("users");
 
-                if(task.isSuccessful()){
-                    Toast.makeText(RegistrationActivity.this, "User Created.", Toast.LENGTH_SHORT).show();
-                    userID = firebaseAuth.getCurrentUser().getUid();
-
-                    final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference ref = database.getReference("users");
-                    DatabaseReference usersRef = ref.child(userID);
-
-                    HashMap<String,Object> user = new HashMap<>();
-                    user.put("Name",inputName);
-                    user.put("email",inputEmail);
-                    user.put("phone",phone);
-                    usersRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    firebaseAuth.createUserWithEmailAndPassword(inputEmail,inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "onSuccess: user Profile is created for "+ userID);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "onFailure: " + e.toString());
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(RegistrationActivity.this, "User Created.", Toast.LENGTH_SHORT).show();
+                                userID = firebaseAuth.getCurrentUser().getUid();
+
+
+                                final DatabaseReference usersRef = ref.child(userID);
+
+                                HashMap<String,Object> user = new HashMap<>();
+
+                                user.put("Name",inputName);
+                                user.put("email",inputEmail);
+                                user.put("phone",phone);
+                                usersRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "onSuccess: user Profile is created for "+ userID);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d(TAG, "onFailure: " + e.toString());
+                                    }
+                                });
+                                startActivity(new Intent(getApplicationContext(), DrawerActivity.class));
+
+                            }else {
+                                Toast.makeText(RegistrationActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+                            }
                         }
                     });
-                    startActivity(new Intent(getApplicationContext(),LoginActivity.class));
 
-                }else {
-                    Toast.makeText(RegistrationActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    //progressBar.setVisibility(View.GONE);
-                    Log.d(TAG, "onFailure: " + task.getException().getMessage());
-                }
-            }
-        });
+
+
+
+
+
     }
+
+
+
+
+
 
     private boolean validateInput(String inName, String inPw, String inPhone, String inEmail){
 
@@ -142,20 +165,58 @@ public class RegistrationActivity extends AppCompatActivity {
             return false;
         }
 
-        if(inPhone.isEmpty()){
-            phone.setError("Phone number is empty.");
+        if(isNumeric(inPhone)==false||inPhone.length()!=10){
+            password.setError("Invalid Phone number ");
             return false;
         }
-        if(inPw.isEmpty()){
-            password.setError("Password is empty.");
+        if(inPw.length()!= 6){
+            password.setError("Invalid Password ");
             return false;
         }
-        if(inEmail.isEmpty()){
-            email.setError("Email is empty.");
+        if(inEmail.contains("@")==false){
+            email.setError("Invalid Email");
             return false;
         }
 
         return true;
     }
+
+
+    public boolean isUsernameExists(final String enteredUsername) {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference ref = database.getReference("users");
+        final Boolean[] isExist = {false};
+        ref.child("users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    String existingUsername = (String) userSnapshot.child("Name").getValue();
+                    if (existingUsername.equals(enteredUsername)) {
+                        isExist[0] = true;
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        username.setError("Username Taken");
+        return isExist[0];
+    }
+
+        public static boolean isNumeric(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            System.out.println(str.charAt(i));
+            if (!Character.isDigit(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
 }
