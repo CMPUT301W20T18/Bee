@@ -156,21 +156,32 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     DrawerLayout drawerLayout;
     Toolbar toolbar;
+    View headerView;
     NavigationView navigationView;
     ActionBarDrawerToggle toggle;
 
     private Button btnLogout;
     private FirebaseAuth firebaseAuth;
+    private EditText displayName;
+    String userID;
 
 
     @Override
@@ -181,8 +192,13 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
 
         drawerLayout = findViewById(R.id.drawer);
+
+        //displayName = findViewById(R.id.profileName);
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.navigationView);
+        //headerView = navigationView.inflateHeaderView(R.layout.header);
+        //displayName  = headerView.findViewById(R.id.profileName);
+        displayName = navigationView.getHeaderView(0).findViewById(R.id.profileName);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -191,10 +207,32 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+
         btnLogout = findViewById(R.id.btnLogout);
         firebaseAuth = FirebaseAuth.getInstance();
+        userID = firebaseAuth.getCurrentUser().getUid();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference ref = database.getReference("users");
+        ref.child(userID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snap: dataSnapshot.getChildren()){
+                    displayName.setText(dataSnapshot.child("Name").getValue().toString());
 
-            btnLogout.setOnClickListener(new View.OnClickListener() {
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(DrawerActivity.this, LoginActivity.class));
