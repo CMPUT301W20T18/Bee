@@ -17,7 +17,9 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bee/EnterAddressMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bee/EnterAddressMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bee/SetCost.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bee/SetCost.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bee/WaitingForDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bee/WaitingForDriver.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/build/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -52,40 +54,35 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/EnterAddressMap.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="68" column="13" selection-start-line="68" selection-start-column="13" selection-end-line="68" selection-end-column="13" />
-              <folding>
-                <element signature="e#6899#6934#0" expanded="true" />
-                <element signature="e#9475#9510#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/RiderAfterAcceptRequest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1827">
-              <caret line="192" column="11" selection-start-line="192" selection-start-column="11" selection-end-line="192" selection-end-column="11" />
+            <state relative-caret-position="-12">
+              <caret line="322" column="46" selection-start-line="322" selection-start-column="46" selection-end-line="322" selection-end-column="46" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/DriverBasicInformation.java">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/WaitingForDriver.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="60" lean-forward="true" selection-start-line="60" selection-end-line="60" />
+            <state relative-caret-position="508">
+              <caret line="109" column="46" selection-start-line="109" selection-start-column="46" selection-end-line="109" selection-end-column="46" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-          <provider editor-type-id="android-manifest" />
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/LoginActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="34" column="67" selection-start-line="34" selection-start-column="67" selection-end-line="34" selection-end-column="67" />
+            <state relative-caret-position="396">
+              <caret line="104" column="93" selection-start-line="104" selection-start-column="93" selection-end-line="104" selection-end-column="93" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/SetCost.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="185">
+              <caret line="51" column="8" selection-start-line="51" selection-start-column="8" selection-end-line="51" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -148,7 +145,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/Rider_after_accept_request.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_driver_basic_information.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/LoginActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_selfprofile.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/nav_header.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/DrawerActivity.xml" />
@@ -168,6 +164,10 @@
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/RiderAfterAcceptRequest.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/DriverBasicInformation.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/SetCost.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/EnterAddressMap.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/LoginActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/bee/WaitingForDriver.java" />
       </list>
     </option>
   </component>
@@ -217,8 +217,13 @@
             <path>
               <item name="Bee" type="1abcf292:AndroidViewProjectNode" />
               <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="drawable" type="ddeffd01:AndroidResFolderTypeNode" />
+              <item name="res (generated)" type="d4f16f75:AndroidResFolderNode" />
+            </path>
+            <path>
+              <item name="Bee" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="res (generated)" type="d4f16f75:AndroidResFolderNode" />
+              <item name="values" type="ddeffd01:AndroidResFolderTypeNode" />
             </path>
             <path>
               <item name="Bee" type="1abcf292:AndroidViewProjectNode" />
@@ -571,10 +576,10 @@
       <window_info anchor="bottom" id="TODO" order="1" sideWeight="0.49486652" weight="0.75384617" />
       <window_info anchor="bottom" id="Terminal" order="2" sideWeight="0.49486652" weight="0.46627218" />
       <window_info anchor="bottom" id="Event Log" order="3" sideWeight="0.676681" side_tool="true" weight="0.08228731" />
-      <window_info anchor="bottom" id="Logcat" order="4" sideWeight="0.8118741" weight="0.044630405" />
-      <window_info anchor="bottom" id="Android Profiler" order="5" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Logcat" order="4" sideWeight="0.8118741" weight="0.30722892" />
+      <window_info anchor="bottom" id="Android Profiler" order="5" />
       <window_info active="true" anchor="bottom" id="Build" order="6" sideWeight="0.32331902" visible="true" weight="0.25421688" />
-      <window_info anchor="bottom" id="Run" order="7" sideWeight="0.6392882" weight="0.6402367" />
+      <window_info anchor="bottom" id="Run" order="7" sideWeight="0.6392882" weight="0.63975906" />
       <window_info anchor="bottom" id="Debug" order="8" />
       <window_info anchor="bottom" id="Find" order="9" sideWeight="0.49760437" weight="0.637378" />
       <window_info anchor="right" id="Capture Analysis" order="0" />
@@ -667,7 +672,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="update unique username enforcement" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/myapplication/MainActivity.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/myapplication/accept_request.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml">
       <provider selected="true" editor-type-id="text-editor" />
@@ -703,17 +707,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/DrawerActivity.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/menu_item.xml" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/LoginActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-807">
-          <caret line="45" column="42" selection-start-line="45" selection-start-column="42" selection-end-line="45" selection-end-column="42" />
-          <folding>
-            <element signature="e#1403#1778#0" expanded="true" />
-            <element signature="e#1777#1778#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -780,13 +773,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
           <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-224">
-          <caret line="2" column="4" selection-start-line="2" selection-start-column="4" selection-end-line="18" selection-end-column="54" />
         </state>
       </provider>
     </entry>
@@ -863,36 +849,60 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/EnterAddressMap.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/DriverBasicInformation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="68" column="13" selection-start-line="68" selection-start-column="13" selection-end-line="68" selection-end-column="13" />
-          <folding>
-            <element signature="e#6899#6934#0" expanded="true" />
-            <element signature="e#9475#9510#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="780">
+          <caret line="70" selection-start-line="70" selection-end-line="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="4" selection-start-line="2" selection-start-column="4" selection-end-line="18" selection-end-column="54" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
       <provider editor-type-id="android-manifest" />
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
+        <state relative-caret-position="462">
           <caret line="34" column="67" selection-start-line="34" selection-start-column="67" selection-end-line="34" selection-end-column="67" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/RiderAfterAcceptRequest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1827">
+        <state relative-caret-position="542">
           <caret line="192" column="11" selection-start-line="192" selection-start-column="11" selection-end-line="192" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/DriverBasicInformation.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/EnterAddressMap.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="60" lean-forward="true" selection-start-line="60" selection-end-line="60" />
+        <state relative-caret-position="-12">
+          <caret line="322" column="46" selection-start-line="322" selection-start-column="46" selection-end-line="322" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/LoginActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="104" column="93" selection-start-line="104" selection-start-column="93" selection-end-line="104" selection-end-column="93" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/SetCost.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="51" column="8" selection-start-line="51" selection-start-column="8" selection-end-line="51" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/bee/WaitingForDriver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="508">
+          <caret line="109" column="46" selection-start-line="109" selection-start-column="46" selection-end-line="109" selection-end-column="46" />
         </state>
       </provider>
     </entry>
