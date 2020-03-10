@@ -1,7 +1,9 @@
 package com.example.bee;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -48,7 +51,7 @@ import static android.content.ContentValues.TAG;
 
 public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private FusedLocationProviderClient client_device;
-    GoogleMap map;
+    GoogleMap mapPop;
     MarkerOptions place1;
     MarkerOptions place2;
     Boolean drew = false;
@@ -70,9 +73,9 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
         int width = displayMetrics.widthPixels;
-        int hegiht = displayMetrics.heightPixels;
+        int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int) (width * 0.8), (int) (hegiht * .6));
+        getWindow().setLayout((int) (width * 0.8), (int) (height * .6));
 
         AcceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,23 +103,23 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
         .findFragmentById(R.id.map_pop);
 
-        supportMapFragment.getMapAsync((OnMapReadyCallback) PopUpMap.this);
+        supportMapFragment.getMapAsync(PopUpMap.this);
 
     }
 //    @Override
     public void onMapReady(GoogleMap googleMap){
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: Map is ready");
-        map = googleMap;
+        mapPop = googleMap;
 
         LatLng place1_position = new LatLng(53.523220, -113.526321);
-        LatLng place2_position = new LatLng(53.484300, -113.517250);
+        LatLng place2_position = new LatLng(53.484300,-113.517250);
 
         place1 = new MarkerOptions().position(place1_position).title("Starting position");
 
         place2 = new MarkerOptions().position(place2_position).title("Destination");
 
-        boolean drew = getPoints(place1, place2);
+        drew = getPoints(place1, place2);
 
         if (!drew) {
             String text = "Invalid Address";
@@ -136,17 +139,18 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             // May throw an IOException
             LatLng from_position = fromAddress.getPosition();
             LatLng to_position = toAddress.getPosition();
-            map.addMarker(fromAddress.position(from_position)
+            mapPop.addMarker(fromAddress.position(from_position)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-            map.addMarker(toAddress.position(to_position)
+            mapPop.addMarker(toAddress.position(to_position)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
 
             LatLngBounds latLngBounds = new LatLngBounds.Builder()
                     .include(from_position)
                     .include(to_position)
                     .build();
-            map.setPadding(0, 150, 0, 0);
-            map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
+            System.out.println("iopiop");
+            mapPop.setPadding(0, 150, 0, 0);
+            mapPop.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
             drawRoute(from_position, to_position);
 
         } catch (Exception e) {
@@ -162,9 +166,8 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
 
 
-
     private void drawRoute(LatLng p1, LatLng p2) {
-        GoogleDirection.withServerKey(getString(R.string.web_api_key))
+        GoogleDirection.withServerKey(getString(R.string.google_api_key))
                 .from(p1)
                 .to(p2)
                 .transportMode(TransportMode.DRIVING)
@@ -175,13 +178,20 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
                             Route route = direction.getRouteList().get(0);
                             Leg leg = route.getLegList().get(0);
                             ArrayList<LatLng> pointList = leg.getDirectionPoint();
-//                                    Info distanceInfo = leg.getDistance();
-//                                    String distance = distanceInfo.getText();
-//                                    dist = Double.parseDouble(distance.substring(0, distance.length() - 3));
+                            Info distanceInfo = leg.getDistance();
+                            String distance = distanceInfo.getText();
+                            Toast.makeText(PopUpMap.this, distance, Toast.LENGTH_SHORT).show();
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(PopUpMap.this, pointList, 5,
                                             getResources().getColor(R.color.yellow));
-                            map.addPolyline(polylineOptions);
+                            mapPop.addPolyline(polylineOptions);
+//                            Route route = direction.getRouteList().get(0);
+//                            Leg leg = route.getLegList().get(0);
+//                            ArrayList<LatLng> pointList = leg.getDirectionPoint();
+//                            PolylineOptions polylineOptions = DirectionConverter
+//                                    .createPolyline(PopUpMap.this, pointList, 5,
+//                                            getResources().getColor(R.color.yellow));
+//                            mapPop.addPolyline(polylineOptions);
                         } else {
                             String text = direction.getStatus();
                             Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);

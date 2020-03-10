@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
-public class WaitingForRider extends AppCompatActivity implements OnMapReadyCallback {
+public class WaitingForRider extends FragmentActivity implements OnMapReadyCallback {
     private FirebaseFirestore db;
     private FirebaseUser user;
     private String originAddress;
@@ -44,8 +45,9 @@ public class WaitingForRider extends AppCompatActivity implements OnMapReadyCall
 
     TextView RequestMoneyAmount;
     GoogleMap map;
-
-    RiderDecision riderDecision;
+    TextView RequestStatus;
+//    RiderDecision riderDecision;
+    Boolean riderResponse;
 
 
     MarkerOptions place1;
@@ -63,21 +65,47 @@ public class WaitingForRider extends AppCompatActivity implements OnMapReadyCall
         riderName = findViewById(R.id.rider_name);
         finishButton = findViewById(R.id.finish_button);
         finishButton.setVisibility(View.GONE);
-
-
-        if()
-
-
-
-
-
-        finishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        RequestStatus = findViewById(R.id.request_status);
+//        Intent show = new I
+        if(riderResponse){
+            RequestStatus.setText("Confirmed ride offer");
+            finishButton.setVisibility(View.VISIBLE);
+            finishButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 //                Intent intent = new Intent(WaitingForRider.this, )
-                finish();
-            }
-        });
+                    finish();
+                }
+            });
+        }else if(!riderResponse){
+            RequestStatus.setText("Declined ride offer");
+            finishButton.setVisibility(View.VISIBLE);
+            finishButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                Intent intent = new Intent(WaitingForRider.this, )
+                    finish();
+                }
+            });
+
+
+        }else{
+            RequestStatus.setText("Waiting for comfirmation......");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }
