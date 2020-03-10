@@ -350,4 +350,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
 
         startActivity(new Intent(EnterAddressMap.this, WaitingForDriver.class));
     }
+
+    @Override
+    public void onBackPressed() {} // Prevent activity from going back to login
 }

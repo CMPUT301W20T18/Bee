@@ -94,6 +94,7 @@ public class WaitingForDriver extends AppCompatActivity {
         dialog.setContentView(R.layout.confirm_cancel_dialog);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         Button confirmBtn = dialog.findViewById(R.id.do_cancel_btn);
         Button cancelBtn = dialog.findViewById(R.id.not_cancel_btn);
 
@@ -149,5 +150,8 @@ public class WaitingForDriver extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {} // Prevent activity from going back to the last activity
 
 }
