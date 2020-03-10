@@ -49,6 +49,7 @@ public class SetCost extends DialogFragment {
         dialog.setContentView(R.layout.set_cost_fragment);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
+        setCancelable(false);
         TextView textView = dialog.findViewById(R.id.old_cost);
         textView.setText("$ " + String.format("%.2f", oldCost));
         EditText editText = dialog.findViewById(R.id.enter_cost);
