@@ -65,7 +65,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 final String inputPw = password.getText().toString().trim();
                 final String inputEmail = email.getText().toString().trim();
 
-                if (validateInput(inputName, inputPw, inputPhone, inputEmail)&& isUsernameExists(inputName))
+                if (validateInput(inputName, inputPw, inputPhone, inputEmail)&& usernameNotExists(inputName))
                     registerUser(inputName, inputPw, inputPhone, inputEmail);
 //                else{
 //                    Toast.makeText(RegistrationActivity.this, "Invalid Input.", Toast.LENGTH_SHORT).show();
@@ -104,7 +104,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void registerUser(final String inputName, final String inputPw, final String phone, final String inputEmail) {
 
-        progressDialog.setMessage("Verificating...");
+        progressDialog.setMessage("Verifying...");
         progressDialog.show();
 
 
@@ -141,7 +141,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                             }else {
                                 Toast.makeText(RegistrationActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
+                                //progressBar.setVisibility(View.GONE);
                             }
                         }
                     });
@@ -160,20 +160,20 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private boolean validateInput(String inName, String inPw, String inPhone, String inEmail){
 
-        if(inName.isEmpty()){
+        if (inName.isEmpty()) {
             username.setError("Username is empty.");
             return false;
         }
 
-        if(isNumeric(inPhone)==false||inPhone.length()!=10){
-            password.setError("Invalid Phone number ");
+        if (inPhone.length()!=10) {
+            phone.setError("Invalid Phone number ");
             return false;
         }
-        if(inPw.length()!= 6){
+        if (inPw.length() < 6) {
             password.setError("Invalid Password ");
             return false;
         }
-        if(inEmail.contains("@")==false){
+        if (inEmail.contains("@")==false) {
             email.setError("Invalid Email");
             return false;
         }
@@ -182,17 +182,19 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
 
-    public boolean isUsernameExists(final String enteredUsername) {
+    public boolean usernameNotExists(String enteredUsername) {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference ref = database.getReference("users");
-        final Boolean[] isExist = {false};
+        final Boolean[] notExist = {true};
+
         ref.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    String existingUsername = (String) userSnapshot.child("Name").getValue();
+                    String existingUsername = userSnapshot.child("Name").getValue(String.class);
                     if (existingUsername.equals(enteredUsername)) {
-                        isExist[0] = true;
+                        notExist[0] = false;
+                        break;
                     }
                 }
 
@@ -204,8 +206,11 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
-        username.setError("Username Taken");
-        return isExist[0];
+        if (notExist[0] == false) {
+            username.setError("Username Taken");
+            return false;
+        }
+        return true;
     }
 
         public static boolean isNumeric(String str) {

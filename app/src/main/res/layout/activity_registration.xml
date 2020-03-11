@@ -59,6 +59,7 @@
                 android:drawableStart="@drawable/icon_person"
                 android:drawableLeft="@drawable/icon_person"
                 android:drawablePadding="10dp"
+                android:inputType="number"
                 android:hint="@string/phoneNum"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
