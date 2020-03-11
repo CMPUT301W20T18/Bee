@@ -103,6 +103,10 @@ public class LoginActivity extends AppCompatActivity {
                     if(role.equals("rider"))
                     {startActivity(new Intent(LoginActivity.this,EnterAddressMap.class));}
                     //startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
+                    else{
+                        Intent driver = new Intent(LoginActivity.this, DriverMain.class);
+                        startActivity(driver);
+                    }
                 }
                 else{
                     progressDialog.dismiss();
