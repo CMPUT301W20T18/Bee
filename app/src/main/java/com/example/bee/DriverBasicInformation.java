@@ -13,6 +13,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+/**
+ * This class shows the basic information of driver after rider accept the driver.
+ */
 
 public class DriverBasicInformation extends AppCompatActivity {
     ImageView back;

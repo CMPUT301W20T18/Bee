@@ -44,6 +44,10 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 
+/**
+ * This class shows the basic information of driver after rider accept the driver.
+ */
+
 public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = "accept_request_activity";
