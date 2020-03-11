@@ -41,6 +41,8 @@
         <activity android:name=".WaitingForDriver" />
         <activity android:name=".DriverBasicInformation"></activity>
         <activity android:name=".RiderAfterAcceptRequest" />
+        <activity android:name=".DriverMain"/>
+        <activity android:name=".SearchRide"/>
     </application>
 
 </manifest>
