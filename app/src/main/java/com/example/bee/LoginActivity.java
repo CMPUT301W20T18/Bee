@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginActivity extends AppCompatActivity {
 
     private ImageView logo, ivSignIn;
-    private AutoCompleteTextView email, password;
+    private AutoCompleteTextView name, password;
     private TextView forgotPass, signUp;
     private Button btnSignInRider, btnSignInDriver;
     private FirebaseAuth firebaseAuth;
@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String inEmail = email.getText().toString();
+                String inEmail = name.getText().toString()+"@gmailbiugvuebgiuv.com";
                 String inPassword = password.getText().toString();
 
                 if(validateInput(inEmail, inPassword)){
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String inEmail = email.getText().toString();
+                String inEmail = name.getText().toString()+"@gmailbiugvuebgiuv.com";
                 String inPassword = password.getText().toString();
 
                 if(validateInput(inEmail, inPassword)){
@@ -76,12 +76,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        forgotPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this,PWresetActivity.class));
-            }
-        });
+//        forgotPass.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(LoginActivity.this,PWresetActivity.class));
+//            }
+//        });
 
 
 
@@ -115,9 +115,9 @@ public class LoginActivity extends AppCompatActivity {
     private void initializeGUI(){
 
         logo = findViewById(R.id.ivLogLogo);
-        email = findViewById(R.id.atvEmailLog);
+        name = findViewById(R.id.atvUsernameReg);
         password = findViewById(R.id.atvPasswordLog);
-        forgotPass = findViewById(R.id.tvForgotPass);
+        //forgotPass = findViewById(R.id.tvForgotPass);
         signUp = findViewById(R.id.tvSignIn);
         btnSignInRider = findViewById(R.id.btnSignInRider);
         btnSignInDriver = findViewById(R.id.btnSignInDriver);
@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
     public boolean validateInput(String inemail, String inpassword){
 
         if(inemail.isEmpty()){
-            email.setError("Email field is empty.");
+            name.setError("Username field is empty.");
             return false;
         }
         if(inpassword.isEmpty()){
