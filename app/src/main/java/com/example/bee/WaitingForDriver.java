@@ -34,9 +34,9 @@ public class WaitingForDriver extends AppCompatActivity {
     private DatabaseReference ref;
     private String userID;
     private Request request;
-    TextView toText;
-    TextView fromText;
-    TextView costText;
+    private TextView toText;
+    private TextView fromText;
+    private TextView costText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +66,7 @@ public class WaitingForDriver extends AppCompatActivity {
                 if (request != null) {
                     String driverID = request.getDriverID();
                     if (driverID != null) {
-                        //insertDriver();
-                        // show dialog to ask to accept ride
+                        new ConfirmOfferDialog(driverID).show(getSupportFragmentManager(), "show_driver");
                     }
                 }
             }
@@ -93,6 +92,7 @@ public class WaitingForDriver extends AppCompatActivity {
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.confirm_cancel_dialog);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         Button confirmBtn = dialog.findViewById(R.id.do_cancel_btn);
