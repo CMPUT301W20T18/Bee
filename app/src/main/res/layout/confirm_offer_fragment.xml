@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/dialog_box"
-    android:padding="10dp">
+    android:paddingTop="10dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,10 +22,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Your request is accepted by"
-            android:textSize="20sp"
+            android:textSize="14sp"
             android:textColor="@color/gray"
             android:layout_toRightOf="@+id/driver_profile1"
-            android:layout_marginLeft="25dp" />
+            android:layout_marginLeft="30dp" />
 
 
         <TextView
@@ -33,9 +33,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/prompt_text"
             android:layout_toRightOf="@+id/driver_profile1"
-            android:layout_marginLeft="25dp"
+            android:layout_alignLeft="@+id/prompt_text"
             android:text="Driver Name"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textColor="@color/black"
             android:id="@+id/driver_name1"/>
 
@@ -45,7 +45,7 @@
             android:layout_alignLeft="@+id/driver_name1"
             android:layout_below="@+id/driver_name1"
             android:text="7801234566"
-            android:textSize="24sp"
+            android:textSize="17sp"
             android:textColor="@color/black"
             android:id="@+id/phone_number"/>
 
@@ -66,7 +66,7 @@
             android:layout_below="@id/phone_number"
             android:layout_marginLeft="10dp"
             android:text="0"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textColor="@color/black" />
 
         <ImageView
@@ -87,7 +87,7 @@
             android:layout_marginLeft="10dp"
             android:layout_alignBaseline="@+id/rate_up"
             android:text="0"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textColor="@color/black" />
 
     </RelativeLayout>
@@ -109,12 +109,12 @@
             android:textSize="18sp"
             android:paddingTop="15dp"
             android:paddingBottom="16dp"
-            android:paddingLeft="21dp"
-            android:paddingRight="21dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:textColor="@color/black"
             android:background="@android:color/transparent"
             android:layout_weight="1"
-            android:id="@+id/cancel_btn" />
+            android:id="@+id/reject_btn" />
 
         <View android:layout_width="1dp"
             android:layout_height="match_parent"
@@ -123,11 +123,11 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/confirm_btn"
+            android:id="@+id/start_btn"
             android:textColor="#1d8f2e"
             android:textSize="18sp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingLeft="21dp"
+            android:paddingRight="21dp"
             android:paddingTop="15dp"
             android:paddingBottom="16dp"
             android:text="Start"

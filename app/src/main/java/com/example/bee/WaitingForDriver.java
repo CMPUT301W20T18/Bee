@@ -62,11 +62,11 @@ public class WaitingForDriver extends AppCompatActivity {
                     fromText.setText(request.getOrigin());
                     costText.setText(String.format("%.2f", request.getCost()));
                 }
-
+                new ConfirmOfferDialog("2rfF4ijh1GTDB16UpL1Ydw6mOlf2").show(getSupportFragmentManager(), "show_driver");
                 if (request != null) {
                     String driverID = request.getDriverID();
                     if (driverID != null) {
-                        new ConfirmOfferDialog(driverID).show(getSupportFragmentManager(), "show_driver");
+                        //new ConfirmOfferDialog(driverID).show(getSupportFragmentManager(), "show_driver");
                     }
                 }
             }
