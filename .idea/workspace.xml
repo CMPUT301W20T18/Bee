@@ -42,6 +42,7 @@
         <option value="layoutResourceFile_vertical" />
         <option value="Class" />
         <option value="layoutResourceFile" />
+        <option value="resourceFile" />
       </list>
     </option>
   </component>

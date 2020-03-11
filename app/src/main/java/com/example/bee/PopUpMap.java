@@ -75,7 +75,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int) (width * 0.8), (int) (height * .6));
+        getWindow().setLayout((int) (width * 0.75), (int) (height * .6));
 
         AcceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
