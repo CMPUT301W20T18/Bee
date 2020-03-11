@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
                 String inPassword = password.getText().toString();
 
                 if(validateInput(inEmail, inPassword)){
-                    signUser(inEmail, inPassword);
+                    signUser(inEmail, inPassword,"rider");
                 }
 
             }
@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                 String inPassword = password.getText().toString();
 
                 if(validateInput(inEmail, inPassword)){
-                    signUser(inEmail, inPassword);
+                    signUser(inEmail, inPassword,"driver");
                 }
 
             }
@@ -89,9 +89,9 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    public void signUser(String email, String password){
+    public void signUser(String email, String password,String role){
 
-        progressDialog.setMessage("Verificating...");
+        progressDialog.setMessage("Verifying...");
         progressDialog.show();
 
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -100,7 +100,9 @@ public class LoginActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
+                    if(role.equals("rider"))
+                    {startActivity(new Intent(LoginActivity.this,EnterAddressMap.class));}
+                    //startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
                 }
                 else{
                     progressDialog.dismiss();
