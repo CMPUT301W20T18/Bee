@@ -48,6 +48,7 @@ public class SetCost extends DialogFragment {
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.set_cost_fragment);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
         dialog.setCanceledOnTouchOutside(false);
         setCancelable(false);
         TextView textView = dialog.findViewById(R.id.old_cost);
