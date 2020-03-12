@@ -25,7 +25,7 @@
             android:textSize="14sp"
             android:textColor="@color/gray"
             android:layout_toRightOf="@+id/driver_profile1"
-            android:layout_marginLeft="30dp" />
+            android:layout_marginLeft="25dp" />
 
 
         <TextView
@@ -34,7 +34,6 @@
             android:layout_below="@+id/prompt_text"
             android:layout_toRightOf="@+id/driver_profile1"
             android:layout_alignLeft="@+id/prompt_text"
-            android:text="Driver Name"
             android:textSize="20sp"
             android:textColor="@color/black"
             android:id="@+id/driver_name1"/>
@@ -44,7 +43,6 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/driver_name1"
             android:layout_below="@+id/driver_name1"
-            android:text="7801234566"
             android:textSize="17sp"
             android:textColor="@color/black"
             android:id="@+id/phone_number"/>

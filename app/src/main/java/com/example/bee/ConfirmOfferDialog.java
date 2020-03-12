@@ -1,6 +1,7 @@
 package com.example.bee;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -9,11 +10,14 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,51 +26,40 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 public class ConfirmOfferDialog extends DialogFragment {
+    private OnFragmentInteractionListener listener;
     private static final String TAG = "TAG";
     private FirebaseUser user;
     private DatabaseReference ref;
-    private String userID;
     private String driverID;
-    private Request request;
-    private TextView driverName;
-    private TextView phoneNum;
-    private TextView rateUp;
-    private TextView rateDown;
-    private Button startBtn;
-    private Button rejectBtn;
+    private String name;
+    private String phone;
+    private String rateUp;
+    private String rateDown;
 
     ConfirmOfferDialog(String driverID) {
         this.driverID = driverID;
+        // Toast.makeText(getActivity(), name+"2", Toast.LENGTH_SHORT).show();
     }
 
-    private void displayInfo(Dialog dialog) {
-        driverName = dialog.findViewById(R.id.driver_name1);
-        phoneNum = dialog.findViewById(R.id.phone_number);
-        rateUp = dialog.findViewById(R.id.rate_up);
-        rateDown = dialog.findViewById(R.id.rate_down);
-
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        userID = user.getUid();
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        ref = database.getReference("users").child(driverID);
-
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String name = dataSnapshot.child("Name").getValue(String.class);
-                driverName.setText(name);
-                String phone = dataSnapshot.child("phone").getValue(String.class);
-                phoneNum.setText(phone);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, databaseError.toString());
-            }
-        });
-
+    public interface OnFragmentInteractionListener {
+        void acceptOffer();
+        void declineOffer();
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener){
+            listener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
 
     @NonNull
     @Override
@@ -74,26 +67,51 @@ public class ConfirmOfferDialog extends DialogFragment {
         Dialog dialog = new Dialog(getActivity(), android.R.style.Theme_Dialog);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.confirm_offer_fragment);
+        TextView driverName = dialog.findViewById(R.id.driver_name1);
+        TextView phoneNum = dialog.findViewById(R.id.phone_number);
+        TextView rateUpText = dialog.findViewById(R.id.rate_up);
+        TextView rateDownText = dialog.findViewById(R.id.rate_down);
+        Button startBtn = dialog.findViewById(R.id.start_btn);
+        Button rejectBtn = dialog.findViewById(R.id.reject_btn);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
         dialog.setCanceledOnTouchOutside(false);
         setCancelable(false);
-        displayInfo(dialog);
-        startBtn = dialog.findViewById(R.id.start_btn);
-        rejectBtn = dialog.findViewById(R.id.reject_btn);
+        //if (name.isEmpty())
+        //driverName.setText(name);
+        //phoneNum.setText(phone);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        ref = database.getReference("users").child(driverID);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (driverName.getText().toString().isEmpty()) {
+                    String name = dataSnapshot.child("Name").getValue(String.class);
+                    driverName.setText(name);
+                    String phone = dataSnapshot.child("phone").getValue(String.class);
+                    phoneNum.setText(phone);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, databaseError.toString());
+            }
+        });
 
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // startActivity(new Intent(ConfirmOfferDialog.this, RiderAfter...));
+                listener.acceptOffer();
             }
         });
 
         rejectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                listener.declineOffer();
             }
         });
 
