@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -34,8 +35,8 @@ public class SearchRide extends AppCompatActivity {
     Request request;
 
     EditText searchNearby;
-    Button searchButton;
-    Button backButton;
+    ImageView searchButton;
+    ImageView backButton;
     ArrayAdapter<Offer> offerAdapter;
     ArrayList<Offer> offerInfo;
     ArrayList<Request> request_list;
@@ -69,7 +70,8 @@ public class SearchRide extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 request = dataSnapshot.getValue(Request.class);
 
-                offerInfo.add(new Offer(request.getOrigin(),request.getDest(),String.valueOf(request.getCost()),request.getOriginLatlng(),request.getRiderID()));
+                offerInfo.add(new Offer(request.getOrigin(),request.getDest(),
+                        String.format("%.2f", request.getCost()),request.getOriginLatlng(),request.getRiderID()));
                 offerAdapter.notifyDataSetChanged();
             }
 
