@@ -63,14 +63,10 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
                     fromText.setText(request.getOrigin());
                     costText.setText(String.format("%.2f", request.getCost()));
                 }
-                driverID = "0bEdwmBMMpSuzycdNfJn0EAvWiw1";
-                //displayOfferDialog();
-                new ConfirmOfferDialog(driverID).show(getSupportFragmentManager(), "show_driver");
                 if (request != null) {
                     driverID = request.getDriverID();
                     if (driverID != null) {
-                        //String[] info = getDriverInfo();
-                        //new ConfirmOfferDialog(driverID).show(getSupportFragmentManager(), "show_driver");
+                        new ConfirmOfferDialog(driverID).show(getSupportFragmentManager(), "show_driver");
                     }
                 }
             }
