@@ -1,11 +1,13 @@
 package com.example.bee;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -35,10 +37,17 @@ public class RegistrationActivity extends AppCompatActivity {
     private ImageView logo;
     private AutoCompleteTextView username, email, password, phone;
     private Button signup;
-    private TextView signin;
+    private TextView signin,passwordhint;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
+    private static final Pattern PASSWORD_PATTERN =
+            Pattern.compile("^" +
+                    //"(?=.*[A-Z])" +         //at least 1 upper case letter
+                    "(?=.*[a-zA-Z])" +      //any letter
+                    "(?=\\S+$)" +           //no white spaces
+                    ".{6,}" +               //at least 4 characters
+                    "$");
     FirebaseFirestore db;
     String userID, registerEmail;
     ProgressBar progressBar;
@@ -68,7 +77,7 @@ public class RegistrationActivity extends AppCompatActivity {
 //
 //                if (validateInput(inputName, inputPw, inputPhone, inputEmail)&& isUsernameExists(inputName)==false)
 //                    registerUser(inputName, inputPw, inputPhone, inputEmail);
-                if (validateInput(inputName, inputPw, inputPhone, inputEmail))
+                if (validateEmail()&&validatePassword()&&validateUsername()&&validatePhone())
                     registerUser(inputName, inputPw, inputPhone, inputEmail);
 
 
@@ -97,6 +106,7 @@ public class RegistrationActivity extends AppCompatActivity {
         password = findViewById(R.id.atvPasswordReg);
         signin = findViewById(R.id.tvSignIn);
         signup = findViewById(R.id.btnSignUp);
+        passwordhint = findViewById(R.id.tvPasswordHint);
         progressDialog = new ProgressDialog(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -169,32 +179,68 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
 
-    private boolean validateInput(String inName, String inPw, String inPhone, String inEmail){
+    private boolean validateEmail() {
+        String emailInput = email.getText().toString().trim();
 
-        if(inName.isEmpty()){
-            username.setError("Username is empty.");
+        if (emailInput.isEmpty()) {
+            email.setError("Field can't be empty");
             return false;
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
+            email.setError("Please enter a valid email address");
+            return false;
+        } else {
+            email.setError(null);
+            return true;
         }
+    }
 
-        if(isNumeric(inPhone)==false||inPhone.length()!=10){
-            password.setError("Invalid Phone number ");
-            return false;
-        }
-        if(inPw.length()!= 6){
-            password.setError("Invalid Password ");
-            return false;
-        }
-        if(inEmail.contains("@")==false){
-            email.setError("Invalid Email");
-            return false;
-        }
+    private boolean validateUsername() {
+        String usernameInput = username.getText().toString().trim();
 
-        return true;
+        if (usernameInput.isEmpty()) {
+            username.setError("Field can't be empty");
+            return false;
+        } else if (usernameInput.length() > 15) {
+            username.setError("Username too long");
+            return false;
+        } else {
+            username.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validatePassword() {
+        String passwordInput = password.getText().toString().trim();
+
+        if (passwordInput.isEmpty()) {
+            password.setError("Field can't be empty");
+            return false;
+        } else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
+            password.setError("Password too weak");
+            return false;
+        } else {
+            password.setError(null);
+            return true;
+        }
+    }
+    private boolean validatePhone() {
+        String phoneInput = phone.getText().toString().trim();
+
+        if (phoneInput.isEmpty()) {
+            phone.setError("Field can't be empty");
+            return false;
+        } else if (!isNumeric(phoneInput)) {
+            phone.setError("Invalid Phone");
+            return false;
+        } else {
+            phone.setError(null);
+            return true;
+        }
     }
 
 
 
-        public static boolean isNumeric(String str) {
+    public static boolean isNumeric(String str) {
         for (int i = 0; i < str.length(); i++) {
             System.out.println(str.charAt(i));
             if (!Character.isDigit(str.charAt(i))) {
