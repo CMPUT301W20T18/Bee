@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private void init(){
         //Button btnMap = (Button) findViewById(R.id.btnMap);
         final Button transfer_request_Btn = findViewById(R.id.transfer_to_request);
-        final Button enter_address_Btn = findViewById(R.id.enter_address);
 
         transfer_request_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,19 +39,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        enter_address_Btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, EnterAddressMap.class));
-                finish();
-            }
-        });
 
     }
 
-    //make the google map more stable
-    //copy from https://github.com/mitchtabian/Google-Maps-Google-Places/blob/6a64cdcaa35f737bf3de899e539e1cf66bdf0cde/app/src/main
-    // /java/codingwithmitch/com/googlemapsgoogleplaces/MainActivity.java 2020-03-01
 
     public boolean isServicesOK(){
         Log.d(TAG, "isServicesOK: checking google services version");

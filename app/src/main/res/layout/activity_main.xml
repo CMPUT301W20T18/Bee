@@ -11,15 +11,8 @@
         android:id="@+id/transfer_to_request"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_weight="1"
         android:text="Transfer_to_rider_after_accept_request" />
-    <Button
-        android:id="@+id/enter_address"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Transfer_to_enter_address" />
 
 </LinearLayout>

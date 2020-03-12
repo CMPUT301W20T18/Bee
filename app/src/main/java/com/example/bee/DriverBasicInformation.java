@@ -14,6 +14,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+/**
+ * This is a class that shows the basic information about driver
+ */
+
+
 public class DriverBasicInformation extends AppCompatActivity {
     ImageView back;
     ImageView phone_call;
@@ -55,6 +60,9 @@ public class DriverBasicInformation extends AppCompatActivity {
             }
         });
     }
+    /**
+     * This is a method enable rider to make a phone call to driver
+     */
 
     private void makePhoneCall(){
         String phone_num = TEST_PHONE;
@@ -74,6 +82,10 @@ public class DriverBasicInformation extends AppCompatActivity {
         }
     }
 
+    /**
+     * This is a method enable rider to send an email to driver
+     */
+
     private void sendMail(){
         String[] recipient = TEST_EMAIL;
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -83,6 +95,10 @@ public class DriverBasicInformation extends AppCompatActivity {
         startActivity(Intent.createChooser(intent, "Choose an email client"));
 
     }
+
+    /**
+     * This is a method to get permission for making a phone call
+     */
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

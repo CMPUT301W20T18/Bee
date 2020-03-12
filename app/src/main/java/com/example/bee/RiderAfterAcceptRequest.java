@@ -56,21 +56,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ * This is a class that shows the situation after the rider confirms the driver's acceptance
+ */
+
 public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = "accept_request_activity";
-    private static final float DEFAULT_ZOOM = 15f;
 
     GoogleMap request_accepted_map;
-    private FusedLocationProviderClient client_device;
     TextView driver_name;
 
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-
-    //vars
-    private Boolean mLocationPermissionsGranted = false;
 
     MarkerOptions place1, place2;
     Boolean drew = false;
@@ -79,7 +75,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_after_accept_request);
-        getLocationPermission();
+        initMap();
         driver_name = (TextView)findViewById(R.id.driver_name);
         driver_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,8 +86,11 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         });
 
 
-
     }
+
+    /**
+     * This is a method to initialize the map
+     */
 
     private void initMap(){
         Log.d(TAG, "initMap: initializing map");
@@ -100,104 +99,12 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         mapFragment.getMapAsync(RiderAfterAcceptRequest.this);
     }
 
-
-    private void getDeviceLocation(){
-        Log.d(TAG, "getDeviceLocation: getting the devices current location");
-
-        client_device = LocationServices.getFusedLocationProviderClient(this);
-
-        try{
-            if(mLocationPermissionsGranted){
-
-                final Task location = client_device.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if(task.isSuccessful()){
-                            Log.d(TAG, "onComplete: found location!");
-                            Location currentLocation = (Location) task.getResult();
-
-//                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-//                                    DEFAULT_ZOOM);
-
-                        }else{
-                            Log.d(TAG, "onComplete: current location is null");
-                            Toast.makeText(RiderAfterAcceptRequest.this, "unable to get current location", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        }catch (SecurityException e){
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
-        }
-    }
-
-    private void getLocationPermission(){
-        Log.d(TAG, "getLocationPermission: getting location permissions");
-        String[] permissions = {FINE_LOCATION, COARSE_LOCATION};
-
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                mLocationPermissionsGranted = true;
-                initMap();
-            }else{
-                ActivityCompat.requestPermissions(this,
-                        permissions,
-                        LOCATION_PERMISSION_REQUEST_CODE);
-            }
-        }else{
-            ActivityCompat.requestPermissions(this,
-                    permissions,
-                    LOCATION_PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d(TAG, "onRequestPermissionsResult: called.");
-        mLocationPermissionsGranted = false;
-
-        switch(requestCode){
-            case LOCATION_PERMISSION_REQUEST_CODE:{
-                if(grantResults.length > 0){
-                    for(int i = 0; i < grantResults.length; i++){
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
-                            mLocationPermissionsGranted = false;
-                            Log.d(TAG, "onRequestPermissionsResult: permission failed");
-                            return;
-                        }
-                    }
-                    Log.d(TAG, "onRequestPermissionsResult: permission granted");
-                    mLocationPermissionsGranted = true;
-                    //initialize our map
-                    initMap();
-                }
-            }
-        }
-    }
-
-    private void moveCamera(LatLng latLng, float zoom){
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
-        request_accepted_map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-    }
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: map is ready");
 
         request_accepted_map = googleMap;
-
-
-        getDeviceLocation();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
         request_accepted_map.setMyLocationEnabled(true);
         //request_accepted_map.getUiSettings().setCompassEnabled(true);
 
@@ -214,9 +121,15 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             toast.show();
         }
 
-
     }
 
+    /**
+     * This is a method to get the position of two points and draw a line between two points
+     * @param from
+     * this is the place to start
+     * @param to
+     * this is the place to end
+     */
 
     private boolean getPoints(MarkerOptions from, MarkerOptions to) {
         try {
@@ -245,7 +158,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             return false;
         }
         return true; }
-
+    /**
+     * This is a method to set the model of marker
+     */
 
     // Convert vector drawable to bitmap
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
@@ -256,6 +171,14 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
+
+    /**
+     * This is a method to draw route between two positions
+     * @param p1
+     * first place
+     * @param p2
+     * second place
+     */
 
     private void drawRoute(LatLng p1, LatLng p2) {
         GoogleDirection.withServerKey(getString(R.string.google_maps_key))
