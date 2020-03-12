@@ -100,10 +100,9 @@ public class LoginActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
-                    if(role.equals("rider"))
-                    {startActivity(new Intent(LoginActivity.this,EnterAddressMap.class));}
-                    //startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
-                    else{
+                    if(role.equals("rider")) {
+                        startActivity(new Intent(LoginActivity.this,EnterAddressMap.class));
+                    } else{
                         Intent driver = new Intent(LoginActivity.this, DriverMain.class);
                         startActivity(driver);
                     }

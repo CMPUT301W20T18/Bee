@@ -41,7 +41,6 @@ public class RegistrationActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     FirebaseFirestore db;
     String userID, registerEmail;
-    ProgressBar progressBar;
 
 
 
@@ -117,9 +116,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
         registerEmail = inputName+"@gmailbiugvuebgiuv.com";
 
-
-
-
         firebaseAuth.createUserWithEmailAndPassword(registerEmail,inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -152,22 +148,11 @@ public class RegistrationActivity extends AppCompatActivity {
                 }else {
                     //Toast.makeText(RegistrationActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     Toast.makeText(RegistrationActivity.this, "Username Taken", Toast.LENGTH_SHORT).show();
-                    //progressBar.setVisibility(View.GONE);
+                    progressDialog.dismiss();
                 }
             }
         });
-
-
-
-
-
-
     }
-
-
-
-
-
 
     private boolean validateInput(String inName, String inPw, String inPhone, String inEmail){
 
@@ -189,18 +174,6 @@ public class RegistrationActivity extends AppCompatActivity {
             return false;
         }
 
-        return true;
-    }
-
-
-
-        public static boolean isNumeric(String str) {
-        for (int i = 0; i < str.length(); i++) {
-            System.out.println(str.charAt(i));
-            if (!Character.isDigit(str.charAt(i))) {
-                return false;
-            }
-        }
         return true;
     }
 
