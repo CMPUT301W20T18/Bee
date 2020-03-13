@@ -1,7 +1,6 @@
 package com.example.bee;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -60,7 +58,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
     GoogleMap map;
     TextView RequestStatus;
 //    RiderDecision riderDecision;
-    Boolean riderResponse;
+    Boolean riderResponse = true;
     ArrayList<Request> request;
 
     Boolean myLocationPermission = false;
@@ -73,6 +71,8 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.waiting_for_rider);
+        // set up the map to the activity
+
         RequestMoneyAmount = findViewById(R.id.request_money_amount2);
         SetMoneyAmount(requestAmount);
         initMap();
@@ -84,15 +84,16 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         riderName = findViewById(R.id.rider_name);
         finishButton = findViewById(R.id.finish_button);
         finishButton.setVisibility(View.GONE);
+//        hide the finish button until the rider make response
         RequestStatus = findViewById(R.id.request_status);
-//        Intent show = new I
+        // Depends rider response to process to next activity
         if(riderResponse){
             RequestStatus.setText("Confirmed ride offer");
             finishButton.setVisibility(View.VISIBLE);
             finishButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                Intent intent = new Intent(WaitingForRider.this, )
+//                Intent intent = new Intent(WaitingForRider.this, );
                     finish();
                 }
             });
@@ -153,13 +154,13 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
             return;
         }
         map.setMyLocationEnabled(true);
-
+//        initialize the starting position and destination on the map displayed
         place1 = new MarkerOptions().position(place1_position).title("Starting position");
 
         place2 = new MarkerOptions().position(place2_position).title("Destination");
 
         boolean drew = getPoints(place1, place2);
-
+//      display message of invalid address
         if (!drew) {
             String text = "Invalid Address";
             Toast toast = Toast.makeText(WaitingForRider.this, text, Toast.LENGTH_SHORT);
@@ -175,7 +176,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
         FusedLocationProviderClient client_device = LocationServices.getFusedLocationProviderClient(this);
-
+//        locate the current driver position
         try{
             if(myLocationPermission){
                 final Task location = client_device.getLastLocation();
@@ -218,7 +219,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             map.addMarker(toAddress.position(to_position)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
-
+//            add markers on the map for starting position and ending position
             LatLngBounds latLngBounds = new LatLngBounds.Builder()
                     .include(from_position)
                     .include(to_position)
@@ -226,7 +227,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
             map.setPadding(0, 150, 0, 0);
             map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
             drawRoute(from_position, to_position);
-
+//            generate the route between starting position and destination
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -248,6 +249,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
 
     private void drawRoute(LatLng p1, LatLng p2) {
+
         GoogleDirection.withServerKey(getString(R.string.google_api_key))
                 .from(p1)
                 .to(p2)
@@ -262,6 +264,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 //                                    Info distanceInfo = leg.getDistance();
 //                                    String distance = distanceInfo.getText();
 //                                    dist = Double.parseDouble(distance.substring(0, distance.length() - 3));
+//                            display the route as line on the map
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(WaitingForRider.this, pointList, 5,
                                             getResources().getColor(R.color.yellow));
