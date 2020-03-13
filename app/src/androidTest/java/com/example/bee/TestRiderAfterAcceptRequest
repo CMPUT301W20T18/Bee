@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
 
-public class RiderAfterAcceptRequestTest {
+public class TestRiderAfterAcceptRequest {
     private Solo solo;
 
     @Rule

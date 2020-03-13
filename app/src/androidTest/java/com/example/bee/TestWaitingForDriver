@@ -2,10 +2,10 @@ package com.example.bee;
 
 import android.app.Activity;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.robotium.solo.Solo;
 
@@ -16,20 +16,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 /**
- * Intent test for Login
+ * Test for WaitingForDriver class
  */
 
-public class TestLogin {
+@RunWith(AndroidJUnit4.class)
+public class TestWaitingForDriver {
+
     private Solo solo;
 
     @Rule
-    public ActivityTestRule<LoginActivity> rule =
-            new ActivityTestRule<>(LoginActivity.class, true, true);
-
+    public ActivityTestRule<WaitingForDriver> rule =
+            new ActivityTestRule<>(WaitingForDriver.class, true, true);
 
     /**
      * Runs before all tests and creates solo instance.
@@ -49,26 +48,20 @@ public class TestLogin {
         Activity activity = rule.getActivity();
         solo.assertCurrentActivity("Wrong Activity", WaitingForDriver.class);
     }
+
     /**
-     * Checks if log in to the right activity
-     * @throws Exception
+     * Check if cancel request will return to EnterAddressMap activity
      */
     @Test
-    public void checkLogin(){
-        solo.enterText((EditText) solo.getView(R.id.atvUsernameReg), "Sophie");
-        solo.enterText((EditText) solo.getView(R.id.atvPasswordLog), "1234!Q");
-        solo.clickOnButton("SIGN IN AS RIDER");
-        solo.assertCurrentActivity("Current Activity", EnterAddressMap.class);
-
-
-
-
+    public void checkCancelRequest() {
+        solo.assertCurrentActivity("Wrong Activity", WaitingForDriver.class);
+        solo.clickOnButton("Cancel Request");
+        solo.clickOnButton("Confirm");
+        solo.assertCurrentActivity("Wrong Activity", EnterAddressMap.class);
     }
 
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();
     }
-
-
 }

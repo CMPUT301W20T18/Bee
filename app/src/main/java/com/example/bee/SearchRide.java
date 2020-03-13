@@ -23,6 +23,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/** This class is is used to show requests that get from firebase
+ * into a list view, and allows user to click one of them to see detailed info
+ */
+
 public class SearchRide extends AppCompatActivity {
 
 
