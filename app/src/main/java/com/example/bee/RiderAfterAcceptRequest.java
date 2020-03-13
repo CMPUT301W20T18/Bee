@@ -101,6 +101,10 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         mapFragment.getMapAsync(RiderAfterAcceptRequest.this);
     }
 
+    /**
+     * This method is to get Device Location
+     */
+
 
     private void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
@@ -169,6 +173,13 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
 
     }
+    /**
+     * This method to get two positions and draw route between two positions
+     * @param from
+     * origin
+     * @param to
+     * destination
+     */
 
 
     private boolean getPoints(MarkerOptions from, MarkerOptions to) {
@@ -199,6 +210,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         }
         return true; }
 
+    /**
+     * This method set marker
+     */
 
     // Convert vector drawable to bitmap
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {

@@ -59,6 +59,10 @@ public class DriverBasicInformation extends AppCompatActivity {
         });
     }
 
+    /**
+     * This method make a phone call to driver
+     */
+
     private void makePhoneCall(){
         String phone_num = TEST_PHONE;
 
@@ -77,6 +81,10 @@ public class DriverBasicInformation extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method send an email to driver
+     */
+
     private void sendMail(){
         String[] recipient = TEST_EMAIL;
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -86,6 +94,10 @@ public class DriverBasicInformation extends AppCompatActivity {
         startActivity(Intent.createChooser(intent, "Choose an email client"));
 
     }
+
+    /**
+     * This method ask permission to call
+     */
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
