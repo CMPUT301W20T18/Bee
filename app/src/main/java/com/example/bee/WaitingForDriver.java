@@ -27,7 +27,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
-
+/**
+ * The class is the waiting page for the rider, it shows the pick up location and destination,
+ * and the cost of the ride.
+ */
 public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferDialog.OnFragmentInteractionListener{
     private static final String TAG = "TAG";
     private FirebaseUser user;
@@ -59,6 +62,7 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
             public void onDataChange(DataSnapshot dataSnapshot) {
                 request = dataSnapshot.getValue(Request.class);
                 if (toText.getText().toString().isEmpty()) {
+                    // Initialize the page with ride information
                     toText.setText(request.getDest());
                     fromText.setText(request.getOrigin());
                     costText.setText(String.format("%.2f", request.getCost()));
@@ -66,6 +70,7 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
                 if (request != null) {
                     driverID = request.getDriverID();
                     if (driverID != null) {
+                        // Show confirm ride offer dialog
                         new ConfirmOfferDialog(driverID).show(getSupportFragmentManager(), "show_driver");
                     }
                 }
@@ -79,35 +84,12 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
         cancelRequestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // An dialog that asks the user to confirm their cancellation
                 toConfirmCancel();
             }
         });
     }
 
-    private void displayOfferDialog() {
-        final String[] info = new String[2];
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference userRef = database.getReference("users").child(driverID);
-        userRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String name = dataSnapshot.child("Name").getValue(String.class);
-                String phone = dataSnapshot.child("phone").getValue(String.class);
-                // rating
-                info[0] = name;
-                info[1] = phone;
-                Toast.makeText(WaitingForDriver.this, info[0]+"1", Toast.LENGTH_SHORT).show();
-
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, databaseError.toString());
-            }
-        });
-        if (info[0] == null)
-            Toast.makeText(WaitingForDriver.this, "null", Toast.LENGTH_SHORT).show();
-        // new ConfirmOfferDialog(info[0], info[1]).show(getSupportFragmentManager(), "show_driver");
-    }
 
     /**
      * Shows a confirm message that ask the user to confirm their cancel of request
@@ -126,8 +108,10 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Go back to EnterAddressMap activity
+                // Remove request from database
                 ref.getParent().removeValue();
+                dialog.dismiss();
+                // Go back to EnterAddressMap activity
                 startActivity(new Intent(WaitingForDriver.this, EnterAddressMap.class));
             }
         });
@@ -146,6 +130,7 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
      * Rider side will notify the driver that the offer has been accepted
      */
     public void acceptOffer() {
+        // Update request in Firebase with status = true;
         request.setStatus(true);
         HashMap<String,Request> updatedRequest = new HashMap<>();
         updatedRequest.put("request", request);
@@ -163,7 +148,11 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
         });
     }
 
+    /**
+     * Rider side will notify the driver that the offer has been declined
+     */
     public void declineOffer() {
+        // Update request in Firebase with driverID = null
         request.setDriverID(null);
         HashMap<String,Request> updatedRequest = new HashMap<>();
         updatedRequest.put("request", request);
