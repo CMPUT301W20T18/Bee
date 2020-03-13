@@ -58,14 +58,14 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 request = dataSnapshot.getValue(Request.class);
-                if (toText.getText().toString().isEmpty()) {
+                if (toText.getText().toString().isEmpty() && request != null) {
                     toText.setText(request.getDest());
                     fromText.setText(request.getOrigin());
                     costText.setText(String.format("%.2f", request.getCost()));
                 }
-                driverID = "0bEdwmBMMpSuzycdNfJn0EAvWiw1";
+                //driverID = "0bEdwmBMMpSuzycdNfJn0EAvWiw1";
                 //displayOfferDialog();
-                new ConfirmOfferDialog(driverID).show(getSupportFragmentManager(), "show_driver");
+                // new ConfirmOfferDialog(driverID).show(getSupportFragmentManager(), "show_driver");
                 if (request != null) {
                     driverID = request.getDriverID();
                     if (driverID != null) {
@@ -88,31 +88,6 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
         });
     }
 
-    private void displayOfferDialog() {
-        final String[] info = new String[2];
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference userRef = database.getReference("users").child(driverID);
-        userRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String name = dataSnapshot.child("Name").getValue(String.class);
-                String phone = dataSnapshot.child("phone").getValue(String.class);
-                // rating
-                info[0] = name;
-                info[1] = phone;
-                Toast.makeText(WaitingForDriver.this, info[0]+"1", Toast.LENGTH_SHORT).show();
-
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, databaseError.toString());
-            }
-        });
-        if (info[0] == null)
-            Toast.makeText(WaitingForDriver.this, "null", Toast.LENGTH_SHORT).show();
-        // new ConfirmOfferDialog(info[0], info[1]).show(getSupportFragmentManager(), "show_driver");
-    }
-
     /**
      * Shows a confirm message that ask the user to confirm their cancel of request
      */
@@ -132,6 +107,7 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
             public void onClick(View v) {
                 // Go back to EnterAddressMap activity
                 ref.getParent().removeValue();
+                dialog.dismiss();
                 startActivity(new Intent(WaitingForDriver.this, EnterAddressMap.class));
             }
         });
