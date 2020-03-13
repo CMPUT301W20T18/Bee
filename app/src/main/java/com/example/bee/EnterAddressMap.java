@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -51,9 +52,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
@@ -96,6 +94,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         // Hide confirm route button
         confirmBtn.setVisibility(View.GONE);
         Button showBtn = findViewById(R.id.show_route);
+        ImageView profileBtn = findViewById(R.id.profile_btn);
 
         showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +125,13 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                 }
+            }
+        });
+
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(EnterAddressMap.this, DrawerActivity.class));
             }
         });
 
@@ -176,10 +182,12 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                     .build();
             fromAddress = GeocodingApi.geocode(context,
                     originAddress).await();
+            // Geocoding origin address
             if (fromAddress == null) {
                 return false;
             }
 
+            // Geocoding destination address
             toAddress = GeocodingApi.geocode(context,
                     destAddress).await();
             if (toAddress == null) {
@@ -317,6 +325,12 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
     }
 
+    /**
+     * Ask for user's permission to use their location
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
                                            @NonNull int[] grantResults) {

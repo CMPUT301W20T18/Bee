@@ -15,26 +15,22 @@
         android:layout_alignParentTop="true" />
 
     <EditText
-        android:id="@+id/from_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/rounded_corner"
-        android:elevation="10dp"
-        android:inputType="text"
-        android:maxLength="40"
+        android:id="@+id/from_address"
         android:padding="10dp"
-        android:textColor="@color/black" />
+        android:maxLength="40"
+        android:elevation="10dp"
+        android:layout_margin="10dp"
+        android:inputType="text"
+        android:hint="Pickup location"
+        android:background="@drawable/rounded_corner" />
 
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/to_address"
-        android:textColor="@color/black"
         android:padding="10dp"
         android:maxLength="40"
         android:elevation="10dp"
@@ -46,23 +42,28 @@
         android:imeOptions="actionDone"
         android:background="@drawable/rounded_corner" />
 
+    <ImageView
+        android:id="@+id/profile_btn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_to_drawer_foreground"
+        android:layout_below="@+id/show_route" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/show_route"
-        android:textColor="@color/black"
         android:layout_below="@+id/to_address"
         android:background="@drawable/rounded_corner"
         android:layout_margin="10dp"
         android:elevation="10dp"
-        android:text="Show Route" />
+        android:text="SHOW ROUTE" />
 
     <Button
         android:layout_width="wrap_content"
         android:id="@+id/confirm_route"
         android:layout_height="wrap_content"
-        android:text="Confirm"
-        android:textColor="@color/black"
+        android:text="CONFIRM"
         android:background="@drawable/rounded_corner"
         android:backgroundTint="@color/button"
         android:layout_alignParentBottom="true"
