@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    public void signUser(String email, String password,String role){
+    public void signUser(String email, String password,final String role){
 
         progressDialog.setMessage("Verifying...");
         progressDialog.show();
@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
-                    if(role.equals("rider")) {
+                    if( role.equals("rider")) {
                         startActivity(new Intent(LoginActivity.this,EnterAddressMap.class));
                     } else{
                         Intent driver = new Intent(LoginActivity.this, DriverMain.class);
