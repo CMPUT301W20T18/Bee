@@ -159,7 +159,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             Log.d(TAG, "onFailure: " + e.toString());
                         }
                     });
-                    startActivity(new Intent(getApplicationContext(), DrawerActivity.class));
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
 
                 }else {
                     //Toast.makeText(RegistrationActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

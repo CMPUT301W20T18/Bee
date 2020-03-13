@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     tools:openDrawer="end"
     android:id="@+id/drawer"
-    android:background="@color/background"
+    android:background="#fcfcfa"
     android:layout_height="match_parent"
     tools:context="com.example.bee.DrawerActivity">
 
@@ -14,9 +14,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
-
 
 
         <androidx.appcompat.widget.Toolbar
@@ -34,7 +31,6 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="-1dp"
-            android:background="@color/background"
             tools:context="com.example.bee.DrawerActivity">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -81,7 +77,7 @@
         android:id="@+id/navigationView"
         app:menu="@menu/menu_item"
         app:headerLayout="@layout/header"
-        android:background="@color/background"
+        android:background="#fcfcfa"
         android:layout_gravity="start"
         app:itemTextColor="@color/gray"/>
 

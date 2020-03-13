@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 /**
  * Example local unit test, which will execute on the development machine (host).
  */
-public class QR_WalletUnitTest {
+public class QRWalletUnitTest {
     private QR_Wallet mockWallet() {
         QR_Wallet mockWallet = new QR_Wallet("Ruichen");
         return mockWallet;
