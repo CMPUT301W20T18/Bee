@@ -81,18 +81,18 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/cancel_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:paddingLeft="21dp"
-            android:paddingTop="15dp"
-            android:paddingRight="21dp"
-            android:paddingBottom="16dp"
             android:text="Cancel"
+            android:textSize="18sp"
+            android:paddingTop="15dp"
+            android:paddingBottom="16dp"
+            android:paddingLeft="21dp"
+            android:paddingRight="21dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:id="@+id/cancel_btn" />
 
         <View android:layout_width="1dp"
             android:layout_height="match_parent"

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -24,18 +25,19 @@ import java.util.ArrayList;
 
 public class SearchRide extends AppCompatActivity {
 
+
+//    initializing local variables
     private static final String TAG = "TAG";
     private FirebaseUser fDriver;
     private String driverId;
     private DatabaseReference ref;
     private String from;
     private String to;
-
     Request request;
 
     EditText searchNearby;
-    Button searchButton;
-    Button backButton;
+    ImageView searchButton;
+    ImageView backButton;
     ArrayAdapter<Offer> offerAdapter;
     ArrayList<Offer> offerInfo;
     ArrayList<Request> request_list;
@@ -47,30 +49,33 @@ public class SearchRide extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_search);
 
+//        setup buttons in current view
         searchNearby = findViewById(R.id.searchNearBy);
-        searchButton = findViewById(R.id.searchButton);
 
+//        setup the listview for current requests
         offerList = findViewById(R.id.offer_list);
         offerInfo = new ArrayList<>();
 
+//        setup list adapter
         offerAdapter = new CustomList(this,offerInfo);
         offerList.setAdapter(offerAdapter);
 
-
-//        fDriver = FirebaseAuth.getInstance().getCurrentUser();
-//        driverId = fDriver.getUid();
-
-
+//      connect to firebase realtime database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        ref = database.getReference("requests").child("cGwYgfbxtjcMgFSWvGoZDbe6SSK2").child("request");
+        ref = database.getReference("requests");
 
-        ref.addValueEventListener(new ValueEventListener() {
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                request = dataSnapshot.getValue(Request.class);
+//                Using for loop to obtain all current reqeusts in database and add them into list view
+                for(DataSnapshot dsp:dataSnapshot.getChildren()){
+                    request = dsp.child("request").getValue(Request.class);
 
-                offerInfo.add(new Offer(request.getOrigin(),request.getDest(),String.valueOf(request.getCost()),request.getOriginLatlng(),request.getRiderID()));
-                offerAdapter.notifyDataSetChanged();
+                    offerInfo.add(new Offer(request.getOrigin(),request.getDest(),String.format("%.2f", request.getCost()),request.getOriginLatlng(),request.getRiderID()));
+//                  notify adapter to update listview
+                    offerAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -79,16 +84,15 @@ public class SearchRide extends AppCompatActivity {
             }
         });
 
+//        Going back to driver's main activity
         backButton = findViewById(R.id.backButtonDriver);
         backButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent driverMain = new Intent(SearchRide.this, PopUpMap.class);
+                Intent driverMain = new Intent(SearchRide.this, DriverMain.class);
                 startActivity(driverMain);
             }
         });
-
-
     }
 
 }

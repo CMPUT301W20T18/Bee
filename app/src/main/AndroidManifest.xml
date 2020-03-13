@@ -20,16 +20,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditProfileActivity"></activity>
+        <activity android:name=".RiderPayActivity"></activity>
+        <activity android:name=".EditProfileActivity" />
         <activity android:name=".DrawerActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-<!--        <activity android:name=".MainActivity" />-->
-<!--        <activity android:name=".LoginActivity">-->
-        <activity android:name=".PopUpMap">
+        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,14 +40,12 @@
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".EnterAddressMap" />
         <activity android:name=".WaitingForDriver" />
-        <activity android:name=".DriverBasicInformation"/>
+        <activity android:name=".DriverBasicInformation" />
         <activity android:name=".RiderAfterAcceptRequest" />
-        <activity android:name=".DriverMain"/>
-        <activity android:name=".SearchRide"/>
-    <activity android:name=".WaitingForRider"/>
-
-
-    <!--        <activity android:name=".WaitingForRider" />-->
+        <activity android:name=".DriverMain" />
+        <activity android:name=".SearchRide" />
+        <activity android:name=".PopUpMap"/>
+        <activity android:name=".WaitingForRider"/>
     </application>
 
 </manifest>

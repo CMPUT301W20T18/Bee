@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +79,16 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                 startActivity(intent);
             }
         });
+        // By Ruichen Chen
+        // For payment testing
+        Button confirmBut = findViewById(R.id.confirm_route);
+        confirmBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RiderAfterAcceptRequest.this, RiderPayActivity.class));
+            }
+        });
+        // End
 
 
 

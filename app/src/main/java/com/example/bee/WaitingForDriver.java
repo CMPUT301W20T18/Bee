@@ -27,16 +27,20 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
-
-public class WaitingForDriver extends AppCompatActivity {
+/**
+ * The class is the waiting page for the rider, it shows the pick up location and destination,
+ * and the cost of the ride.
+ */
+public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferDialog.OnFragmentInteractionListener{
     private static final String TAG = "TAG";
     private FirebaseUser user;
     private DatabaseReference ref;
     private String userID;
     private Request request;
-    TextView toText;
-    TextView fromText;
-    TextView costText;
+    private TextView toText;
+    private TextView fromText;
+    private TextView costText;
+    private String driverID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,17 @@ public class WaitingForDriver extends AppCompatActivity {
         fromText = findViewById(R.id.show_from);
         costText = findViewById(R.id.show_cost);
         Button cancelRequestBtn = findViewById(R.id.cancel_request);
+
+        // Ruichen's Testing -- Local Variable start
+        Button testBtn = findViewById(R.id.test_button);
+        testBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(WaitingForDriver.this, RiderAfterAcceptRequest.class));
+            }
+        });
+        // Ruichen's Testing -- Local Variable end
+
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
@@ -58,16 +73,16 @@ public class WaitingForDriver extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 request = dataSnapshot.getValue(Request.class);
                 if (toText.getText().toString().isEmpty()) {
+                    // Initialize the page with ride information
                     toText.setText(request.getDest());
                     fromText.setText(request.getOrigin());
                     costText.setText(String.format("%.2f", request.getCost()));
                 }
-
                 if (request != null) {
-                    String driverID = request.getDriverID();
+                    driverID = request.getDriverID();
                     if (driverID != null) {
-                        //insertDriver();
-                        // show dialog to ask to accept ride
+                        // Show confirm ride offer dialog
+                        new ConfirmOfferDialog(driverID).show(getSupportFragmentManager(), "show_driver");
                     }
                 }
             }
@@ -80,19 +95,22 @@ public class WaitingForDriver extends AppCompatActivity {
         cancelRequestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toConfirm();
+                // An dialog that asks the user to confirm their cancellation
+                toConfirmCancel();
             }
         });
     }
 
+
     /**
      * Shows a confirm message that ask the user to confirm their cancel of request
      */
-    private void toConfirm() {
+    private void toConfirmCancel() {
         Dialog dialog = new Dialog(WaitingForDriver.this, android.R.style.Theme_Dialog);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.confirm_cancel_dialog);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         Button confirmBtn = dialog.findViewById(R.id.do_cancel_btn);
@@ -101,8 +119,10 @@ public class WaitingForDriver extends AppCompatActivity {
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Go back to EnterAddressMap activity
+                // Remove request from database
                 ref.getParent().removeValue();
+                dialog.dismiss();
+                // Go back to EnterAddressMap activity
                 startActivity(new Intent(WaitingForDriver.this, EnterAddressMap.class));
             }
         });
@@ -117,7 +137,11 @@ public class WaitingForDriver extends AppCompatActivity {
         dialog.show();
     }
 
-    private void acceptOffer() {
+    /**
+     * Rider side will notify the driver that the offer has been accepted
+     */
+    public void acceptOffer() {
+        // Update request in Firebase with status = true;
         request.setStatus(true);
         HashMap<String,Request> updatedRequest = new HashMap<>();
         updatedRequest.put("request", request);
@@ -125,6 +149,7 @@ public class WaitingForDriver extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "onSuccess: rider accepted the offer");
+                //startActivity(new Intent(WaitingForDriver.this, RiderAfter));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -134,7 +159,11 @@ public class WaitingForDriver extends AppCompatActivity {
         });
     }
 
-    private void declineOffer() {
+    /**
+     * Rider side will notify the driver that the offer has been declined
+     */
+    public void declineOffer() {
+        // Update request in Firebase with driverID = null
         request.setDriverID(null);
         HashMap<String,Request> updatedRequest = new HashMap<>();
         updatedRequest.put("request", request);

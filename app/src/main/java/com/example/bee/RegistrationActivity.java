@@ -1,11 +1,13 @@
 package com.example.bee;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -33,15 +35,21 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class RegistrationActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     private ImageView logo;
-    private AutoCompleteTextView username, email, password, phone;
+    private AutoCompleteTextView username, email, password, phone, firstName, lastName;
     private Button signup;
-    private TextView signin;
+    private TextView signin,passwordhint;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
+    private static final Pattern PASSWORD_PATTERN =
+            Pattern.compile("^" +
+                    //"(?=.*[A-Z])" +         //at least 1 upper case letter
+                    "(?=.*[a-zA-Z])" +      //any letter
+                    "(?=\\S+$)" +           //no white spaces
+                    ".{6,}" +               //at least 4 characters
+                    "$");
     FirebaseFirestore db;
     String userID, registerEmail;
-    ProgressBar progressBar;
 
 
 
@@ -64,12 +72,14 @@ public class RegistrationActivity extends AppCompatActivity {
                 final String inputPhone = phone.getText().toString().trim();
                 final String inputPw = password.getText().toString().trim();
                 final String inputEmail = email.getText().toString().trim();
+                final String infirstName = firstName.getText().toString().trim();
+                final String inlastName = lastName.getText().toString().trim();
 
 //
 //                if (validateInput(inputName, inputPw, inputPhone, inputEmail)&& isUsernameExists(inputName)==false)
 //                    registerUser(inputName, inputPw, inputPhone, inputEmail);
-                if (validateInput(inputName, inputPw, inputPhone, inputEmail))
-                    registerUser(inputName, inputPw, inputPhone, inputEmail);
+                if (validateEmail(inputEmail)&&validatePassword(inputPw)&&validateUsername(inputName)&&validatePhone(inputPhone))
+                    registerUser(inputName, inputPw, inputPhone, inputEmail,infirstName,inlastName);
 
 
             }
@@ -92,11 +102,14 @@ public class RegistrationActivity extends AppCompatActivity {
 
         logo = findViewById(R.id.ivRegLogo);
         username = findViewById(R.id.atvUsernameReg);
+        firstName = findViewById(R.id.atvFirstName);
+        lastName = findViewById(R.id.atvLastName);
         phone = findViewById(R.id.phoneNum);
         email = findViewById(R.id.atvEmailReg);
         password = findViewById(R.id.atvPasswordReg);
         signin = findViewById(R.id.tvSignIn);
         signup = findViewById(R.id.btnSignUp);
+        passwordhint = findViewById(R.id.tvPasswordHint);
         progressDialog = new ProgressDialog(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -105,7 +118,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
 
-    private void registerUser(final String inputName, final String inputPw, final String phone, final String inputEmail) {
+    public void registerUser(final String inputName, final String inputPw, final String phone, final String inputEmail, final String infirstName, final String inlastName) {
 
         progressDialog.setMessage("Verifying...");
         progressDialog.show();
@@ -116,9 +129,6 @@ public class RegistrationActivity extends AppCompatActivity {
 //        System.out.println("test");
 
         registerEmail = inputName+"@gmailbiugvuebgiuv.com";
-
-
-
 
         firebaseAuth.createUserWithEmailAndPassword(registerEmail,inputPw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -135,6 +145,8 @@ public class RegistrationActivity extends AppCompatActivity {
                     user.put("Name",inputName);
                     user.put("email",inputEmail);
                     user.put("phone",phone);
+                    user.put("firstName",infirstName);
+                    user.put("lastName",inlastName);
 
                     usersRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -152,16 +164,10 @@ public class RegistrationActivity extends AppCompatActivity {
                 }else {
                     //Toast.makeText(RegistrationActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     Toast.makeText(RegistrationActivity.this, "Username Taken", Toast.LENGTH_SHORT).show();
-                    //progressBar.setVisibility(View.GONE);
+                    progressDialog.dismiss();
                 }
             }
         });
-
-
-
-
-
-
     }
 
 
@@ -169,32 +175,67 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
 
-    private boolean validateInput(String inName, String inPw, String inPhone, String inEmail){
+    public boolean validateEmail(String emailInput) {
 
-        if (inName.isEmpty()) {
-            username.setError("Username is empty.");
-            return false;
-        }
 
-        if (inPhone.length()!=10) {
-            phone.setError("Invalid Phone number ");
+        if (emailInput.isEmpty()) {
+            email.setError("Field can't be empty");
             return false;
-        }
-        if (inPw.length() < 6) {
-            password.setError("Invalid Password ");
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
+            email.setError("Please enter a valid email address");
             return false;
+        } else {
+            email.setError(null);
+            return true;
         }
-        if (inEmail.contains("@")==false) {
-            email.setError("Invalid Email");
-            return false;
-        }
+    }
 
-        return true;
+    public boolean validateUsername(String usernameInput) {
+
+        if (usernameInput.isEmpty()) {
+            username.setError("Field can't be empty");
+            return false;
+        } else if (usernameInput.length() > 15) {
+            username.setError("Username too long");
+            return false;
+        } else {
+            username.setError(null);
+            return true;
+        }
+    }
+
+    public boolean validatePassword(String passwordInput) {
+
+
+        if (passwordInput.isEmpty()) {
+            password.setError("Field can't be empty");
+            return false;
+        } else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
+            password.setError("Password too weak");
+            return false;
+        } else {
+            password.setError(null);
+            return true;
+        }
+    }
+    public boolean validatePhone(String phoneInput) {
+
+
+        if (phoneInput.isEmpty()) {
+            phone.setError("Field can't be empty");
+            return false;
+        } else if (!isNumeric(phoneInput)) {
+            phone.setError("Invalid Phone");
+            return false;
+        } else {
+            phone.setError(null);
+            return true;
+        }
     }
 
 
 
-        public static boolean isNumeric(String str) {
+    public static boolean isNumeric(String str) {
         for (int i = 0; i < str.length(); i++) {
             System.out.println(str.charAt(i));
             if (!Character.isDigit(str.charAt(i))) {

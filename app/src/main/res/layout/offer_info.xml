@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/offer_view">
+    android:id="@+id/offer_view"
+    android:padding="10dp"
+    android:background="@drawable/driver_request_list"
+>
 
     <LinearLayout
         android:id="@+id/fromTo"
@@ -14,27 +17,32 @@
         <TextView
             android:id="@+id/fromText"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:textSize="21sp"
-            android:text="From: Home"/>
+            android:text="From: Home"
+            android:padding="10dp"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/toText"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:textSize="21sp"
-            android:text="To: School"/>
+            android:text="To: School"
+            android:padding="10dp"
+            android:textColor="@color/black"/>
     </LinearLayout>
 
     <TextView
         android:id="@+id/offerFare"
-        android:layout_width="209dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:paddingLeft="80dp"
         android:paddingTop="13dp"
         android:text="$20.00"
         android:textSize="27sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
 
 
 </LinearLayout>
