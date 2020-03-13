@@ -6,6 +6,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.robotium.solo.Solo;
 
@@ -20,15 +21,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Intent test for Login
+ * Intent test for Registration
  */
 
-public class TestLogin {
+public class TestRegistration {
     private Solo solo;
 
     @Rule
-    public ActivityTestRule<LoginActivity> rule =
-            new ActivityTestRule<>(LoginActivity.class, true, true);
+    public ActivityTestRule<RegistrationActivity> rule =
+            new ActivityTestRule<>(RegistrationActivity.class, true, true);
 
 
     /**
@@ -47,19 +48,22 @@ public class TestLogin {
     @Test
     public void start() throws Exception{
         Activity activity = rule.getActivity();
-        solo.assertCurrentActivity("Wrong Activity", WaitingForDriver.class);
+        solo.assertCurrentActivity("Wrong Activity", RegistrationActivity.class);
     }
     /**
-     * Checks if log in to the right activity
+     * Checks if registeruser
      * @throws Exception
      */
     @Test
-    public void checkLogin(){
+    public void checkRegister(){
         solo.enterText((EditText) solo.getView(R.id.atvUsernameReg), "Sophie");
         solo.enterText((EditText) solo.getView(R.id.atvPasswordLog), "1234!Q");
-        solo.clickOnButton("SIGN IN AS RIDER");
-        solo.assertCurrentActivity("Current Activity", EnterAddressMap.class);
-
+        solo.enterText((EditText) solo.getView(R.id.atvFirstName), "Sophie");
+        solo.enterText((EditText) solo.getView(R.id.atvLastName), "White");
+        solo.enterText((EditText) solo.getView(R.id.atvEmailReg), "a@gmail.com");
+        solo.enterText((EditText) solo.getView(R.id.phoneNum), "5879375617");
+        solo.clickOnButton("SIGN UP");
+        solo.assertCurrentActivity("Current Activity", LoginActivity.class);
 
 
 

@@ -20,15 +20,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Intent test for Login
+ * Intent test for DrawerActivity
  */
 
 public class DrawerActivityTest {
     private Solo solo;
 
     @Rule
-    public ActivityTestRule<LoginActivity> rule =
-            new ActivityTestRule<>(LoginActivity.class, true, true);
+    public ActivityTestRule<DrawerActivity> rule =
+            new ActivityTestRule<>(DrawerActivity.class, true, true);
 
 
     /**
@@ -47,7 +47,7 @@ public class DrawerActivityTest {
     @Test
     public void start() throws Exception{
         Activity activity = rule.getActivity();
-        solo.assertCurrentActivity("Wrong Activity", WaitingForDriver.class);
+        solo.assertCurrentActivity("Wrong Activity", DrawerActivity.class);
     }
     /**
      * Checks if correctly linked to Edit Profile
@@ -56,8 +56,8 @@ public class DrawerActivityTest {
     @Test
     public void checkEditProfileLink(){
 
-        solo.clickOnButton("Profile");
-        solo.assertCurrentActivity("Current Activity", EditProfileActivity.class);
+        solo.clickOnMenuItem("Profile");
+        solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
 
 
 
