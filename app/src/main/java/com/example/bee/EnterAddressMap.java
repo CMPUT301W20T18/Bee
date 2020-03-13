@@ -65,7 +65,7 @@ import java.util.HashMap;
 /**
  *  This class takes user input of addresses and show the route on the map
  */
-public class EnterAddressMap extends AppCompatActivity implements OnMapReadyCallback, SetCost.OnFragmentInteractionListener {
+public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallback, SetCost.OnFragmentInteractionListener {
     private static final String TAG = "TAG";
     private static final int REQUEST_CODE = 100;
     private Location currentLocation;
