@@ -174,24 +174,24 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     private boolean getPoints(MarkerOptions from, MarkerOptions to) {
         try {
 
-            LatLng from_position = from.getPosition();
-            LatLng to_position = to.getPosition();
+            LatLng fromPosition = from.getPosition();
+            LatLng toPosition = to.getPosition();
 
             request_accepted_map.addMarker(from
-                    .position(from_position)
-                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
-            request_accepted_map.addMarker(to
-                    .position(to_position)
+                    .position(fromPosition)
                     .icon(bitmapDescriptorFromVector(this, R.drawable.ic_red_placeholder)));
+            request_accepted_map.addMarker(to
+                    .position(toPosition)
+                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
 
             LatLngBounds latLngBounds = new LatLngBounds.Builder()
-                    .include(from_position)
-                    .include(to_position)
+                    .include(fromPosition)
+                    .include(toPosition)
                     .build();
             // Move camera to include both points
             request_accepted_map.setPadding(     0,      350,      0,     0);
             request_accepted_map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
-            drawRoute(from_position, to_position);
+            drawRoute(fromPosition, toPosition);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -224,7 +224,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                             ArrayList<LatLng> pointList = leg.getDirectionPoint();
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(RiderAfterAcceptRequest.this, pointList, 5,
-                                            getResources().getColor(R.color.yellow));
+                                            getResources().getColor(R.color.route));
                             request_accepted_map.addPolyline(polylineOptions);
                         } else {
                             String text = direction.getStatus();

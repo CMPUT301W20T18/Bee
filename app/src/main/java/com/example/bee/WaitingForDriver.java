@@ -53,6 +53,7 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
 
         // Ruichen's Testing -- Local Variable start
         Button testBtn = findViewById(R.id.test_button);
+        testBtn.setVisibility(View.GONE);
         testBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

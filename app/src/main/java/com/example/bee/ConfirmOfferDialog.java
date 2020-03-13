@@ -2,6 +2,7 @@ package com.example.bee;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -84,6 +85,14 @@ public class ConfirmOfferDialog extends DialogFragment {
         //if (name.isEmpty())
         //driverName.setText(name);
         //phoneNum.setText(phone);
+
+        /*driverName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ConfirmOfferDialog.this, DriverBasicInformation.class);
+                startActivity(intent);
+            }
+        });*/
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
