@@ -2,6 +2,8 @@ package com.example.bee;
 
 import android.app.Activity;
 
+import androidx.test.rule.ActivityTestRule;
+
 import com.robotium.solo.Solo;
 
 import org.junit.Rule;

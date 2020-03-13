@@ -4,6 +4,8 @@ import android.app.Activity;
 
 //import androidx.test.rule.ActivityTestRule;
 
+import androidx.test.rule.ActivityTestRule;
+
 import com.robotium.solo.Solo;
 
 import org.junit.Rule;
@@ -12,7 +14,7 @@ import org.junit.Test;
 public class PopUpMapTest {
     private Solo solo;
     @Rule
-    public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(PopUpMap.class, true, true);
+    public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
 
     @Test
     public void start() throws Exception{

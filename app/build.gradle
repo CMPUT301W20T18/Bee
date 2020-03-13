@@ -61,6 +61,6 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
     testCompileOnly 'org.apiguardian:apiguardian-api:1.0.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 }
 apply plugin: 'com.google.gms.google-services'

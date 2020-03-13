@@ -4,6 +4,7 @@ package com.example.bee;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -91,6 +92,13 @@ public class SearchRide extends AppCompatActivity {
             public void onClick(View v){
                 Intent driverMain = new Intent(SearchRide.this, DriverMain.class);
                 startActivity(driverMain);
+            }
+        });
+        offerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent show = new Intent(SearchRide.this,PopUpMap.class);
+                startActivity(show);
             }
         });
     }
