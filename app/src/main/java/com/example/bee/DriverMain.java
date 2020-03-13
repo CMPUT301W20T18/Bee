@@ -24,6 +24,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 /**
  *This is a class that used for Driver, the map with current location
  */
+
+// This class is used to display driver's map
+// it requests permission of GPS/location usage to get current location
+// and move camero to it
+// issue so far is current location is set to googleplex
+// instead of real current location
+
+
 public class DriverMain extends FragmentActivity implements OnMapReadyCallback {
 
     GoogleMap map;
