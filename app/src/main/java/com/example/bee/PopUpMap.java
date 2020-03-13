@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,9 @@ import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
+/**
+ * Pop up the map windows to display locations and route
+ */
 public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private FusedLocationProviderClient client_device;
     GoogleMap mapPop;
@@ -71,7 +75,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
+        EditText editText = findViewById(R.id.enter_cost);
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
@@ -80,24 +84,38 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         AcceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent intent = new Intent(PopUpMap.this, WaitingForRider.class);
-                startActivity(intent);
+                String MoneyString = editText.getText().toString();
+                if(!MoneyString.isEmpty()){
+                    double newCost = Double.parseDouble(MoneyString);
+                    startActivity(new Intent(PopUpMap.this, WaitingForRider.class));
+                }else {
+                    String text = "Invalid Amount";
+                    Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.show();
+                }
+
+                final Intent show = new Intent(PopUpMap.this, WaitingForRider.class);
+                startActivity(show);
             }
         });
         CancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent intent = new Intent(PopUpMap.this, WaitingForRider.class);
+                final Intent intent = new Intent(PopUpMap.this, SearchRide.class);
                 startActivity(intent);
             }
         });
 
 
     }
+
     public void SetMoneyAmount(double MoneyAmount){
         RequestMoneyAmount.setText("$ "+ MoneyAmount);
     }
-
+    /**
+     * This initialize the map to start
+     */
     private void initMap(){
         Log.d(TAG, "Initializing map");
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -106,6 +124,9 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         supportMapFragment.getMapAsync(PopUpMap.this);
 
     }
+    /**
+     * This locate the current location for the user device
+     */
 //    @Override
     public void onMapReady(GoogleMap googleMap){
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
@@ -130,7 +151,13 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         }
     }
 
-
+    /**
+     * This set up the marker points on the map
+     * @param fromAddress
+     * address of starting position
+     * @param toAddress
+     * address of the destination
+     */
 
     private boolean getPoints(MarkerOptions fromAddress, MarkerOptions toAddress) {
 
@@ -159,12 +186,13 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         }
         return true;
     }
-
-
-
-
-
-
+    /**
+     * This return draw the route between two locations
+     * @param p1
+     * coordinate of starting location
+     * @param p2
+     * coordinate of destination
+     */
 
     private void drawRoute(LatLng p1, LatLng p2) {
         GoogleDirection.withServerKey(getString(R.string.google_api_key))

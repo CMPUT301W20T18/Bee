@@ -3,16 +3,17 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/dialog_box"
-    android:padding="50dp">
+    android:paddingTop="30dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Your Estimated Cost is"
+        android:text="Your estimated cost is"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textStyle="bold"
         android:textSize="20sp" />
 
     <TextView
@@ -30,30 +31,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:textStyle="bold"
         android:textSize="20sp"
         android:text="Enter your bid:"
         android:layout_gravity="center" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
 
         <EditText
             android:id="@+id/enter_cost"
-            android:layout_width="150dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignBaseline="@+id/dollar_sign"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="000.00"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:paddingTop="10dp"
             android:backgroundTint="@android:color/transparent"
-            android:paddingLeft="40dp"
-            android:paddingBottom="10dp"
+            android:paddingBottom="15dp"
             android:layout_gravity="center"
             android:ems="10"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
-            android:padding="10dp"
             android:textAlignment="center"
             android:textColor="@color/black" />
 
@@ -61,16 +61,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dollar_sign"
-            android:layout_toLeftOf="@+id/enter_cost"
+            android:layout_gravity="start"
             android:text="$"
             android:textColor="@color/black"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:textStyle="bold"
-            android:gravity="center"
             android:textSize="20sp" />
 
-    </RelativeLayout>
+    </FrameLayout>
 
     <View android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -82,23 +81,33 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/cancel_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:textSize="15sp"
-            android:padding="10dp"
-            android:textColor="@color/black"
-            android:background="@android:color/transparent"
             android:layout_weight="1"
-            android:id="@+id/cancel_btn" />
+            android:background="@android:color/transparent"
+            android:paddingLeft="21dp"
+            android:paddingTop="15dp"
+            android:paddingRight="21dp"
+            android:paddingBottom="16dp"
+            android:text="Cancel"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <View android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/confirm_btn"
             android:textColor="#1d8f2e"
-            android:textSize="15sp"
-            android:padding="10dp"
+            android:textSize="18sp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="16dp"
             android:text="Confirm"
             android:background="@android:color/transparent"
             android:layout_weight="1" />

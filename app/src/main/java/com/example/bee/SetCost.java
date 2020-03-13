@@ -1,6 +1,7 @@
 package com.example.bee;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -26,7 +27,18 @@ public class SetCost extends DialogFragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void confirmedAmount(double cost);
+        void postRequest(double cost);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener){
+            listener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @NonNull
@@ -37,6 +49,7 @@ public class SetCost extends DialogFragment {
         dialog.setContentView(R.layout.set_cost_fragment);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
+        setCancelable(false);
         TextView textView = dialog.findViewById(R.id.old_cost);
         textView.setText("$ " + String.format("%.2f", oldCost));
         EditText editText = dialog.findViewById(R.id.enter_cost);
@@ -57,11 +70,10 @@ public class SetCost extends DialogFragment {
                             toast.setGravity(Gravity.TOP, 0, 0);
                             toast.show();
                         } else {
-                            listener.confirmedAmount(newCost);
+                            listener.postRequest(newCost);
                         }
                     } catch (Exception e) {
-                        String text = "Invalid Amount";
-                        Toast toast = Toast.makeText(SetCost.this.getActivity(), text, Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(SetCost.this.getActivity(), e.toString(), Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.TOP, 0, 0);
                         toast.show();
                     }
