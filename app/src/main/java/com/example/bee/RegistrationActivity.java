@@ -126,7 +126,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference ref = database.getReference("users");
-//        System.out.println("test");
+
 
         registerEmail = inputName+"@gmailbiugvuebgiuv.com";
 

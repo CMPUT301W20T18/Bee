@@ -32,6 +32,13 @@ public class TestLogin {
         solo.clickOnButton("SIGN IN AS RIDER");
         solo.assertCurrentActivity("Current Activity", EnterAddressMap.class);
 
+        solo.enterText((EditText) solo.getView(R.id.atvUsernameReg), "Sophie");
+        solo.enterText((EditText) solo.getView(R.id.atvPasswordLog), "1234!Q");
+        solo.clickOnButton("SIGN IN AS Driver");
+        solo.assertCurrentActivity("Current Activity", EnterAddressMap.class);
+
+
+
     }
 
 

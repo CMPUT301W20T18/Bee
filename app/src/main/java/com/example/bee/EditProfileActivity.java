@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -28,6 +29,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+
+import static com.example.bee.RegistrationActivity.isNumeric;
 
 public class EditProfileActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
@@ -60,12 +63,12 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-//                if (isNumeric(phone.getText().toString()) == false || phone.getText().toString().length()!= 10 ){
-//                    Toast.makeText(EditProfileActivity.this,"invalid phone number",Toast.LENGTH_SHORT).show();
-//                    return;
-//
-//                }
-                if (email.getText().toString().contains("@") == false ){
+                if (!isNumeric(phone.getText().toString())){
+                    Toast.makeText(EditProfileActivity.this,"invalid phone number",Toast.LENGTH_SHORT).show();
+                    return;
+
+                }
+                if (!Patterns.EMAIL_ADDRESS.matcher(email.getText().toString()).matches() ){
                     Toast.makeText(EditProfileActivity.this,"invalid email",Toast.LENGTH_SHORT).show();
                     return;
 
