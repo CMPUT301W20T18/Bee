@@ -16,7 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-
+/**
+ *  This class is temporaryly deprecated
+ */
 public class PWresetActivity extends AppCompatActivity {
 
     private ImageView ivLogo;
