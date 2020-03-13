@@ -12,22 +12,35 @@ public class RegistrationTest {
         assertFalse(reg.isNumeric("a"));
         assertTrue(reg.isNumeric("1"));
     }
+
+    /**
+     * Test if email is successful
+     */
     @Test
     public void validateEmail_isCorrect(){
         assertTrue(reg.validateEmail("a@gmail.com"));
         assertFalse(reg.validateEmail("agmail.com"));
         assertFalse(reg.validateEmail("a@gmail"));
     }
+    /**
+     * Test if username is successful
+     */
     @Test
     public void validateUsername_isCorrect(){
         assertTrue(reg.validateUsername("Sophie"));
         assertFalse(reg.validateUsername("gugouegougbfeoufgegroerfv"));
     }
+    /**
+     * Test if phone number is successful
+     */
     @Test
     public void validatePhone_isCorrect(){
         assertTrue(reg.validatePhone("5879375617"));
         assertFalse(reg.validatePhone("u123456789"));
     }
+    /**
+     * Test if password is successful
+     */
     @Test
     public void validatePassword_isCorrect(){
         assertTrue(reg.validatePassword("1234Q!"));
@@ -35,6 +48,9 @@ public class RegistrationTest {
         assertFalse(reg.validatePassword("65010584604"));
 
     }
+    /**
+     * Test if register user is successful
+     */
     @Test
     public void registerUser_isCorrect(){
 //        assertTrue(reg.registerUser("Sophie","4567W!","5879375617","sophie@gmail.com","Sophie","White"));
