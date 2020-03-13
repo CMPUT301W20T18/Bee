@@ -1,6 +1,7 @@
 package com.example.bee;
 
 public class Offer {
+//    setup local variables and store them later
     private String startingPoint;
     private String endPoint;
     private String fare;
@@ -15,15 +16,15 @@ public class Offer {
         this.riderId = riderId;
     }
 
-
+//  return offer's starting point
     String getStartingPoint(){
         return this.startingPoint;
     }
-
+//  return offer's endPoint
     String getEndPoint(){
         return this.endPoint;
     }
-
+//  return offer's cost
     String getFare(){
         return this.fare;
     }
