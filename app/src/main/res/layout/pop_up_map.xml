@@ -6,7 +6,7 @@
 
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rider_card"
         android:layout_width="match_parent"
         android:layout_height="92dp"
@@ -15,6 +15,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:background="#fff"
+        android:orientation="horizontal"
         android:elevation="20dp"
         android:padding="16dp">
 
@@ -26,14 +27,11 @@
 
         <TextView
             android:id="@+id/rider_name"
-            android:layout_width="127dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="163dp"
+            android:layout_width="176dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="25dp"
             android:layout_marginLeft="100dp"
-            android:layout_marginTop="23dp"
+            android:layout_marginTop="-10dp"
             android:layout_marginEnd="105dp"
             android:text="RiderName"
             android:textColor="#000"
@@ -41,58 +39,55 @@
 
         <TextView
             android:id="@+id/request_money_amount1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="339dp"
-            android:layout_marginLeft="350dp"
-            android:layout_marginTop="18dp"
+            android:layout_width="88dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="-80dp"
             android:text="$ Amount"
             android:textColor="#000"
-            android:textSize="30dp"
+            android:textSize="15dp"
             android:textStyle="bold" />
 
-    </RelativeLayout>
+    </LinearLayout>
+
 
     <fragment
         android:id="@+id/map_pop"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
+        android:layout_height="582dp"
         android:layout_marginBottom="78dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
-    <Button
-        android:id="@+id/accept_button"
-        android:layout_width="127dp"
-        android:layout_height="75dp"
-        android:layout_alignParentEnd="true"
-
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="281dp"
-
-        android:layout_weight="1"
-        android:text="Accept" />
-
-    <Button
-        android:id="@+id/cancel_button"
-        android:layout_width="105dp"
-        android:layout_height="77dp"
-
-        android:layout_alignParentStart="true"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="147dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="133dp"
-        android:layout_marginTop="655dp"
-        android:layout_marginEnd="173dp"
-        android:layout_marginBottom="-1dp"
-        android:layout_weight="1"
-        android:text="Cancel"
-        android:textSize="15dp" />
+        android:layout_marginTop="584dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/accept_button"
+            android:layout_width="202dp"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:text="Accept" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="196dp"
+            android:layout_height="match_parent"
+
+
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textSize="15dp" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>
