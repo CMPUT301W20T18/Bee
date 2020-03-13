@@ -28,6 +28,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
+/**
+ * This class displays a dialog that shows information of the driver who accepted the request.
+ * The user chooses to accept or decline this offer in this dialog.
+ */
 public class ConfirmOfferDialog extends DialogFragment {
     private OnFragmentInteractionListener listener;
     private static final String TAG = "TAG";
@@ -89,6 +93,7 @@ public class ConfirmOfferDialog extends DialogFragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (driverName.getText().toString().isEmpty()) {
+                    // Initialize the dialog with driver's info
                     String name = dataSnapshot.child("Name").getValue(String.class);
                     driverName.setText(name);
                     String phone = dataSnapshot.child("phone").getValue(String.class);
@@ -104,6 +109,7 @@ public class ConfirmOfferDialog extends DialogFragment {
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Rider accepted the offer
                 listener.acceptOffer();
             }
         });
@@ -111,6 +117,7 @@ public class ConfirmOfferDialog extends DialogFragment {
         rejectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Rider declined the offer
                 listener.declineOffer();
             }
         });

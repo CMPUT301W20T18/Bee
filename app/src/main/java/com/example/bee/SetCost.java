@@ -17,6 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * This class implements a dialog that shows the user with initial estimated fare, and provide
+ * the option to add more on top of the estimated fare.
+ */
 public class SetCost extends DialogFragment {
     private OnFragmentInteractionListener listener;
     private double oldCost;
@@ -66,11 +70,13 @@ public class SetCost extends DialogFragment {
                     try {
                         newCost = Double.parseDouble(costString);
                         if (newCost < oldCost) {
+                            // New cost entered cannot be lower than the estimated cost
                             String text = "Value less than estimated fair";
                             Toast toast = Toast.makeText(SetCost.this.getActivity(), text, Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.TOP, 0, 0);
                             toast.show();
                         } else {
+                            // Cost is valid, post request to Firebase
                             listener.postRequest(newCost);
                         }
                     } catch (Exception e) {

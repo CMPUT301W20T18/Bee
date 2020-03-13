@@ -1,6 +1,7 @@
 package com.example.bee;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -21,6 +22,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -64,7 +67,7 @@ import java.util.HashMap;
 /**
  *  This class takes user input of addresses and show the route on the map
  */
-public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallback, SetCost.OnFragmentInteractionListener {
+public class EnterAddressMap extends AppCompatActivity implements OnMapReadyCallback, SetCost.OnFragmentInteractionListener {
     private static final String TAG = "TAG";
     private static final int REQUEST_CODE = 100;
     private Location currentLocation;
@@ -95,6 +98,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         // Hide confirm route button
         confirmBtn.setVisibility(View.GONE);
         Button showBtn = findViewById(R.id.show_route);
+        ImageButton profileBtn = findViewById(R.id.profile_btn);
 
         showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +132,12 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
             }
         });
 
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(EnterAddressMap.this, DrawerActivity.class));
+            }
+        });
         // Confirm button for confirming route, invokes set cost dialog
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,6 +165,12 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
+    /**
+     * Get latitude and longitude from the input location and call draw route function
+     * @param originAddress
+     * @param destAddress
+     * @return whether or not the route is successfully drawn
+     */
     /*
     Github library for Google Maps API Web Services by Google Maps https://github.com/googlemaps
     Library page: https://github.com/googlemaps/google-maps-services-java
@@ -224,6 +240,12 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
+    /**
+     * Draw route on the map from the given p1 and p2. They are the latitude and longitude
+     * for the start location and end location respectively.
+     * @param p1
+     * @param p2
+     */
     /*
     Github libray by Akexorcist https://github.com/akexorcist
     Library page: https://github.com/akexorcist/Android-GoogleDirectionLibrary
@@ -270,6 +292,9 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                 });
     }
 
+    /**
+     * Show the last location of the device on the map
+     */
     private void fetchLastLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
@@ -315,6 +340,10 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
+    /**
+     * Post request to Firebase with possibly increased cost from user
+     * @param cost
+     */
     @Override
     public void postRequest(double cost) {
         user = FirebaseAuth.getInstance().getCurrentUser();
