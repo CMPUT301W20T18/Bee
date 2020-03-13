@@ -21,6 +21,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+/**
+ *This is a class that used for Driver, the map with current location
+ */
 public class DriverMain extends FragmentActivity implements OnMapReadyCallback {
 
     GoogleMap map;
@@ -72,6 +75,12 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback {
                 });
     }
 
+    /**
+     * This initialize google map and set & move camera to current location
+     * @param googleMap
+     *  This is the googleMap parameter
+     */
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
@@ -83,7 +92,15 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback {
     }
 
 
-
+    /**This method is asking for permission of locating services
+     *
+     * @param requestCode
+     *  request Code
+     * @param permissions
+     *  permission variable String
+     * @param grantResults
+     * grantResult nonNull int
+     */
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
