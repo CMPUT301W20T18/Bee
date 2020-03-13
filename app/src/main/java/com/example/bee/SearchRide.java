@@ -63,16 +63,22 @@ public class SearchRide extends AppCompatActivity {
 
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        ref = database.getReference("requests").child("cGwYgfbxtjcMgFSWvGoZDbe6SSK2").child("request");
+        ref = database.getReference("requests");
 
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                request = dataSnapshot.getValue(Request.class);
+                for(DataSnapshot dsp:dataSnapshot.getChildren()){
+                    request = dsp.child("request").getValue(Request.class);
 
-                offerInfo.add(new Offer(request.getOrigin(),request.getDest(),
-                        String.format("%.2f", request.getCost()),request.getOriginLatlng(),request.getRiderID()));
-                offerAdapter.notifyDataSetChanged();
+                    offerInfo.add(new Offer(request.getOrigin(),request.getDest(),String.valueOf(request.getCost()),request.getOriginLatlng(),request.getRiderID()));
+
+                    System.out.println("####################################");
+                    System.out.println(request.getDest());
+
+
+                    offerAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -80,6 +86,24 @@ public class SearchRide extends AppCompatActivity {
 
             }
         });
+
+
+
+//        ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                request = dataSnapshot.getValue(Request.class);
+//
+//                offerInfo.add(new Offer(request.getOrigin(),request.getDest(),
+//                        String.format("%.2f", request.getCost()),request.getOriginLatlng(),request.getRiderID()));
+//                offerAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
         backButton = findViewById(R.id.backButtonDriver);
         backButton.setOnClickListener(new View.OnClickListener(){
