@@ -35,7 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class RegistrationActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     private ImageView logo;
-    private AutoCompleteTextView username, email, password, phone;
+    private AutoCompleteTextView username, email, password, phone, firstName, lastName;
     private Button signup;
     private TextView signin,passwordhint;
     private ProgressDialog progressDialog;
@@ -73,12 +73,14 @@ public class RegistrationActivity extends AppCompatActivity {
                 final String inputPhone = phone.getText().toString().trim();
                 final String inputPw = password.getText().toString().trim();
                 final String inputEmail = email.getText().toString().trim();
+                final String infirstName = firstName.getText().toString().trim();
+                final String inlastName = lastName.getText().toString().trim();
 
 //
 //                if (validateInput(inputName, inputPw, inputPhone, inputEmail)&& isUsernameExists(inputName)==false)
 //                    registerUser(inputName, inputPw, inputPhone, inputEmail);
-                if (validateEmail()&&validatePassword()&&validateUsername()&&validatePhone())
-                    registerUser(inputName, inputPw, inputPhone, inputEmail);
+                if (validateEmail(inputEmail)&&validatePassword(inputPw)&&validateUsername(inputName)&&validatePhone(inputPhone))
+                    registerUser(inputName, inputPw, inputPhone, inputEmail,infirstName,inlastName);
 
 
             }
@@ -101,6 +103,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
         logo = findViewById(R.id.ivRegLogo);
         username = findViewById(R.id.atvUsernameReg);
+        firstName = findViewById(R.id.atvFirstName);
+        lastName = findViewById(R.id.atvLastName);
         phone = findViewById(R.id.phoneNum);
         email = findViewById(R.id.atvEmailReg);
         password = findViewById(R.id.atvPasswordReg);
@@ -115,7 +119,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
 
-    private void registerUser(final String inputName, final String inputPw, final String phone, final String inputEmail) {
+    public void registerUser(final String inputName, final String inputPw, final String phone, final String inputEmail, final String infirstName, final String inlastName) {
 
         progressDialog.setMessage("Verificating...");
         progressDialog.show();
@@ -145,6 +149,8 @@ public class RegistrationActivity extends AppCompatActivity {
                     user.put("Name",inputName);
                     user.put("email",inputEmail);
                     user.put("phone",phone);
+                    user.put("firstName",infirstName);
+                    user.put("lastName",inlastName);
 
                     usersRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -179,8 +185,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
 
-    private boolean validateEmail() {
-        String emailInput = email.getText().toString().trim();
+    public boolean validateEmail(String emailInput) {
+
 
         if (emailInput.isEmpty()) {
             email.setError("Field can't be empty");
@@ -194,8 +200,7 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-    private boolean validateUsername() {
-        String usernameInput = username.getText().toString().trim();
+    public boolean validateUsername(String usernameInput) {
 
         if (usernameInput.isEmpty()) {
             username.setError("Field can't be empty");
@@ -209,8 +214,8 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-    private boolean validatePassword() {
-        String passwordInput = password.getText().toString().trim();
+    public boolean validatePassword(String passwordInput) {
+
 
         if (passwordInput.isEmpty()) {
             password.setError("Field can't be empty");
@@ -223,8 +228,8 @@ public class RegistrationActivity extends AppCompatActivity {
             return true;
         }
     }
-    private boolean validatePhone() {
-        String phoneInput = phone.getText().toString().trim();
+    public boolean validatePhone(String phoneInput) {
+
 
         if (phoneInput.isEmpty()) {
             phone.setError("Field can't be empty");

@@ -1,22 +1,52 @@
 package com.example.bee;
 
 
-
+/**
+ * This is a class creates a User Profile object
+ */
 public class UserProfile {
 
     private String username;
     private String password;
     private String phone;
-    public UserProfile() {
-        //firebase constructor
-    }
+    private String email, firstName,lastName;
 
 
-    public UserProfile(String username, String phone, String password) {
+
+    public UserProfile(String username, String phone, String email, String password, String firstName,
+                       String lastName
+    ) {
 
         this.username = username;
         this.phone = phone;
         this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhone() {
