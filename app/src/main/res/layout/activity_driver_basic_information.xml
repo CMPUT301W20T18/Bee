@@ -34,7 +34,8 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="  Driver Name"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:textColor="@color/black"/>
 
 
         <ImageView
@@ -59,7 +60,8 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="10086 people"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
 
         <ImageView
             android:layout_marginTop="310dp"
@@ -73,7 +75,8 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="10086 people"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
 
         <ImageView
             android:layout_width="60dp"
