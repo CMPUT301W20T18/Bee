@@ -27,7 +27,9 @@
         android:inputType="text"
         android:maxLength="40"
         android:padding="10dp"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:hint = "Origin"
+        android:textColorHint="#C9C9C9"/>
 
 
     <EditText
@@ -44,7 +46,8 @@
         android:hint="Destination"
         android:inputType="text"
         android:imeOptions="actionDone"
-        android:background="@drawable/rounded_corner" />
+        android:background="@drawable/rounded_corner"
+        android:textColorHint="#C9C9C9"/>
 
     <Button
         android:layout_width="match_parent"
