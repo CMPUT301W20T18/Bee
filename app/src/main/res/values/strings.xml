@@ -21,6 +21,8 @@
     <string name="password_hint"> *at least 6 characters with capital letter</string>
     <string name="FirstName"> First Name</string>
     <string name="LastName"> Last Name</string>
+    <string name="hello_world"> Last Name</string>
+
 
 
 
