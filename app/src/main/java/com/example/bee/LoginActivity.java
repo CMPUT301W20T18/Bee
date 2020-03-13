@@ -18,7 +18,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
+/**
+ *  This class logs a user in if they already registered in the database
+ *  connects to the RegistrationActivity
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private ImageView logo, ivSignIn;
@@ -88,7 +91,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
+/**
+ *  This method builds the firebase authentication
+ */
     public void signUser(String email, String password,final String role){
 
         progressDialog.setMessage("Verifying...");
@@ -115,7 +120,9 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
-
+/**
+ *  This initializes the GUI
+ */
 
     private void initializeGUI(){
 
@@ -130,7 +137,9 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
     }
-
+/**
+ *  This is used to determine if user input is valid before log in 
+ */
 
     public boolean validateInput(String inemail, String inpassword){
 
