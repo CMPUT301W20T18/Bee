@@ -18,17 +18,17 @@ import org.junit.runner.RunWith;
 import static junit.framework.TestCase.assertTrue;
 
 /**
- * Test for EnterAddressMap class
+ * Test for WaitingForDriver class
  */
 
 @RunWith(AndroidJUnit4.class)
-public class TestEnterAddressMap{
+public class WaitingForDriverTest {
 
     private Solo solo;
 
     @Rule
-    public ActivityTestRule<EnterAddressMap> rule =
-            new ActivityTestRule<>(EnterAddressMap.class, true, true);
+    public ActivityTestRule<WaitingForDriver> rule =
+            new ActivityTestRule<>(WaitingForDriver.class, true, true);
 
     /**
      * Runs before all tests and creates solo instance.
@@ -46,20 +46,18 @@ public class TestEnterAddressMap{
     @Test
     public void start() throws Exception{
         Activity activity = rule.getActivity();
-        solo.assertCurrentActivity("Wrong Activity", EnterAddressMap.class);
+        solo.assertCurrentActivity("Wrong Activity", WaitingForDriver.class);
     }
 
     /**
-     * Check if the class will invoke SetCost dialog
+     * Check if cancel request will return to EnterAddressMap activity
      */
     @Test
-    public void checkShowSetCost() {
+    public void checkCancelRequest() {
+        solo.assertCurrentActivity("Wrong Activity", WaitingForDriver.class);
+        solo.clickOnButton("Cancel Request");
+        solo.clickOnButton("Confirm");
         solo.assertCurrentActivity("Wrong Activity", EnterAddressMap.class);
-        solo.enterText((EditText) solo.getView(R.id.from_address), "West Edmonton Mall");
-        solo.enterText((EditText) solo.getView(R.id.to_address), "Southgate Mall, Edmonton");
-        solo.clickOnButton("SHOW ROUTE");
-        solo.clickOnButton("CONFIRM");
-        assertTrue("Dialog not shown", solo.searchText("Your estimated cost is"));
     }
 
     @After
