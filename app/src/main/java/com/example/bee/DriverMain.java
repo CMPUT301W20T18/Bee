@@ -44,6 +44,7 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback {
         searchButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+//                get new Intent and start new activity
                 Intent search = new Intent(DriverMain.this, SearchRide.class);
                 startActivity(search);
             }
@@ -51,6 +52,7 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback {
 
     }
 
+//    This method is used to get current location for use
     private void getCurrentLocation(){
         if(ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
