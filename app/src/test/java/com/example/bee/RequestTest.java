@@ -5,11 +5,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
+/**
+ * Test for setters in Request
+ */
 public class RequestTest {
     /**
      * Set up a Request class before each test
      */
-    public Request setup() {
+    public Request setUp() {
         String origin = "West Edmonton Mall";
         String dest = "University of Alberta";
         String originLatlng = "53.522515,-113.624191";
@@ -28,7 +31,7 @@ public class RequestTest {
      */
     @Test
     public void testSetDriver() {
-        Request request = setup();
+        Request request = setUp();
         assertNull(request.getDriverID());
         request.setDriverID("driverID");
         assertTrue(request.getDriverID().equals("driverID"));
@@ -39,7 +42,7 @@ public class RequestTest {
      */
     @Test
     public void testSetStatus() {
-        Request request = setup();
+        Request request = setUp();
         assertFalse(request.getStatus());
         request.setStatus(true);
         assertTrue(request.getStatus());
@@ -50,7 +53,7 @@ public class RequestTest {
      */
     @Test
     public void testSetFinished() {
-        Request request = setup();
+        Request request = setUp();
         assertFalse(request.getFinished());
         request.setFinished(true);
         assertTrue(request.getFinished());
