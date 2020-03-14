@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initializeGUI();
@@ -97,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
     public void signUser(String email, String password,final String role){
 
         progressDialog.setMessage("Verifying...");
+        progressDialog.setCancelable(false);;
         progressDialog.show();
 
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

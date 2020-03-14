@@ -143,7 +143,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: map is ready");
 
         request_accepted_map = googleMap;
