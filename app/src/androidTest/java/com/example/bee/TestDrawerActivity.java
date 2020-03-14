@@ -56,7 +56,7 @@ public class TestDrawerActivity {
     @Test
     public void checkEditProfileLink(){
 
-        solo.clickOnMenuItem("Profile");
+        solo.clickOnMenuItem("profile");
         solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
 
 

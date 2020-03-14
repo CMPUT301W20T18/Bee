@@ -47,21 +47,18 @@ public class TestLogin {
     @Test
     public void start() throws Exception{
         Activity activity = rule.getActivity();
-        solo.assertCurrentActivity("Wrong Activity", WaitingForDriver.class);
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
     }
     /**
-     * Checks if log in to the right activity
+     * Checks if given wrong username and password is not going to login
      * @throws Exception
      */
     @Test
     public void checkLogin(){
         solo.enterText((EditText) solo.getView(R.id.atvUsernameReg), "Sophie");
         solo.enterText((EditText) solo.getView(R.id.atvPasswordLog), "1234!Q");
-        solo.clickOnButton("SIGN IN AS RIDER");
-        solo.assertCurrentActivity("Current Activity", EnterAddressMap.class);
-
-
-
+        solo.clickOnButton("Sign in as Rider");
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
 
     }
 

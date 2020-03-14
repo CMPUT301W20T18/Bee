@@ -1,25 +1,19 @@
 
 package com.example.bee;
 
-        import android.app.Activity;
-        import android.content.Intent;
-        import android.net.Uri;
-        import android.widget.ImageView;
-        import android.widget.TextView;
+import android.app.Activity;
+import android.widget.ImageView;
 
-        import androidx.fragment.app.FragmentActivity;
-        import androidx.test.platform.app.InstrumentationRegistry;
-        import androidx.test.rule.ActivityTestRule;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 
-        import com.google.android.gms.maps.SupportMapFragment;
-        import com.robotium.solo.Solo;
+import com.robotium.solo.Solo;
 
-        import org.junit.After;
-        import org.junit.Before;
-        import org.junit.Rule;
-        import org.junit.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
-        import static junit.framework.TestCase.assertTrue;
 
 public class TestDriverBasicInfomation {
     private Solo solo;
@@ -43,28 +37,10 @@ public class TestDriverBasicInfomation {
         Activity activity = (Activity)rule.getActivity();
     }
 
+
     /**
-     * check whether call can work
+     * Check back button works
      */
-
-    @Test
-    public void checkCall() {
-        solo.assertCurrentActivity("Wrong Activity", DriverBasicInformation.class);
-        ImageView phone = (ImageView) solo.getView("phone");
-        solo.clickOnView(phone);
-
-    }
-    /**
-     * check click onDrivername can work
-     */
-
-    @Test
-    public void checkMail() {
-        solo.assertCurrentActivity("Wrong Activity", DriverBasicInformation.class);
-        ImageView mail = (ImageView) solo.getView("mail");
-        solo.clickOnView(mail);
-    }
-
     @Test
     public void checkBack() {
         solo.assertCurrentActivity("Wrong Activity", DriverBasicInformation.class);

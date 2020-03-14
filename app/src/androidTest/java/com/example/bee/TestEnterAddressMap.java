@@ -57,8 +57,8 @@ public class TestEnterAddressMap {
         solo.assertCurrentActivity("Wrong Activity", EnterAddressMap.class);
         solo.enterText((EditText) solo.getView(R.id.from_address), "West Edmonton Mall");
         solo.enterText((EditText) solo.getView(R.id.to_address), "Southgate Mall, Edmonton");
-        solo.clickOnButton("SHOW ROUTE");
-        solo.clickOnButton("CONFIRM");
+        solo.clickOnButton("Show Route");
+        solo.clickOnButton("Confirm");
         assertTrue("Dialog not shown", solo.searchText("Your estimated cost is"));
     }
 

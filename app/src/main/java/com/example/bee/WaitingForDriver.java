@@ -72,7 +72,7 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 request = dataSnapshot.getValue(Request.class);
-                if (toText.getText().toString().isEmpty()) {
+                if (toText.getText().toString().isEmpty() && request != null) {
                     // Initialize the page with ride information
                     toText.setText(request.getDest());
                     fromText.setText(request.getOrigin());
