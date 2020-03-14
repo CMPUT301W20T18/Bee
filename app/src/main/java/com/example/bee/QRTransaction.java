@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 /**
  * This class represent one transaction via QRcode
  */
-public class QR_Transaction {
+public class QRTransaction {
     private String descr;
     private double amount;
 
@@ -14,7 +14,7 @@ public class QR_Transaction {
      * @param descr
      * @param amount
      */
-    QR_Transaction(String descr, double amount) {
+    QRTransaction(String descr, double amount) {
 
         // amount should greater than 0
         this.descr = descr;

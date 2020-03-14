@@ -15,7 +15,7 @@ public class Payment {
      * @param amount
      * @return
      */
-    public boolean make_Payment(QR_Wallet driverWallet, QR_Wallet riderWallet, double amount) {
+    public boolean make_Payment(QRWallet driverWallet, QRWallet riderWallet, double amount) {
         if (amount <= 0) return false;
         String driverDescr = String.format("%s owes me $%.2f", riderWallet.getName(), amount);
         String riderDescr = String.format("I owe %s $%.2f", driverWallet.getName(), amount);

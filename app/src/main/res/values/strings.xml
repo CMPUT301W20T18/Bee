@@ -16,7 +16,7 @@
     <string name="signup_redirect">Don\'t have an account? Register here!</string>
     <string name="drawerOpen">drawerOpen</string>
     <string name="drawerClose">drawerClose</string>
-    <string name="contactEmail">contact Email</string>
+    <string name="contactEmail">Contact Email</string>
     <string name="bee">Bee</string>
     <string name="password_hint"> *at least 6 characters with capital letter</string>
     <string name="FirstName"> First Name</string>

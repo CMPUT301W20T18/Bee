@@ -34,7 +34,8 @@ import java.util.HashMap;
 public class EditProfileActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     private ImageView logo;
-    private EditText username, email, phone;
+    private TextView username;
+    private EditText email, phone;
     private Button saveBt;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
