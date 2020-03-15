@@ -45,6 +45,13 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -55,6 +62,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * This is a class that shows the situation after the rider confirms the driver's acceptance
@@ -70,12 +78,20 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     MarkerOptions place1, place2;
     Boolean drew = false;
+    private static ArrayList<String> points = new ArrayList<>();
+
+    private FirebaseUser user;
+    FirebaseDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_after_accept_request);
         initMap();
+//        user = FirebaseAuth.getInstance().getCurrentUser();
+//        String userID = user.getUid();
+
+        db = FirebaseDatabase.getInstance();
         driver_name = (TextView)findViewById(R.id.driver_name);
         driver_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +100,8 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                 startActivity(intent);
             }
         });
-
+        getPointsList();
+        System.out.println(points.size()+ "sssssssssssssssssssssssssssssssssize");
 
     }
 
@@ -112,14 +129,14 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         place1 = new MarkerOptions().position(place1_postion).title("Orientation");
         LatLng place2_postion = new LatLng(53.484300,-113.517250);
         place2 = new MarkerOptions().position(place2_postion).title("Destination");
-        drew = getPoints(place1, place2);
-
-        if (!drew){
-            String text = "Invalid Address";
-            Toast toast = Toast.makeText(RiderAfterAcceptRequest.this, text, Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-        }
+//        drew = getPoints(place1, place2);
+//
+//        if (!drew){
+//            String text = "Invalid Address";
+//            Toast toast = Toast.makeText(RiderAfterAcceptRequest.this, text, Toast.LENGTH_SHORT);
+//            toast.setGravity(Gravity.CENTER, 0, 0);
+//            toast.show();
+//        }
 
     }
 
@@ -151,7 +168,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             // Move camera to include both points
             request_accepted_map.setPadding(     0,      350,      0,     0);
             request_accepted_map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
-            drawRoute(from_position, to_position);
+            //drawRoute(from_position, to_position);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,47 +189,44 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    /**
-     * This is a method to draw route between two positions
-     * @param p1
-     * first place
-     * @param p2
-     * second place
-     */
+//    /**
+//     * This is a method to draw route between two positions
+//     * @param p1
+//     * first place
+//     * @param p2
+//     * second place
+//     */
 
-    private void drawRoute(LatLng p1, LatLng p2) {
-        GoogleDirection.withServerKey(getString(R.string.google_maps_key))
-                .from(p1)
-                .to(p2)
-                .transportMode(TransportMode.DRIVING)
-                .execute(new DirectionCallback() {
-                    @Override
-                    public void onDirectionSuccess(Direction direction) {
-                        if(direction.isOK()) {
-                            Route route = direction.getRouteList().get(0);
-                            Leg leg = route.getLegList().get(0);
-                            ArrayList<LatLng> pointList = leg.getDirectionPoint();
-                            PolylineOptions polylineOptions = DirectionConverter
-                                    .createPolyline(RiderAfterAcceptRequest.this, pointList, 5,
-                                            getResources().getColor(R.color.yellow));
-                            request_accepted_map.addPolyline(polylineOptions);
-                        } else {
-                            String text = direction.getStatus();
-                            Toast toast = Toast.makeText(RiderAfterAcceptRequest.this, text, Toast.LENGTH_SHORT);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                        }
-                    }
+//    private void drawRoute(LatLng p1, LatLng p2) {
+//        PolylineOptions polylineOptions = DirectionConverter
+//                .createPolyline(RiderAfterAcceptRequest.this, pointList, 5,
+//                        getResources().getColor(R.color.yellow));
+//        request_accepted_map.addPolyline(polylineOptions);
+//    }
 
-                    @Override
-                    public void onDirectionFailure(Throwable t) {
-                        String text = "Failed to get direction";
-                        Toast toast = Toast.makeText(RiderAfterAcceptRequest.this, text, Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
+    private void getPointsList(){
+        DatabaseReference ref = db.getReference();
+        ref.child("requests")
+                .child("PAvxlWke8KfOtRbuXuqo6TheIrw1")
+                .child("request")
+                .child("points")
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> items = dataSnapshot.getChildren();
+                for(DataSnapshot child: items){
+                    String latlng_str = child.getValue(String.class);
+                    points.add(latlng_str);
+                }
 
-                    }
-                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
 
