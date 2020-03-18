@@ -50,7 +50,6 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
         fromText = findViewById(R.id.show_from);
         costText = findViewById(R.id.show_cost);
         Button cancelRequestBtn = findViewById(R.id.cancel_request);
-
         // Ruichen's Testing -- Local Variable start
         Button testBtn = findViewById(R.id.test_button);
         testBtn.setOnClickListener(new View.OnClickListener() {
