@@ -14,6 +14,7 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 
 public class SearchRide extends AppCompatActivity {
 
+    private FirebaseUser user;
 
 //    initializing local variables
     private static final String TAG = "TAG";
@@ -49,7 +51,8 @@ public class SearchRide extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_search);
-
+        user = FirebaseAuth.getInstance().getCurrentUser();
+//        String userID = user.getUid();
 //        setup buttons in current view
         searchNearby = findViewById(R.id.searchNearBy);
 

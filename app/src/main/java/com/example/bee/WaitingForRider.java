@@ -108,7 +108,6 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                 }
             });
 
-
         }else{
             RequestStatus.setText("Waiting for comfirmation......");
         }

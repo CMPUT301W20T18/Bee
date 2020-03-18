@@ -1,5 +1,6 @@
 package com.example.bee;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -11,7 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -32,9 +35,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
+import static android.app.PendingIntent.getActivity;
 import static android.content.ContentValues.TAG;
 
 /**
@@ -42,6 +54,11 @@ import static android.content.ContentValues.TAG;
  */
 public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private FusedLocationProviderClient client_device;
+    EditText riderID, requestMoneyAmount;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+    String userID;
+    private FirebaseDatabase firebaseDatabase;
     GoogleMap mapPop;
     MarkerOptions place1;
     MarkerOptions place2;
@@ -51,52 +68,84 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private TextView RequestMoneyAmount;
 
 
-    @Override
+
+
+
+
+        @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.pop_up_map);
-        initMap();
-        AcceptButton = findViewById(R.id.accept_button);
-        CancelButton = findViewById(R.id.cancel_button);
-        RequestMoneyAmount = findViewById(R.id.request_money_amount1);
+            riderID = findViewById(R.id.rider_id);
+            requestMoneyAmount = findViewById(R.id.money_amount_in_pop);
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.pop_up_map);
+            initMap();
+//            setUpGUI();
+            AcceptButton = findViewById(R.id.accept_button);
+            CancelButton = findViewById(R.id.cancel_button);
 //        initialize the map as a pop up window
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        EditText editText = findViewById(R.id.enter_cost);
-        int width = displayMetrics.widthPixels;
-        int height = displayMetrics.heightPixels;
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        getWindow().setLayout((int) (width * 0.75), (int) (height * .6));
+//            requestMoneyAmount.setText("1");
+            int width = displayMetrics.widthPixels;
+            int height = displayMetrics.heightPixels;
+
+            getWindow().setLayout((int) (width * 0.8), (int) (height * .6));
 //        set up the accept button
-        AcceptButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String MoneyString = editText.getText().toString();
-                if(!MoneyString.isEmpty()){
-                    double newCost = Double.parseDouble(MoneyString);
-                    startActivity(new Intent(PopUpMap.this, WaitingForRider.class));
-                }else {
-                    String text = "Invalid Amount";
-                    Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.TOP, 0, 0);
-                    toast.show();
+            AcceptButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    String MoneyString = requestMoneyAmount.getText().toString();
+//                    if (!MoneyString.isEmpty()) {
+//                        double newCost = Double.parseDouble(MoneyString);
+                        startActivity(new Intent(PopUpMap.this, WaitingForRider.class));
+//                    } else {
+//                        String text = "Invalid Amount";
+//                        Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
+//                        toast.setGravity(Gravity.TOP, 0, 0);
+//                        toast.show();
+//                        final Intent show = new Intent(PopUpMap.this, WaitingForRider.class);
+//                        startActivity(show);
+//                    }
+
+
                 }
-
-                final Intent show = new Intent(PopUpMap.this, WaitingForRider.class);
-                startActivity(show);
-            }
-        });
+            });
 //        set up the cancel button
-        CancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent intent = new Intent(PopUpMap.this, SearchRide.class);
-                startActivity(intent);
-            }
-        });
+            CancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Intent cancel = new Intent(PopUpMap.this, SearchRide.class);
+                    startActivity(cancel);
+                }
+            });
 
 
-    }
+        }
+//        set up the User information on the interface
+//    public void setUpGUI() {
+////        user = FirebaseAuth.getInstance().getCurrentUser();
+////        if(user != null){
+////            userID = firebaseAuth.getCurrentUser().getUid();
+////        }
+////
+////        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+////        final DatabaseReference ref = database.getReference("users");
+////        ref.child(userID).addValueEventListener(new ValueEventListener() {
+////            @Override
+////            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+////                    riderID.setText(userID);
+////            }
+////
+////            @Override
+////            public void onCancelled(@NonNull DatabaseError databaseError) {
+////
+////            }
+////        });
+//        userID =
+//        riderID.setText(userID);
+//
+//    }
 
     public void SetMoneyAmount(double MoneyAmount){
         RequestMoneyAmount.setText("$ "+ MoneyAmount);

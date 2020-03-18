@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/dialog_box"
 
     android:orientation="vertical">
 
@@ -10,7 +11,6 @@
         android:id="@+id/rider_card"
         android:layout_width="match_parent"
         android:layout_height="92dp"
-        android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
@@ -26,25 +26,22 @@
             android:src="@mipmap/ic_launcher" />
 
         <EditText
-            android:id="@+id/rider_name"
-            android:layout_width="170dp"
-            android:layout_height="39dp"
+            android:id="@+id/rider_id"
+            android:layout_width="142dp"
+            android:layout_height="62dp"
             android:layout_gravity="top"
-            android:layout_marginTop="-25dp"
+            android:layout_marginTop="-10dp"
             android:text="RiderName"
             android:textColor="#000"
             android:textSize="21sp" />
 
         <EditText
-            android:id="@+id/request_money_amount1"
+            android:id="@+id/money_amount_in_pop"
             android:layout_width="wrap_content"
             android:layout_height="74dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-
-            android:text="$ Amount"
+            android:text="AmountOfMoney"
             android:textColor="#000"
-            android:textSize="30dp"
+            android:textSize="15dp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -53,43 +50,50 @@
         android:id="@+id/map_pop"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="482dp"
+        android:layout_height="250dp"
         android:layout_alignParentBottom="true"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 <!--        android:layout_marginBottom="78dp"-->
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="88dp"
+        android:background="#fff"
+
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/accept_button"
-            android:layout_width="211dp"
+            android:layout_width="119dp"
             android:layout_height="match_parent"
-
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="-4dp"
-            android:layout_weight="1"
-            android:text="Accept" />
+
+            android:layout_marginEnd="202dp"
+            android:layout_marginBottom="0dp"
+            android:background="#fff"
+            android:text="Accept"
+            android:textColor="#000" />
 
         <Button
             android:id="@+id/cancel_button"
-            android:layout_width="205dp"
-            android:layout_height="match_parent"
+            android:layout_width="117dp"
 
-            android:layout_alignParentStart="true"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="3dp"
-            android:layout_marginBottom="-4dp"
+            android:layout_marginEnd="85dp"
+            android:layout_marginBottom="0dp"
             android:layout_weight="1"
-            android:text="Cancel" />
-<!--            android:layout_marginStart="216dp"-->
+            android:background="#fff"
 
-    </LinearLayout>
+            android:text="Cancel"
+            android:textColor="#000" />
+        <!--            android:layout_marginStart="216dp"-->
+
+    </RelativeLayout>
 
 
 </LinearLayout>
