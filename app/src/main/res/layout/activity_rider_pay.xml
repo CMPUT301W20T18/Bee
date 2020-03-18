@@ -28,6 +28,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="110dp"
+        android:textColor="@color/black"
         android:text="TextView" />
 
     <TextView
@@ -37,6 +38,7 @@
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="93dp"
+        android:textColor="@color/black"
         android:text="TextView" />
 
     <TextView
@@ -46,6 +48,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="125dp"
+        android:textColor="@color/black"
         android:text="TextView" />
 
 </RelativeLayout>
