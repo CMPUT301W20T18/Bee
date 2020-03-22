@@ -7,123 +7,159 @@
     tools:context="com.example.bee.RegistrationActivity">
 
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="113dp">
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:orientation="vertical"
+        android:layout_marginTop="50dp">
 
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/ivRegLogo"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="55dp"
+            android:contentDescription="TODO"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo" />
+
+
+        <AutoCompleteTextView
+            android:id="@+id/atvUsernameReg"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginBottom="10dp"
+            android:drawableStart="@drawable/icon_person"
+            android:drawableLeft="@drawable/icon_person"
+            android:drawablePadding="10dp"
+            android:hint="@string/usernameReg"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/gray"
+            android:background="@drawable/rounded_rect"
+            android:textSize="15sp" />
+
+
+
+        <AutoCompleteTextView
+            android:id="@+id/phoneNum"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginBottom="10dp"
+            android:drawableStart="@drawable/icon_phone_sign"
+            android:drawableLeft="@drawable/icon_phone_sign"
+            android:drawablePadding="10dp"
+            android:inputType="number"
+            android:hint="@string/phoneNum"
+            android:paddingStart="15dp"
+            android:paddingEnd="10dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/gray"
+            android:background="@drawable/rounded_rect"
+            android:textSize="15sp" />
+
+
+        <AutoCompleteTextView
+            android:id="@+id/atvEmailReg"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginBottom="10dp"
+            android:drawableStart="@drawable/icon_mail"
+            android:drawableLeft="@drawable/icon_mail"
+            android:drawablePadding="10dp"
+            android:hint="@string/emailReg"
+            android:inputType="textEmailAddress"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/gray"
+            android:background="@drawable/rounded_rect"
+            android:textSize="15sp" />
+        <AutoCompleteTextView
+            android:id="@+id/atvFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginBottom="10dp"
+            android:drawableStart="@drawable/icon_person"
+            android:drawableLeft="@drawable/icon_person"
+            android:drawablePadding="10dp"
+            android:hint="@string/FirstName"
+            android:inputType="textPersonName"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/gray"
+            android:background="@drawable/rounded_rect"
+            android:textSize="15sp" />
+        <AutoCompleteTextView
+            android:id="@+id/atvLastName"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginBottom="10dp"
+            android:drawableStart="@drawable/icon_person"
+            android:drawableLeft="@drawable/icon_person"
+            android:drawablePadding="10dp"
+            android:hint="@string/LastName"
+            android:inputType="textPersonName"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/gray"
+            android:background="@drawable/rounded_rect"
+            android:textSize="15sp" />
+
+
+        <AutoCompleteTextView
+            android:id="@+id/atvPasswordReg"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginBottom="10dp"
+            android:drawableStart="@drawable/icon_password"
+            android:drawableLeft="@drawable/icon_password"
+            android:drawablePadding="10dp"
+            android:hint="@string/passwordReg"
+            android:inputType="textPassword"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:imeOptions="actionDone"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_rect"
+            android:textColorHint="@color/gray"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/tvPasswordHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:text="@string/password_hint"
+            android:textColor="@color/gray" />
+
+
+
+        <Button
+            android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginEnd="50dp"
-            android:orientation="vertical">
+            android:layout_marginTop="15dp"
+            android:text="@string/sign_upReg"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tvSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="@string/signin_redirect"
+            android:textColor="@color/gray" />
 
 
-            <ImageView
-                android:id="@+id/ivRegLogo"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="55dp"
-                android:contentDescription="TODO"
-                android:scaleType="fitCenter"
-                android:src="@drawable/logo" />
+    </LinearLayout>
 
-
-            <AutoCompleteTextView
-                android:id="@+id/atvUsernameReg"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="10dp"
-                android:drawableStart="@drawable/icon_person"
-                android:drawableLeft="@drawable/icon_person"
-                android:drawablePadding="10dp"
-                android:hint="@string/usernameReg"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:textColor="@color/gray"
-                android:textColorHint="@color/gray"
-                android:textSize="15sp" />
-
-            <AutoCompleteTextView
-                android:id="@+id/phoneNum"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="10dp"
-                android:drawableStart="@drawable/icon_person"
-                android:drawableLeft="@drawable/icon_person"
-                android:drawablePadding="10dp"
-                android:hint="@string/phoneNum"
-                android:inputType="number"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:textColor="@color/gray"
-                android:textColorHint="@color/gray"
-                android:textSize="15sp" />
-
-
-            <AutoCompleteTextView
-                android:id="@+id/atvEmailReg"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="10dp"
-                android:drawableStart="@drawable/icon_mail"
-                android:drawableLeft="@drawable/icon_mail"
-                android:drawablePadding="10dp"
-                android:hint="@string/emailReg"
-                android:inputType="textEmailAddress"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/gray"
-                android:background="@drawable/rounded_rect"
-                android:textSize="15sp" />
-
-
-            <AutoCompleteTextView
-                android:id="@+id/atvPasswordReg"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="10dp"
-                android:drawableStart="@drawable/icon_password"
-                android:drawableLeft="@drawable/icon_password"
-                android:drawablePadding="10dp"
-                android:hint="@string/passwordReg"
-                android:inputType="textPassword"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:imeOptions="actionDone"
-                android:textColor="@color/white"
-                android:background="@drawable/rounded_rect"
-                android:textColorHint="@color/gray"
-                android:textSize="15sp" />
-
-
-            <Button
-                android:id="@+id/btnSignUp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/sign_upReg"
-                android:textColor="#FFFFFF" />
-
-            <TextView
-                android:id="@+id/tvSignIn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:text="@string/signin_redirect"
-                android:textColor="@color/gray" />
-
-
-        </LinearLayout>
-
-
-    </ScrollView>
 
 </RelativeLayout>

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WaitingForDriver" >
+    tools:context=".WaitingForDriver"
+    android:background="@color/white">
 
 
     <TextView
@@ -93,6 +94,16 @@
         android:paddingRight="20dp"
         android:layout_marginBottom="60dp" />
 
+    <Button
+        android:id="@+id/test_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="160dp"
+        android:layout_marginBottom="169dp"
+        android:text="Testing" />
 
 
 </RelativeLayout>

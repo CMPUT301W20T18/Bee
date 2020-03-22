@@ -19,10 +19,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -53,9 +53,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
@@ -67,7 +64,7 @@ import java.util.HashMap;
 /**
  *  This class takes user input of addresses and show the route on the map
  */
-public class EnterAddressMap extends AppCompatActivity implements OnMapReadyCallback, SetCost.OnFragmentInteractionListener {
+public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallback, SetCost.OnFragmentInteractionListener {
     private static final String TAG = "TAG";
     private static final int REQUEST_CODE = 100;
     private Location currentLocation;
@@ -98,7 +95,7 @@ public class EnterAddressMap extends AppCompatActivity implements OnMapReadyCall
         // Hide confirm route button
         confirmBtn.setVisibility(View.GONE);
         Button showBtn = findViewById(R.id.show_route);
-        ImageButton profileBtn = findViewById(R.id.profile_btn);
+        ImageView profileBtn = findViewById(R.id.profile_btn);
 
         showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,10 +182,12 @@ public class EnterAddressMap extends AppCompatActivity implements OnMapReadyCall
                     .build();
             fromAddress = GeocodingApi.geocode(context,
                     originAddress).await();
+            // Geocoding origin address
             if (fromAddress == null) {
                 return false;
             }
 
+            // Geocoding destination address
             toAddress = GeocodingApi.geocode(context,
                     destAddress).await();
             if (toAddress == null) {
@@ -326,6 +325,12 @@ public class EnterAddressMap extends AppCompatActivity implements OnMapReadyCall
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
     }
 
+    /**
+     * Ask for user's permission to use their location
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
                                            @NonNull int[] grantResults) {

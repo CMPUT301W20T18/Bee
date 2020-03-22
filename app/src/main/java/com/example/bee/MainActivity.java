@@ -11,7 +11,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+/**
+ *  This class determines if currently has a user signed in 
+ */
 public class MainActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
     private Button btnLogout;
     private FirebaseAuth firebaseAuth;
@@ -21,21 +30,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnLogout = findViewById(R.id.btnLogout);
-        firebaseAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
 
-        FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if (user == null){
+            // if no user is signed in
 
-                firebaseAuth.signOut();
-                finish();
-                startActivity(new Intent(MainActivity.this,LoginActivity.class));
-            }
-        });
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));}
+        else{
+            // if a user signed in, start drawerActivity
+            startActivity(new Intent(MainActivity.this, DrawerActivity.class));
+        }
+        finish();
 
     }
+
 
 }

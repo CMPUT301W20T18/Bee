@@ -50,6 +50,16 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
         fromText = findViewById(R.id.show_from);
         costText = findViewById(R.id.show_cost);
         Button cancelRequestBtn = findViewById(R.id.cancel_request);
+        // Ruichen's Testing -- Local Variable start
+        Button testBtn = findViewById(R.id.test_button);
+        testBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(WaitingForDriver.this, RiderAfterAcceptRequest.class));
+            }
+        });
+        // Ruichen's Testing -- Local Variable end
+
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
@@ -61,7 +71,7 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 request = dataSnapshot.getValue(Request.class);
-                if (toText.getText().toString().isEmpty()) {
+                if (toText.getText().toString().isEmpty() && request != null) {
                     // Initialize the page with ride information
                     toText.setText(request.getDest());
                     fromText.setText(request.getOrigin());

@@ -4,6 +4,13 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -13,13 +20,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".RiderPayActivity"></activity>
+        <activity android:name=".EditProfileActivity" />
+        <activity android:name=".DrawerActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".MainActivity"></activity>
-
+        <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,11 +36,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PWresetActivity"></activity>
-        <activity android:name=".RegistrationActivity"></activity>
-        <activity android:name=".EnterAddressMap"></activity>
-        <activity android:name=".WaitingForDriver"></activity>
-
+        <activity android:name=".PWresetActivity" />
+        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".EnterAddressMap" />
+        <activity android:name=".WaitingForDriver" />
+        <activity android:name=".DriverBasicInformation" />
+        <activity android:name=".RiderAfterAcceptRequest" />
+        <activity android:name=".DriverMain" />
+        <activity android:name=".SearchRide" />
     </application>
 
 </manifest>
