@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -60,6 +61,17 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback {
                 startActivity(search);
             }
         });
+
+        final ImageView profileButton = findViewById(R.id.profile_btn);
+        profileButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent profile = new Intent(DriverMain.this,DrawerActivity.class);
+                startActivity(profile);
+            }
+        });
+
 
     }
 
