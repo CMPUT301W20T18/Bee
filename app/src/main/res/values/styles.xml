@@ -17,9 +17,4 @@
         <item name="android:windowExitAnimation">@anim/zoom_out</item>
     </style>
 
-    <style name="DialogAnimation">
-        <item name="android:windowEnterAnimation">@anim/zoom_in</item>
-        <item name="android:windowExitAnimation">@anim/zoom_out</item>
-    </style>
-
 </resources>

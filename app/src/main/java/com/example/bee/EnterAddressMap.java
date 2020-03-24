@@ -14,12 +14,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,6 +61,7 @@ import com.google.maps.model.GeocodingResult;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *  This class takes user input of addresses and show the route on the map
@@ -71,11 +73,15 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     private FusedLocationProviderClient fusedLocationProviderClient;
     private GoogleMap map;
     private FirebaseUser user;
+    private EditText fromEditText;
+    private EditText toEditText;
+    private Button confirmBtn;
     private String originAddress;
     private String destAddress;
     private LatLng p1;
     private LatLng p2;
     private ArrayList<LatLng> pointList;
+    private int markers;
     private Boolean drew = false;
     private String distance;
     private String time;
@@ -89,9 +95,13 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLastLocation();
 
-        final EditText fromEditText = findViewById(R.id.from_address);
-        final EditText toEditText = findViewById(R.id.to_address);
-        final Button confirmBtn = findViewById(R.id.confirm_route);
+        // Latlng of locations is null by default
+        p1 = null;
+        p2 = null;
+
+        fromEditText = findViewById(R.id.from_address);
+        toEditText = findViewById(R.id.to_address);
+        confirmBtn = findViewById(R.id.confirm_route);
         // Hide confirm route button
         confirmBtn.setVisibility(View.GONE);
         Button showBtn = findViewById(R.id.show_route);
@@ -164,65 +174,42 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
 
     /**
      * Get latitude and longitude from the input location and call draw route function
-     * @param originAddress
-     * @param destAddress
+     * @param originString
+     * @param destString
      * @return whether or not the route is successfully drawn
      */
     /*
     Github library for Google Maps API Web Services by Google Maps https://github.com/googlemaps
     Library page: https://github.com/googlemaps/google-maps-services-java
      */
-    private boolean getPoints(String originAddress, String destAddress) {
-        GeocodingResult[] fromAddress;
-        GeocodingResult[] toAddress;
+    private boolean getPoints(String originString, String destString) {
+        LocationConverter converter = new LocationConverter(getApplicationContext());
+        p1 = converter.addressToLatlng(originString);
+        p2 = converter.addressToLatlng(destString);
 
-        try {
-            GeoApiContext context = new GeoApiContext.Builder()
-                    .apiKey(getString(R.string.google_maps_key))
-                    .build();
-            fromAddress = GeocodingApi.geocode(context,
-                    originAddress).await();
-            // Geocoding origin address
-            if (fromAddress == null) {
-                return false;
-            }
-
-            // Geocoding destination address
-            toAddress = GeocodingApi.geocode(context,
-                    destAddress).await();
-            if (toAddress == null) {
-                return false;
-            }
-
-            p1 = new LatLng(fromAddress[0].geometry.location.lat, fromAddress[0].geometry.location.lng);
-            p2 = new LatLng(toAddress[0].geometry.location.lat, toAddress[0].geometry.location.lng);
-            map.addMarker(new MarkerOptions()
-                    .position(p1)
-                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_red_placeholder)));
-
-            map.addMarker(new MarkerOptions()
-                    .position(p2)
-                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
-            LatLngBounds latLngBounds = new LatLngBounds.Builder()
-                    .include(p1)
-                    .include(p2)
-                    .build();
-
-            // Move camera to include both points
-            map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
-            drawRoute(p1, p2);
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (p1 == null || p2 == null) {
             return false;
         }
 
+        map.addMarker(new MarkerOptions()
+                .position(p1)
+                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_red_placeholder)));
+
+        map.addMarker(new MarkerOptions()
+                .position(p2)
+                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
+        markers = 2;
+        LatLngBounds latLngBounds = new LatLngBounds.Builder()
+                .include(p1)
+                .include(p2)
+                .build();
+
+        // Move camera to include both points
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
+        drawRoute(p1, p2);
+
         return true;
     }
-
 
     /*
     StackOverflow post by Leo Droidcoder https://stackoverflow.com/users/5730321/leo-droidcoder
@@ -323,6 +310,43 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         map.setMyLocationEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+
+        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                confirmBtn.setVisibility(View.GONE);
+                // Fill in the address box
+                String address;
+                String inputFrom = fromEditText.getText().toString();
+                String inputTo = toEditText.getText().toString();
+                if (markers == 2) {
+                    markers = 0;
+                    map.clear();
+                }
+                if (inputFrom.isEmpty()) {
+                    // First text box is empty
+                    // if both text box is empty, the first text box has priority
+                    LocationConverter converter = new LocationConverter(getApplicationContext());
+                    address = converter.latlngToAddress(latLng);
+                    fromEditText.setText(address);
+                    map.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .icon(bitmapDescriptorFromVector(EnterAddressMap.this, R.drawable.ic_red_placeholder)));
+                    markers += 1;
+
+                } else if (!inputFrom.isEmpty() && inputTo.isEmpty()) {
+                    // destination text box is empty
+                    LocationConverter converter = new LocationConverter(getApplicationContext());
+                    address = converter.latlngToAddress(latLng);
+                    toEditText.setText(address);
+                    map.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .icon(bitmapDescriptorFromVector(EnterAddressMap.this, R.drawable.ic_green_placeholder)));
+                    markers += 1;
+                }
+
+            }
+        });
     }
 
     /**

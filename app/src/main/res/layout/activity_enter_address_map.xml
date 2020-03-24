@@ -22,10 +22,9 @@
         android:inputType="text"
         android:hint="Pickup location"
         android:background="@drawable/rounded_corner"
-        android:maxLength="40"
         android:padding="10dp"
         android:textColor="@color/black"
-        android:textColorHint="#C9C9C9"/>
+        android:textColorHint="#A9A9A9"/>
 
 
     <EditText
@@ -33,7 +32,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/to_address"
         android:padding="10dp"
-        android:maxLength="40"
         android:elevation="10dp"
         android:layout_alignLeft="@+id/from_address"
         android:layout_alignRight="@+id/from_address"
@@ -42,7 +40,7 @@
         android:inputType="text"
         android:textColor="@color/black"
         android:imeOptions="actionDone"
-        android:textColorHint="#C9C9C9"
+        android:textColorHint="#A9A9A9"
         android:background="@drawable/rounded_corner" />
 
     <ImageView
