@@ -45,9 +45,14 @@
         <activity android:name=".DriverBasicInformation" />
         <activity android:name=".RiderAfterAcceptRequest" />
         <activity android:name=".DriverMain" />
+<!--<<<<<<< Updated upstream-->
         <activity android:name=".SearchRide"/>
 
 <!--        <activity android:name=".PopUpMap"/>-->
+=======
+
+<!--        <activity android:name=".PopUpMap"/>-->
+>>>>>>> Stashed changes
         <activity android:name=".WaitingForRider"/>
     </application>
 
