@@ -162,6 +162,10 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Android App.app" />
+      <item itemvalue="Android Instrumented Tests.PopUpMapTest" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Android Instrumented Tests.PopUpMapTest" />
