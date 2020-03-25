@@ -188,16 +188,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     }
 
 
-    private boolean getOriDest() {
-        try {
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true ; }
-
         /**
      * This is a method to set the model of marker
      */
