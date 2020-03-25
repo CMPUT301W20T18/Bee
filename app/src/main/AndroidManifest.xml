@@ -44,6 +44,7 @@
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".EnterAddressMap" />
         <activity android:name=".WaitingForDriver" />
+        <activity android:name=".RatingActivity" />
         <activity android:name=".DriverBasicInformation" />
         <activity android:name=".RiderAfterAcceptRequest" />
         <activity android:name=".DriverMain" />

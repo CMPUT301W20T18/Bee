@@ -29,14 +29,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 /**
- *  This class supports user to edit their contact information
+ *  This class supports user to see the ratings they got
  */
 public class RatingActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     private ImageView logo;
     private TextView username;
-    private EditText email, phone;
-    private Button saveBt;
+    private Button back;
+
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
@@ -53,6 +53,15 @@ public class RatingActivity extends AppCompatActivity {
 
         initializeGUI();
 
+//
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                startActivity(new Intent(RatingActivity.this, DrawerActivity.class));
+//            }
+//        });
+
 
     }
 
@@ -62,7 +71,7 @@ public class RatingActivity extends AppCompatActivity {
     private void initializeGUI() {
 
 
-        username = findViewById(R.id.profileName);
+        username = findViewById(R.id.ratingName);
 
         progressDialog = new ProgressDialog(this);
 

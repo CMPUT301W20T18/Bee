@@ -164,7 +164,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             case R.id.rating:
                 Toast.makeText(DrawerActivity.this, "My Rating Selected", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(DrawerActivity.this, RatingActivity.class));
-                break;
+                return true;
             case R.id.about:
                 Toast.makeText(DrawerActivity.this, "About us Selected", Toast.LENGTH_SHORT).show();
                 break;
