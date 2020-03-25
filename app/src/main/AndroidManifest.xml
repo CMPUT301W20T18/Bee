@@ -28,15 +28,14 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-<<<<<<< HEAD
+
 <!--        <activity android:name=".MainActivity" />-->
 <!--        <activity android:name=".LoginActivity">-->
         <activity android:name=".PopUpMap"
-            android:theme="@style/AppTheme">
-=======
+            android:theme="@style/AppTheme"/>
+
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity">
->>>>>>> master
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,7 +49,7 @@
         <activity android:name=".DriverBasicInformation" />
         <activity android:name=".RiderAfterAcceptRequest" />
         <activity android:name=".DriverMain" />
-<<<<<<< HEAD
+
 <!--<<<<<<< Updated upstream-->
         <activity android:name=".SearchRide"/>
 
@@ -61,7 +60,7 @@
 >>>>>>> Stashed changes
         <activity android:name=".WaitingForRider"/>
 =======
-        <activity android:name=".SearchRide" />
+
 >>>>>>> master
     </application>
 
