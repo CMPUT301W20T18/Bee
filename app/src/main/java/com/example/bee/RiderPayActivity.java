@@ -36,7 +36,7 @@ public class RiderPayActivity extends AppCompatActivity {
 
     private DatabaseReference ref;
     private String userID;
-    private FirebaseUser user;;
+    private FirebaseUser user;
     private Request mRequest;
     private double cost = 0;
     @Override
