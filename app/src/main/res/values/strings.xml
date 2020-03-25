@@ -16,20 +16,11 @@
     <string name="signup_redirect">Don\'t have an account? Register here!</string>
     <string name="drawerOpen">drawerOpen</string>
     <string name="drawerClose">drawerClose</string>
-<<<<<<< HEAD
-    <string name="contactEmail">contact Email</string>
-=======
     <string name="contactEmail">Contact Email</string>
->>>>>>> master
     <string name="bee">Bee</string>
     <string name="password_hint"> *at least 6 characters with capital letter</string>
     <string name="FirstName"> First Name</string>
     <string name="LastName"> Last Name</string>
     <string name="hello_world"> Last Name</string>
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> master
 </resources>

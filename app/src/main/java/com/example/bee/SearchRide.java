@@ -4,10 +4,8 @@ package com.example.bee;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-<<<<<<< HEAD
+
 import android.widget.AdapterView;
-=======
->>>>>>> master
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,10 +15,6 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-<<<<<<< HEAD
-import com.google.firebase.auth.FirebaseAuth;
-=======
->>>>>>> master
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
@@ -31,18 +25,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-<<<<<<< HEAD
-public class SearchRide extends AppCompatActivity {
-
-    private FirebaseUser user;
-=======
 /** This class is is used to show requests that get from firebase
  * into a list view, and allows user to click one of them to see detailed info
  */
 
 public class SearchRide extends AppCompatActivity {
 
->>>>>>> master
 
 //    initializing local variables
     private static final String TAG = "TAG";
@@ -66,12 +54,7 @@ public class SearchRide extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_search);
-<<<<<<< HEAD
-        user = FirebaseAuth.getInstance().getCurrentUser();
-//        String userID = user.getUid();
-=======
 
->>>>>>> master
 //        setup buttons in current view
         searchNearby = findViewById(R.id.searchNearBy);
 
@@ -116,7 +99,7 @@ public class SearchRide extends AppCompatActivity {
                 startActivity(driverMain);
             }
         });
-<<<<<<< HEAD
+
         offerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -124,8 +107,8 @@ public class SearchRide extends AppCompatActivity {
                 startActivity(show);
             }
         });
-=======
->>>>>>> master
+
+
     }
 
 }

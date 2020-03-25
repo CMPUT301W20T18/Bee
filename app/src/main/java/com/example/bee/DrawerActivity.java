@@ -27,13 +27,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-<<<<<<< HEAD
-
-=======
 /**
  *  This class supports log out function and a drawer for user to view, edit profile
  */
->>>>>>> master
 public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     DrawerLayout drawerLayout;
@@ -181,8 +177,4 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     }
 
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> master

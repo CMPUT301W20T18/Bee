@@ -101,13 +101,10 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         mapFragment.getMapAsync(RiderAfterAcceptRequest.this);
     }
 
-<<<<<<< HEAD
-=======
     /**
      * This method is to get Device Location
      */
 
->>>>>>> master
 
     private void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
@@ -146,10 +143,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-<<<<<<< HEAD
-        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
-=======
->>>>>>> master
         Log.d(TAG, "onMapReady: map is ready");
 
         request_accepted_map = googleMap;
@@ -179,8 +172,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
 
     }
-<<<<<<< HEAD
-=======
     /**
      * This method to get two positions and draw route between two positions
      * @param from
@@ -188,27 +179,11 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
      * @param to
      * destination
      */
->>>>>>> master
 
 
     private boolean getPoints(MarkerOptions from, MarkerOptions to) {
         try {
 
-<<<<<<< HEAD
-            LatLng from_position = from.getPosition();
-            LatLng to_position = to.getPosition();
-
-            request_accepted_map.addMarker(from
-                    .position(from_position)
-                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
-            request_accepted_map.addMarker(to
-                    .position(to_position)
-                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_red_placeholder)));
-
-            LatLngBounds latLngBounds = new LatLngBounds.Builder()
-                    .include(from_position)
-                    .include(to_position)
-=======
             LatLng fromPosition = from.getPosition();
             LatLng toPosition = to.getPosition();
 
@@ -222,16 +197,11 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             LatLngBounds latLngBounds = new LatLngBounds.Builder()
                     .include(fromPosition)
                     .include(toPosition)
->>>>>>> master
                     .build();
             // Move camera to include both points
             request_accepted_map.setPadding(     0,      350,      0,     0);
             request_accepted_map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
-<<<<<<< HEAD
-            drawRoute(from_position, to_position);
-=======
             drawRoute(fromPosition, toPosition);
->>>>>>> master
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -239,12 +209,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         }
         return true; }
 
-<<<<<<< HEAD
-=======
     /**
      * This method set marker
      */
->>>>>>> master
 
     // Convert vector drawable to bitmap
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
@@ -270,11 +237,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                             ArrayList<LatLng> pointList = leg.getDirectionPoint();
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(RiderAfterAcceptRequest.this, pointList, 5,
-<<<<<<< HEAD
-                                            getResources().getColor(R.color.yellow));
-=======
                                             getResources().getColor(R.color.route));
->>>>>>> master
                             request_accepted_map.addPolyline(polylineOptions);
                         } else {
                             String text = direction.getStatus();

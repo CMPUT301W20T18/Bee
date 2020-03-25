@@ -5,21 +5,12 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class PaymentTest {
-<<<<<<< HEAD
-    private QR_Wallet driverWallet() {
-        return new QR_Wallet("driver");
-    }
-
-    private QR_Wallet riderWallet() {
-        return new QR_Wallet("rider");
-=======
     private QRWallet driverWallet() {
         return new QRWallet("driver");
     }
 
     private QRWallet riderWallet() {
         return new QRWallet("rider");
->>>>>>> master
     }
 
     @Test
@@ -32,13 +23,8 @@ public class PaymentTest {
 
     @Test
     public void createTransaction_isCorrect() {
-<<<<<<< HEAD
-        QR_Wallet driver = driverWallet();
-        QR_Wallet rider = riderWallet();
-=======
         QRWallet driver = driverWallet();
         QRWallet rider = riderWallet();
->>>>>>> master
         Payment payment = new Payment();
         payment.make_Payment(driver, rider, 1);
         assertTrue(driver.getTransactions().size() == rider.getTransactions().size());
@@ -47,13 +33,8 @@ public class PaymentTest {
 
     @Test
     public void transactionAmount_isCorrect() {
-<<<<<<< HEAD
-        QR_Wallet driver = driverWallet();
-        QR_Wallet rider = riderWallet();
-=======
         QRWallet driver = driverWallet();
         QRWallet rider = riderWallet();
->>>>>>> master
         Payment payment = new Payment();
         payment.make_Payment(driver, rider, 233.33);
         assertEquals("233.33", driver.getTotalAmount());

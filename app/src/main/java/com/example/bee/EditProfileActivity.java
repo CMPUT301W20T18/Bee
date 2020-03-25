@@ -28,13 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
-<<<<<<< HEAD
-
-public class EditProfileActivity extends AppCompatActivity {
-    public static final String TAG = "TAG";
-    private ImageView logo;
-    private EditText username, email, phone;
-=======
 /**
  *  This class supports user to edit their contact information
  */
@@ -43,7 +36,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView logo;
     private TextView username;
     private EditText email, phone;
->>>>>>> master
     private Button saveBt;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
@@ -71,17 +63,9 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-<<<<<<< HEAD
-//                if (isNumeric(phone.getText().toString()) == false || phone.getText().toString().length()!= 10 ){
-//                    Toast.makeText(EditProfileActivity.this,"invalid phone number",Toast.LENGTH_SHORT).show();
-//                    return;
-//
-//                }
-=======
 /**
  *  validate changed info
  */
->>>>>>> master
                 if (email.getText().toString().contains("@") == false ){
                     Toast.makeText(EditProfileActivity.this,"invalid email",Toast.LENGTH_SHORT).show();
                     return;
@@ -97,13 +81,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
-<<<<<<< HEAD
-
-=======
 /**
  *  This method initializes GUI and gets the user's current information
  */
->>>>>>> master
     private void initializeGUI() {
 
         logo = findViewById(R.id.ivRegLogo);

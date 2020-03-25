@@ -50,10 +50,6 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
         fromText = findViewById(R.id.show_from);
         costText = findViewById(R.id.show_cost);
         Button cancelRequestBtn = findViewById(R.id.cancel_request);
-<<<<<<< HEAD
-
-=======
->>>>>>> master
         // Ruichen's Testing -- Local Variable start
         Button testBtn = findViewById(R.id.test_button);
         testBtn.setOnClickListener(new View.OnClickListener() {
@@ -75,11 +71,7 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 request = dataSnapshot.getValue(Request.class);
-<<<<<<< HEAD
-                if (toText.getText().toString().isEmpty()) {
-=======
                 if (toText.getText().toString().isEmpty() && request != null) {
->>>>>>> master
                     // Initialize the page with ride information
                     toText.setText(request.getDest());
                     fromText.setText(request.getOrigin());
