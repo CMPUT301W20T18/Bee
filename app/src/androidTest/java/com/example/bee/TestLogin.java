@@ -25,13 +25,55 @@ import static org.junit.Assert.assertFalse;
 
 public class TestLogin {
     private Solo solo;
+<<<<<<< HEAD
+=======
+
+    @Rule
+    public ActivityTestRule<LoginActivity> rule =
+            new ActivityTestRule<>(LoginActivity.class, true, true);
+
+
+    /**
+     * Runs before all tests and creates solo instance.
+     * @throws Exception
+     */
+    @Before
+    public void setUp() throws Exception{
+        solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
+    }
+
+    /**
+     * Gets the Activity and check if it is the correct activity
+     * @throws Exception
+     */
+    @Test
+    public void start() throws Exception{
+        Activity activity = rule.getActivity();
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+    }
+    /**
+     * Checks if given wrong username and password is not going to login
+     * @throws Exception
+     */
+>>>>>>> master
     @Test
     public void checkLogin(){
         solo.enterText((EditText) solo.getView(R.id.atvUsernameReg), "Sophie");
         solo.enterText((EditText) solo.getView(R.id.atvPasswordLog), "1234!Q");
+<<<<<<< HEAD
         solo.clickOnButton("SIGN IN AS RIDER");
         solo.assertCurrentActivity("Current Activity", EnterAddressMap.class);
 
+=======
+        solo.clickOnButton("Sign in as Rider");
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+
+    }
+
+    @After
+    public void tearDown() throws Exception{
+        solo.finishOpenedActivities();
+>>>>>>> master
     }
 
 

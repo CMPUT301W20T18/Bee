@@ -18,7 +18,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+<<<<<<< HEAD
 
+=======
+/**
+ *  This class logs a user in if they already registered in the database
+ *  connects to the RegistrationActivity
+ */
+>>>>>>> master
 public class LoginActivity extends AppCompatActivity {
 
     private ImageView logo, ivSignIn;
@@ -32,6 +39,10 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+<<<<<<< HEAD
+=======
+        setTheme(R.style.AppTheme);
+>>>>>>> master
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initializeGUI();
@@ -88,10 +99,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+<<<<<<< HEAD
 
     public void signUser(String email, String password,final String role){
 
         progressDialog.setMessage("Verifying...");
+=======
+/**
+ *  This method builds the firebase authentication
+ */
+    public void signUser(String email, String password,final String role){
+
+        progressDialog.setMessage("Verifying...");
+        progressDialog.setCancelable(false);;
+>>>>>>> master
         progressDialog.show();
 
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -115,7 +136,13 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+<<<<<<< HEAD
 
+=======
+/**
+ *  This initializes the GUI
+ */
+>>>>>>> master
 
     private void initializeGUI(){
 
@@ -130,7 +157,13 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
     }
+<<<<<<< HEAD
 
+=======
+/**
+ *  This is used to determine if user input is valid before log in 
+ */
+>>>>>>> master
 
     public boolean validateInput(String inemail, String inpassword){
 

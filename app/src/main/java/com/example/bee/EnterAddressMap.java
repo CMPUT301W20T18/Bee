@@ -19,9 +19,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+<<<<<<< HEAD
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+=======
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+>>>>>>> master
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -51,9 +59,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+<<<<<<< HEAD
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+=======
+>>>>>>> master
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
@@ -96,6 +107,10 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         // Hide confirm route button
         confirmBtn.setVisibility(View.GONE);
         Button showBtn = findViewById(R.id.show_route);
+<<<<<<< HEAD
+=======
+        ImageView profileBtn = findViewById(R.id.profile_btn);
+>>>>>>> master
 
         showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +144,16 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
             }
         });
 
+<<<<<<< HEAD
+=======
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(EnterAddressMap.this, DrawerActivity.class));
+            }
+        });
+
+>>>>>>> master
         // Confirm button for confirming route, invokes set cost dialog
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,10 +201,18 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                     .build();
             fromAddress = GeocodingApi.geocode(context,
                     originAddress).await();
+<<<<<<< HEAD
+=======
+            // Geocoding origin address
+>>>>>>> master
             if (fromAddress == null) {
                 return false;
             }
 
+<<<<<<< HEAD
+=======
+            // Geocoding destination address
+>>>>>>> master
             toAddress = GeocodingApi.geocode(context,
                     destAddress).await();
             if (toAddress == null) {
@@ -317,6 +350,15 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Ask for user's permission to use their location
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+>>>>>>> master
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
                                            @NonNull int[] grantResults) {

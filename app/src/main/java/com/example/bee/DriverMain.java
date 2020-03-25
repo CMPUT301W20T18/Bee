@@ -21,6 +21,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+<<<<<<< HEAD
+=======
+/**
+ *This is a class that used for Driver, the map with current location
+ */
+>>>>>>> master
 
 // This class is used to display driver's map
 // it requests permission of GPS/location usage to get current location
@@ -28,6 +34,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 // issue so far is current location is set to googleplex
 // instead of real current location
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 public class DriverMain extends FragmentActivity implements OnMapReadyCallback {
 
     GoogleMap map;
@@ -79,6 +89,15 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback {
                 });
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * This initialize google map and set & move camera to current location
+     * @param googleMap
+     *  This is the googleMap parameter
+     */
+
+>>>>>>> master
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
@@ -90,7 +109,19 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback {
     }
 
 
+<<<<<<< HEAD
 
+=======
+    /**This method is asking for permission of locating services
+     *
+     * @param requestCode
+     *  request Code
+     * @param permissions
+     *  permission variable String
+     * @param grantResults
+     * grantResult nonNull int
+     */
+>>>>>>> master
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],

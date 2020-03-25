@@ -48,10 +48,16 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
 
     implementation 'de.hdodenhof:circleimageview:3.0.1'
+<<<<<<< HEAD
 
     androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.3.1'
 
     androidTestImplementation 'androidx.test:rules:1.2.0'
+=======
+    androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.3.1'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+>>>>>>> master
 
 
     // Libraries for QRwriter
@@ -60,6 +66,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
     testCompileOnly 'org.apiguardian:apiguardian-api:1.0.0'
+<<<<<<< HEAD
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+=======
+
+>>>>>>> master
 }
 apply plugin: 'com.google.gms.google-services'

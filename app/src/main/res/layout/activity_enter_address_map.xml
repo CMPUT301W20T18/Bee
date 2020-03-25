@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<<<<<<< HEAD
     xmlns:app="http://schemas.android.com/apk/res-auto"
+=======
+>>>>>>> master
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,6 +18,7 @@
         android:layout_alignParentTop="true" />
 
     <EditText
+<<<<<<< HEAD
         android:id="@+id/from_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,6 +33,19 @@
         android:padding="10dp"
         android:textColor="@color/black"
         android:hint = "Origin"
+=======
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/from_address"
+        android:elevation="10dp"
+        android:layout_margin="10dp"
+        android:inputType="text"
+        android:hint="Pickup location"
+        android:background="@drawable/rounded_corner"
+        android:maxLength="40"
+        android:padding="10dp"
+        android:textColor="@color/black"
+>>>>>>> master
         android:textColorHint="#C9C9C9"/>
 
 
@@ -36,7 +53,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/to_address"
+<<<<<<< HEAD
         android:textColor="@color/black"
+=======
+>>>>>>> master
         android:padding="10dp"
         android:maxLength="40"
         android:elevation="10dp"
@@ -45,19 +65,40 @@
         android:layout_below="@+id/from_address"
         android:hint="Destination"
         android:inputType="text"
+<<<<<<< HEAD
         android:imeOptions="actionDone"
         android:background="@drawable/rounded_corner"
         android:textColorHint="#C9C9C9"/>
+=======
+        android:textColor="@color/black"
+        android:imeOptions="actionDone"
+        android:textColorHint="#C9C9C9"
+        android:background="@drawable/rounded_corner" />
+
+    <ImageView
+        android:id="@+id/profile_btn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_to_drawer_foreground"
+        android:layout_below="@+id/show_route" />
+>>>>>>> master
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/show_route"
+<<<<<<< HEAD
         android:textColor="@color/black"
+=======
+>>>>>>> master
         android:layout_below="@+id/to_address"
         android:background="@drawable/rounded_corner"
         android:layout_margin="10dp"
         android:elevation="10dp"
+<<<<<<< HEAD
+=======
+        android:textColor="@color/black"
+>>>>>>> master
         android:text="Show Route" />
 
     <Button
@@ -65,10 +106,17 @@
         android:id="@+id/confirm_route"
         android:layout_height="wrap_content"
         android:text="Confirm"
+<<<<<<< HEAD
         android:textColor="@color/black"
         android:background="@drawable/rounded_corner"
         android:backgroundTint="@color/button"
         android:layout_alignParentBottom="true"
+=======
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="@color/button"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/black"
+>>>>>>> master
         android:elevation="10dp"
         android:layout_centerHorizontal="true"
         android:paddingLeft="40dp"

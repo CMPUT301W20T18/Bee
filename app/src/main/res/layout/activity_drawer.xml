@@ -6,7 +6,11 @@
     android:layout_width="match_parent"
     tools:openDrawer="end"
     android:id="@+id/drawer"
+<<<<<<< HEAD
     android:background="@color/background"
+=======
+    android:background="#fcfcfa"
+>>>>>>> master
     android:layout_height="match_parent"
     tools:context="com.example.bee.DrawerActivity">
 
@@ -16,9 +20,12 @@
         android:layout_height="match_parent">
 
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> master
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,7 +33,11 @@
             android:background="@color/button"/>
 
 
+<<<<<<< HEAD
         <android.support.constraint.ConstraintLayout
+=======
+        <androidx.constraintlayout.widget.ConstraintLayout
+>>>>>>> master
             android:layout_below="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -34,6 +45,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="-1dp"
+<<<<<<< HEAD
             android:background="@color/background"
             tools:context="com.example.bee.DrawerActivity">
 
@@ -46,6 +58,26 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+=======
+            tools:context="com.example.bee.DrawerActivity">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:orientation="vertical">
+
+
+            <ImageView
+                android:id="@+id/ivLogLogo"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="55dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/logo" />
+>>>>>>> master
 
             <Button
                 android:id="@+id/btnLogout"
@@ -58,10 +90,19 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+<<<<<<< HEAD
                 app:layout_constraintTop_toBottomOf="@+id/textView"
                 app:layout_constraintVertical_bias="0.285" />
 
         </android.support.constraint.ConstraintLayout>
+=======
+                app:layout_constraintTop_toBottomOf="@+id/ivLogLogo"
+                app:layout_constraintVertical_bias="0.285" />
+        </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+>>>>>>> master
 
 
     </RelativeLayout>
@@ -72,9 +113,17 @@
         android:id="@+id/navigationView"
         app:menu="@menu/menu_item"
         app:headerLayout="@layout/header"
+<<<<<<< HEAD
         android:background="@color/background"
+=======
+        android:background="#fcfcfa"
+>>>>>>> master
         android:layout_gravity="start"
         app:itemTextColor="@color/gray"/>
 
 
+<<<<<<< HEAD
 </androidx.drawerlayout.widget.DrawerLayout>
+=======
+</androidx.drawerlayout.widget.DrawerLayout>
+>>>>>>> master
