@@ -43,6 +43,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -94,6 +95,13 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReference("requests").child(userID).child("request");
+
+
+
+
+
+
+
             setContentView(R.layout.pop_up_map);
             initMap();
 
@@ -191,18 +199,96 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     /**
      * This locate the current location for the user device
      */
+
+//    https://stackoverflow.com/questions/30708036/delete-the-last-two-characters-of-the-string
     @Override
     public void onMapReady(GoogleMap googleMap){
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: Map is ready");
         mapPop = googleMap;
+        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot s : dataSnapshot.getChildren()){
+                    Request request = s.getValue(Request.class);
+                    String originTempString = ref.child("originLatlng").getKey();
+                    String originString = originTempString.substring(1).substring(0, originTempString.length() - 2 );
+
+                    String[] afterSplitLoc = originString.split(",");
+
+                    double originLatitude = Double.parseDouble(afterSplitLoc[0]);
+
+                    double originLongitude = Double.parseDouble(afterSplitLoc[1]);
+                    LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
+
+
+
+
+
+
+
+
+
+
+
+
+                    place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
+
+                    String destTempString = ref.child("dest").getKey();
+                    String destString = destTempString.substring(1).substring(0, destTempString.length() - 2 );
+
+                    String[] afterSplitLoc1 = originString.split(",");
+
+                    double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
+
+                    double deseLongitude = Double.parseDouble(afterSplitLoc[1]);
+                    LatLng destCoordinate = new LatLng(originLatitude,originLongitude);
+
+
+
+                    place2 = new MarkerOptions().position(destCoordinate).title("Destination");
+
+
+
+
+
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //        initialize the starting position and destination
-        LatLng place1_position = new LatLng(53.523220, -113.526321);
-        LatLng place2_position = new LatLng(53.484300,-113.517250);
+//        LatLng place1_position = new LatLng(53.523220, -113.526321);
 
-        place1 = new MarkerOptions().position(place1_position).title("Starting position");
-
-        place2 = new MarkerOptions().position(place2_position).title("Destination");
 
         drew = getPoints(place1, place2);
 
@@ -230,6 +316,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             // May throw an IOException
             LatLng from_position = fromAddress.getPosition();
             LatLng to_position = toAddress.getPosition();
+
             mapPop.addMarker(fromAddress.position(from_position)
                     .icon(bitmapDescriptorFromVector(this, R.drawable.ic_red_placeholder)));
             mapPop.addMarker(toAddress.position(to_position)
