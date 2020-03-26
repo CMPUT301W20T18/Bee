@@ -25,20 +25,20 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_launcher" />
 
-        <EditText
+        <TextView
             android:id="@+id/rider_id"
-            android:layout_width="142dp"
+            android:layout_width="140dp"
             android:layout_height="62dp"
             android:layout_gravity="top"
-            android:layout_marginTop="-10dp"
+            android:layout_marginTop="-7dp"
             android:text="RiderName"
             android:textColor="#000"
             android:textSize="21sp" />
 
-        <EditText
+        <TextView
             android:id="@+id/money_amount_in_pop"
-            android:layout_width="wrap_content"
-            android:layout_height="74dp"
+            android:layout_width="133dp"
+            android:layout_height="82dp"
             android:text="AmountOfMoney"
             android:textColor="#000"
             android:textSize="15dp"

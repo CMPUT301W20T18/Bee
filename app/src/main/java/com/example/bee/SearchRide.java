@@ -38,8 +38,9 @@ public class SearchRide extends AppCompatActivity {
     private DatabaseReference ref;
     private String from;
     private String to;
+    String passDistance;
     Request request;
-
+    String passMoneyAmount;
     EditText searchNearby;
     ImageView searchButton;
     ImageView backButton;
@@ -98,11 +99,15 @@ public class SearchRide extends AppCompatActivity {
                 startActivity(driverMain);
             }
         });
-
+//        Xiutong's configuration: for passing value to pop up map
         offerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent show = new Intent(SearchRide.this,PopUpMap.class);
+                passMoneyAmount = String.format("%.2f",request.getCost());
+                passDistance = request.getDistance();
+                show.putExtra("passMoneyAmount",passMoneyAmount);
+                show.putExtra("passDistance",passDistance);
                 startActivity(show);
             }
         });

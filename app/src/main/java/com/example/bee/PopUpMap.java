@@ -61,7 +61,7 @@ import static android.content.ContentValues.TAG;
  */
 public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private FusedLocationProviderClient client_device;
-    EditText riderID, requestMoneyAmount;
+    TextView riderID, requestMoneyAmount;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
     String userID;
@@ -79,19 +79,43 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
         @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
             riderID = findViewById(R.id.rider_id);
             requestMoneyAmount = findViewById(R.id.money_amount_in_pop);
-            super.onCreate(savedInstanceState);
 
             user = firebaseAuth.getInstance().getCurrentUser();
             userID = user.getUid();
 
 
 
-
+//            https://stackoverflow.com/questions/9998221/how-to-pass-double-value-to-a-textview-in-android
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReference("requests").child(userID).child("request");
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot s: dataSnapshot.getChildren()){
 
+                    }
+                    Request request = dataSnapshot.getValue(Request.class);
+                    if(request != null){
+                        Bundle bundle = getIntent().getExtras();
+                        String passMoneyAmount = bundle.getString("passMoneyAmount");
+                        requestMoneyAmount.setText(passMoneyAmount);
+                        riderID.setText(request.getRiderID());
+
+
+
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d(TAG, databaseError.toString());
+                }
+            });
 
 
 
@@ -202,13 +226,19 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: Map is ready");
         mapPop = googleMap;
-        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for (DataSnapshot s : dataSnapshot.getChildren()){
-//                    Request request = s.getValue(Request.class);
-//                    String originTempString = ref.child("originLatlng").getKey();
+        LatLng place1_postion = new LatLng(53.523220,-113.526321);
+        place1 = new MarkerOptions().position(place1_postion).title("Orientation");
+        LatLng place2_postion = new LatLng(53.484300,-113.517250);
+        place2 = new MarkerOptions().position(place2_postion).title("Destination");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot s : dataSnapshot.getChildren()){
+
+                    Request request = s.getValue(Request.class);
+
+                    //                    String originTempString = ref.child("originLatlng").getKey();
 //                    String originString = originTempString.substring(1).substring(0, originTempString.length() - 2 );
 //
 //                    String[] afterSplitLoc = originString.split(",");
@@ -217,17 +247,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 //
 //                    double originLongitude = Double.parseDouble(afterSplitLoc[1]);
 //                    LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //                    place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
 //
@@ -238,55 +257,23 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 //
 //                    double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
 //
-//                    double deseLongitude = Double.parseDouble(afterSplitLoc[1]);
-//                    LatLng destCoordinate = new LatLng(originLatitude,originLongitude);
-//
-//
+//                    double destLongitude = Double.parseDouble(afterSplitLoc[1]);
+//                    LatLng destCoordinate = new LatLng(destLatitude,destLongitude);
 //
 //                    place2 = new MarkerOptions().position(destCoordinate).title("Destination");
-//
-//
-//
-//
-//
-//
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        LatLng place1_postion = new LatLng(53.523220,-113.526321);
-        place1 = new MarkerOptions().position(place1_postion).title("Orientation");
-        LatLng place2_postion = new LatLng(53.484300,-113.517250);
-        place2 = new MarkerOptions().position(place2_postion).title("Destination");
 
 //        initialize the starting position and destination
-//        LatLng place1_position = new LatLng(53.523220, -113.526321);
 
 
         drew = getPoints(place1, place2);
@@ -309,7 +296,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
      */
 
     private boolean getPoints(MarkerOptions fromAddress, MarkerOptions toAddress) {
-
 
         try {
             // May throw an IOException

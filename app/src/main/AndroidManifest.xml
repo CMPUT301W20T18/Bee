@@ -49,8 +49,10 @@
         <activity android:name=".RiderAfterAcceptRequest" />
         <activity android:name=".DriverMain" />
         <activity android:name=".SearchRide" />
-        <activity android:name=".PopUpMap" />
-        <activity android:name=".WaitingForRider" />
+        <activity android:name=".PopUpMap"/>
+        <activity android:name=".WaitingForRider"/>
+
+
     </application>
 
 </manifest>
