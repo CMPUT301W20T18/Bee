@@ -33,15 +33,15 @@
             android:layout_marginTop="-7dp"
             android:hint="riderId"
             android:textColor="#000"
-            android:textSize="21sp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/money_amount_in_pop"
-            android:layout_width="133dp"
+            android:layout_width="153dp"
             android:layout_height="82dp"
             android:hint="AmountOfMoney"
             android:textColor="#000"
-            android:textSize="15dp"
+            android:textSize="18dp"
             android:textStyle="bold" />
 
     </LinearLayout>

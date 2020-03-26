@@ -90,8 +90,9 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             userID = user.getUid();
             Bundle bundle = getIntent().getExtras();
             String passMoneyAmount = bundle.getString("passMoneyAmount");
+            String passRiderID = bundle.getString("passRiderID");
             requestMoneyAmount.setText("$" + passMoneyAmount);
-
+            riderID.setText(passRiderID);
 //            riderID.setText(request.getRiderID());
 
 

@@ -105,7 +105,7 @@ public class SearchRide extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent show = new Intent(SearchRide.this,PopUpMap.class);
 
-
+                String passRiderID = request.getRiderID();
                 String passOriginLatlng = request.getOriginLatlng();
                 String passDestLatlng = request.getDestLatlng();
                 passMoneyAmount = String.format("%.2f",request.getCost());
@@ -114,6 +114,7 @@ public class SearchRide extends AppCompatActivity {
                 show.putExtra("passDistance",passDistance);
                 show.putExtra("passOriginLatlng",passOriginLatlng);
                 show.putExtra("passDestLatlng",passDestLatlng);
+                show.putExtra("passRiderID",passRiderID);
 
                 startActivity(show);
             }
