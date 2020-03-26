@@ -30,6 +30,7 @@ import com.akexorcist.googledirection.model.Info;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -77,11 +78,12 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
 
     MarkerOptions ori, dest;
-    Boolean drew = false;
     private static ArrayList<String> points = new ArrayList<>();
 
     private FirebaseUser user;
     FirebaseDatabase db;
+
+    FloatingActionButton fabConfirm, fabCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +103,8 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             }
         });
 
+        fabCancel = findViewById(R.id.my_cancel);
+        fabConfirm = findViewById(R.id.my_confirm);
 
     }
 
