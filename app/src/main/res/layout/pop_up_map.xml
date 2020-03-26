@@ -31,7 +31,7 @@
             android:layout_height="62dp"
             android:layout_gravity="top"
             android:layout_marginTop="-7dp"
-            android:text="RiderName"
+            android:hint="riderId"
             android:textColor="#000"
             android:textSize="21sp" />
 
@@ -39,7 +39,7 @@
             android:id="@+id/money_amount_in_pop"
             android:layout_width="133dp"
             android:layout_height="82dp"
-            android:text="AmountOfMoney"
+            android:hint="AmountOfMoney"
             android:textColor="#000"
             android:textSize="15dp"
             android:textStyle="bold" />

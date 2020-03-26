@@ -32,9 +32,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity">
-            <intent-filter>
+<!--        <activity android:name=".MainActivity" />-->
+<!--        <activity android:name=".LoginActivity">-->
+        <activity android:name=".SearchRide" >
+
+        <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -48,7 +50,7 @@
         <activity android:name=".DriverBasicInformation" />
         <activity android:name=".RiderAfterAcceptRequest" />
         <activity android:name=".DriverMain" />
-        <activity android:name=".SearchRide" />
+<!--        <activity android:name=".SearchRide" />-->
         <activity android:name=".PopUpMap"/>
         <activity android:name=".WaitingForRider"/>
 
