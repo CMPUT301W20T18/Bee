@@ -1,7 +1,11 @@
 package com.example.bee;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -14,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -30,6 +35,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -37,6 +43,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,6 +68,8 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private FirebaseDatabase firebaseDatabase;
     GoogleMap mapPop;
     MarkerOptions place1;
+    private DatabaseReference ref;
+
     MarkerOptions place2;
     Boolean drew = false;
     Button AcceptButton;
@@ -77,8 +86,26 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             riderID = findViewById(R.id.rider_id);
             requestMoneyAmount = findViewById(R.id.money_amount_in_pop);
             super.onCreate(savedInstanceState);
+
+            user = firebaseAuth.getInstance().getCurrentUser();
+            userID = user.getUid();
+
+
+
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            ref = database.getReference("requests").child(userID).child("request");
+
+
+
+
+
+
+
             setContentView(R.layout.pop_up_map);
             initMap();
+
+
 //            setUpGUI();
             AcceptButton = findViewById(R.id.accept_button);
             CancelButton = findViewById(R.id.cancel_button);
@@ -122,6 +149,14 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
 
         }
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
 //        set up the User information on the interface
 //    public void setUpGUI() {
 ////        user = FirebaseAuth.getInstance().getCurrentUser();
@@ -164,18 +199,96 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     /**
      * This locate the current location for the user device
      */
+
+//    https://stackoverflow.com/questions/30708036/delete-the-last-two-characters-of-the-string
     @Override
     public void onMapReady(GoogleMap googleMap){
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: Map is ready");
         mapPop = googleMap;
+        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot s : dataSnapshot.getChildren()){
+                    Request request = s.getValue(Request.class);
+                    String originTempString = ref.child("originLatlng").getKey();
+                    String originString = originTempString.substring(1).substring(0, originTempString.length() - 2 );
+
+                    String[] afterSplitLoc = originString.split(",");
+
+                    double originLatitude = Double.parseDouble(afterSplitLoc[0]);
+
+                    double originLongitude = Double.parseDouble(afterSplitLoc[1]);
+                    LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
+
+
+
+
+
+
+
+
+
+
+
+
+                    place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
+
+                    String destTempString = ref.child("dest").getKey();
+                    String destString = destTempString.substring(1).substring(0, destTempString.length() - 2 );
+
+                    String[] afterSplitLoc1 = originString.split(",");
+
+                    double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
+
+                    double deseLongitude = Double.parseDouble(afterSplitLoc[1]);
+                    LatLng destCoordinate = new LatLng(originLatitude,originLongitude);
+
+
+
+                    place2 = new MarkerOptions().position(destCoordinate).title("Destination");
+
+
+
+
+
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //        initialize the starting position and destination
-        LatLng place1_position = new LatLng(53.523220, -113.526321);
-        LatLng place2_position = new LatLng(53.484300,-113.517250);
+//        LatLng place1_position = new LatLng(53.523220, -113.526321);
 
-        place1 = new MarkerOptions().position(place1_position).title("Starting position");
-
-        place2 = new MarkerOptions().position(place2_position).title("Destination");
 
         drew = getPoints(place1, place2);
 
@@ -203,10 +316,11 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             // May throw an IOException
             LatLng from_position = fromAddress.getPosition();
             LatLng to_position = toAddress.getPosition();
+
             mapPop.addMarker(fromAddress.position(from_position)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_red_placeholder)));
             mapPop.addMarker(toAddress.position(to_position)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
 //            display the two locations as the marker in the map
             LatLngBounds latLngBounds = new LatLngBounds.Builder()
                     .include(from_position)
@@ -231,7 +345,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
      */
 
     private void drawRoute(LatLng p1, LatLng p2) {
-        GoogleDirection.withServerKey(getString(R.string.google_api_key))
+        GoogleDirection.withServerKey(getString(R.string.google_maps_key))
                 .from(p1)
                 .to(p2)
                 .transportMode(TransportMode.DRIVING)
@@ -248,7 +362,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
                             Toast.makeText(PopUpMap.this, distance, Toast.LENGTH_SHORT).show();
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(PopUpMap.this, pointList, 5,
-                                            getResources().getColor(R.color.yellow));
+                                            getResources().getColor(R.color.route));
                             mapPop.addPolyline(polylineOptions);
 //                            display the route as line on the map
 //                            Route route = direction.getRouteList().get(0);
