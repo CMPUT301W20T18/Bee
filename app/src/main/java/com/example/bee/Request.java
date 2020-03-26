@@ -20,6 +20,8 @@ public class Request {
     private String time;
     private double cost;
     private boolean status;
+    private boolean cancel;
+    private boolean reached;
     private boolean finished;
 
     public Request() {}
@@ -37,6 +39,8 @@ public class Request {
         this.cost = cost;
         this.driverID = null;
         this.status = false;
+        this.cancel = false;
+        this.reached = false;
         this.finished = false;
     }
 
@@ -129,6 +133,22 @@ public class Request {
     }
 
     /**
+     * Returns true if rider cancel the request before the driver picks up the rider
+     * @return cancel
+     */
+    public boolean getCancel() {
+        return cancel;
+    }
+
+    /**
+     * Returns true if the driver clicks on the button indicating destination is reached
+     * @return reached
+     */
+    public boolean getReached() {
+        return reached;
+    }
+
+    /**
      * Returns true if the driver pressed the finished button
      * @return finished
      */
@@ -150,6 +170,22 @@ public class Request {
      */
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    /**
+     * Sets whether or not the request is cancelled
+     * @param cancel
+     */
+    public void setCancel(boolean cancel) {
+        this.cancel = cancel;
+    }
+
+    /**
+     * Sets whether or not the destination is reached
+     * @param reached
+     */
+    public void setReached(boolean reached) {
+        this.reached = reached;
     }
 
     /**
