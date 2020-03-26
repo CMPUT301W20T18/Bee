@@ -77,10 +77,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private TextView RequestMoneyAmount;
 
 
-
-
-
-
         @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
             riderID = findViewById(R.id.rider_id);
@@ -207,64 +203,62 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         Log.d(TAG, "onMapReady: Map is ready");
         mapPop = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot s : dataSnapshot.getChildren()){
-                    Request request = s.getValue(Request.class);
-                    String originTempString = ref.child("originLatlng").getKey();
-                    String originString = originTempString.substring(1).substring(0, originTempString.length() - 2 );
-
-                    String[] afterSplitLoc = originString.split(",");
-
-                    double originLatitude = Double.parseDouble(afterSplitLoc[0]);
-
-                    double originLongitude = Double.parseDouble(afterSplitLoc[1]);
-                    LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
-
-
-
-
-
-
-
-
-
-
-
-
-                    place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
-
-                    String destTempString = ref.child("dest").getKey();
-                    String destString = destTempString.substring(1).substring(0, destTempString.length() - 2 );
-
-                    String[] afterSplitLoc1 = originString.split(",");
-
-                    double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
-
-                    double deseLongitude = Double.parseDouble(afterSplitLoc[1]);
-                    LatLng destCoordinate = new LatLng(originLatitude,originLongitude);
-
-
-
-                    place2 = new MarkerOptions().position(destCoordinate).title("Destination");
-
-
-
-
-
-
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
+//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (DataSnapshot s : dataSnapshot.getChildren()){
+//                    Request request = s.getValue(Request.class);
+//                    String originTempString = ref.child("originLatlng").getKey();
+//                    String originString = originTempString.substring(1).substring(0, originTempString.length() - 2 );
+//
+//                    String[] afterSplitLoc = originString.split(",");
+//
+//                    double originLatitude = Double.parseDouble(afterSplitLoc[0]);
+//
+//                    double originLongitude = Double.parseDouble(afterSplitLoc[1]);
+//                    LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//                    place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
+//
+//                    String destTempString = ref.child("dest").getKey();
+//                    String destString = destTempString.substring(1).substring(0, destTempString.length() - 2 );
+//
+//                    String[] afterSplitLoc1 = originString.split(",");
+//
+//                    double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
+//
+//                    double deseLongitude = Double.parseDouble(afterSplitLoc[1]);
+//                    LatLng destCoordinate = new LatLng(originLatitude,originLongitude);
+//
+//
+//
+//                    place2 = new MarkerOptions().position(destCoordinate).title("Destination");
+//
+//
+//
+//
+//
+//
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
 
@@ -285,6 +279,11 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
 
 
+
+        LatLng place1_postion = new LatLng(53.523220,-113.526321);
+        place1 = new MarkerOptions().position(place1_postion).title("Orientation");
+        LatLng place2_postion = new LatLng(53.484300,-113.517250);
+        place2 = new MarkerOptions().position(place2_postion).title("Destination");
 
 //        initialize the starting position and destination
 //        LatLng place1_position = new LatLng(53.523220, -113.526321);
