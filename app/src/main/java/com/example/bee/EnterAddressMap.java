@@ -90,7 +90,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     private Boolean drew = false;
     private String distance;
     private String time;
-    private double dist;
+    private double oldCost;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private String userID;
@@ -163,7 +163,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SetCost(dist*2.30).show(getSupportFragmentManager(), "set_cost");
+                new SetCost(oldCost).show(getSupportFragmentManager(), "set_cost");
             }
         });
     }
@@ -241,18 +241,31 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
 
         // Move camera to include both points
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
-        getRideInfo(p1, p2);
-
+        //return getRideInfo(p1, p2);
+        drawRoute(p1, p2);
         return true;
+
     }
 
-    private void getRideInfo(LatLng p1, LatLng p2) {
-        Routes routes = new Routes(p1, p2);
-        routes.getRoutes();
-        // distance in double, remove comma if there's any, remove km
-        String temp = distance.replaceAll(",", "");
-        dist = Double.parseDouble(temp.substring(0, temp.length() - 3));
-    }
+/*    private boolean getRideInfo(LatLng p1, LatLng p2) {
+        Routes routes = new Routes(getApplicationContext(), p1, p2);
+        pointList = routes.getRoutes();
+        if (pointList != null) {
+            distance = routes.getDistance();
+            time = routes.getTime();
+            // distance in double, remove comma if there's any, remove km
+            String temp = distance.replaceAll(",", "");
+            oldCost = Double.parseDouble(temp.substring(0, temp.length() - 3)) * 2.3;
+            PolylineOptions polylineOptions = DirectionConverter
+                    .createPolyline(EnterAddressMap.this, pointList, 5,
+                            getResources().getColor(R.color.route));
+            map.addPolyline(polylineOptions);
+            return true;
+        } else {
+            // pointList is null when routes are not found
+            return false;
+        }
+    }*/
 
     /*
     StackOverflow post by Leo Droidcoder https://stackoverflow.com/users/5730321/leo-droidcoder
@@ -268,17 +281,16 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
-/*
-    *//**
+    /**
      * Draw route on the map from the given p1 and p2. They are the latitude and longitude
      * for the start location and end location respectively.
      * @param p1
      * @param p2
-     *//*
-    *//*
+     */
+    /*
     Github libray by Akexorcist https://github.com/akexorcist
     Library page: https://github.com/akexorcist/Android-GoogleDirectionLibrary
-     *//*
+     */
     private void drawRoute(LatLng p1, LatLng p2) {
         GoogleDirection.withServerKey(getString(R.string.google_maps_key))
                 .from(p1)
@@ -297,7 +309,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                             time = durationInfo.getText();
                             // distance in double, remove comma if there's any, remove km
                             String temp = distance.replaceAll(",", "");
-                            dist = Double.parseDouble(temp.substring(0, temp.length() - 3));
+                            oldCost = Double.parseDouble(temp.substring(0, temp.length() - 3)) * 2.3;
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(EnterAddressMap.this, pointList, 5,
                                             getResources().getColor(R.color.route));
@@ -319,7 +331,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
 
                     }
                 });
-    }*/
+    }
 
     /**
      * Show the last location of the device on the map
@@ -401,7 +413,6 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                             .icon(bitmapDescriptorFromVector(EnterAddressMap.this, R.drawable.ic_green_placeholder)));
                     markers += 1;
                 }
-
             }
         });
     }
@@ -428,10 +439,10 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
 
     /**
      * Post request to Firebase with possibly increased cost from user
-     * @param cost
+     * @param newCost
      */
     @Override
-    public void postRequest(double cost) {
+    public void postRequest(double newCost) {
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference requestRef = database.getReference("requests").child(userID);
@@ -446,7 +457,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         String p1Latlng = String.format("%f,%f",p1.latitude,p1.longitude);
         String p2Latlng = String.format("%f,%f",p2.latitude,p2.longitude);
         request.put("request", new Request(userID, originAddress, destAddress, p1Latlng, p2Latlng,
-                points, distance, time, cost));
+                points, distance, time, newCost));
         requestRef.setValue(request).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

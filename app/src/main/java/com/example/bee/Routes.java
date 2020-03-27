@@ -1,8 +1,6 @@
 package com.example.bee;
 
 import android.content.Context;
-import android.view.Gravity;
-import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
@@ -12,8 +10,6 @@ import com.akexorcist.googledirection.model.Info;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.google.android.gms.maps.model.LatLng;
-import com.akexorcist.googledirection.util.DirectionConverter;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
@@ -55,17 +51,12 @@ public class Routes {
                             Info durationInfo = leg.getDuration();
                             distance = distanceInfo.getText();
                             time = durationInfo.getText();
-
                         }
                     }
 
                     @Override
                     public void onDirectionFailure(Throwable t) {
-                        String text = "Failed to get direction";
-                        Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-
+                        pointList = null;
                     }
                 });
         return pointList;
