@@ -266,9 +266,6 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                             Info durationInfo = leg.getDuration();
                             distance = distanceInfo.getText();
                             time = durationInfo.getText();
-                            // distance in double, remove comma if there's any, remove km
-                            String temp = distance.replaceAll(",", "");
-                            dist = Double.parseDouble(temp.substring(0, temp.length() - 3));
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(EnterAddressMap.this, pointList, 5,
                                             getResources().getColor(R.color.route));

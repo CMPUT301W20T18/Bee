@@ -50,6 +50,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -61,7 +63,7 @@ import static android.content.ContentValues.TAG;
  */
 public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private FusedLocationProviderClient client_device;
-    EditText riderID, requestMoneyAmount;
+    TextView riderID, requestMoneyAmount;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
     String userID;
@@ -77,32 +79,120 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private TextView RequestMoneyAmount;
 
 
-
-
-
-
         @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.pop_up_map);
             riderID = findViewById(R.id.rider_id);
             requestMoneyAmount = findViewById(R.id.money_amount_in_pop);
-            super.onCreate(savedInstanceState);
 
             user = firebaseAuth.getInstance().getCurrentUser();
             userID = user.getUid();
+            Bundle bundle = getIntent().getExtras();
+            String passMoneyAmount = bundle.getString("passMoneyAmount");
+            String passRiderID = bundle.getString("passRiderID");
+            requestMoneyAmount.setText("$" + passMoneyAmount);
+
+            if(passRiderID != null){
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                ref = database.getReference("requests").child(passRiderID).child("request");
+                DatabaseReference originLatlngRef = ref.child("originLatlng");
+
+                originLatlngRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String originString = dataSnapshot.getValue(String.class);
+                        riderID.setText(originString);
+                        String[] afterSplitLoc = originString.split(",");
+//
+//                double originLatitude = Double.parseDouble(afterSplitLoc[0]);
+//
+//                double originLongitude = Double.parseDouble(afterSplitLoc[1]);
+//                LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
+//
+//                place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
+//
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                DatabaseReference destLatlngRef = ref.child("destLatlng");
+                destLatlngRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String destStringTemp = dataSnapshot.getValue(String.class);
+                        String[] afterSplitLoc1 = destStringTemp.split(",");
+
+                        double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
+
+                        double destLongitude = Double.parseDouble(afterSplitLoc1[1]);
+                        LatLng destCoordinate = new LatLng(destLatitude,destLongitude);
+
+                        place2 = new MarkerOptions().position(destCoordinate).title("Destination");
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+//                String tripTime = ref.child("time").toString();
+////              LatLng destLatlng = ref.child("destLaglng");
+//                String originStringTemp = ref.child("originLatlng").get();
+//                riderID.setText(originStringTemp);
+//                String originString = originStringTemp.substring(1).substring(0, originStringTemp.length() - 2 );
+//
+//
+//
+//                String destString = destStringTemp.substring(1).substring(0, destStringTemp.length() - 2 );
+//
+
+                drew = getPoints(place1, place2);
+
+                if (!drew) {
+                    String text = "Invalid Address";
+                    Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+
+                }
+//
+//
 
 
+            }
 
 
+//            https://stackoverflow.com/questions/9998221/how-to-pass-double-value-to-a-textview-in-android
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReference("requests").child(userID).child("request");
+//            ref.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+////                    for(DataSnapshot s: dataSnapshot.getChildren()){
+////
+////                    }
+//                    Request request = dataSnapshot.getValue(Request.class);
+//                    if(request != null){
+//
+//
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//                    Log.d(TAG, databaseError.toString());
+//                }
+//            });
 
 
 
 
 
 
-
-            setContentView(R.layout.pop_up_map);
             initMap();
 
 
@@ -113,7 +203,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-//            requestMoneyAmount.setText("1");
             int width = displayMetrics.widthPixels;
             int height = displayMetrics.heightPixels;
 
@@ -134,8 +223,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 //                        final Intent show = new Intent(PopUpMap.this, WaitingForRider.class);
 //                        startActivity(show);
 //                    }
-
-
                 }
             });
 //        set up the cancel button
@@ -181,10 +268,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 //        riderID.setText(userID);
 //
 //    }
-
-    public void SetMoneyAmount(double MoneyAmount){
-        RequestMoneyAmount.setText("$ "+ MoneyAmount);
-    }
     /**
      * This initialize the map to start
      */
@@ -206,55 +289,21 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: Map is ready");
         mapPop = googleMap;
-        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+//        LatLng place1_postion = new LatLng(53.523220,-113.526321);
+//        place1 = new MarkerOptions().position(place1_postion).title("Orientation");
+//        LatLng place2_postion = new LatLng(53.484300,-113.517250);
+//        place2 = new MarkerOptions().position(place2_postion).title("Destination");
+
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot s : dataSnapshot.getChildren()){
+                    Bundle bundle = getIntent().getExtras();
+                    String passOriginLatlng = bundle.getString("passOriginLatlng");
+                    String passDestLatlng = bundle.getString("passDestLatlng");
                     Request request = s.getValue(Request.class);
-                    String originTempString = ref.child("originLatlng").getKey();
-                    String originString = originTempString.substring(1).substring(0, originTempString.length() - 2 );
 
-                    String[] afterSplitLoc = originString.split(",");
-
-                    double originLatitude = Double.parseDouble(afterSplitLoc[0]);
-
-                    double originLongitude = Double.parseDouble(afterSplitLoc[1]);
-                    LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
-
-
-
-
-
-
-
-
-
-
-
-
-                    place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
-
-                    String destTempString = ref.child("dest").getKey();
-                    String destString = destTempString.substring(1).substring(0, destTempString.length() - 2 );
-
-                    String[] afterSplitLoc1 = originString.split(",");
-
-                    double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
-
-                    double deseLongitude = Double.parseDouble(afterSplitLoc[1]);
-                    LatLng destCoordinate = new LatLng(originLatitude,originLongitude);
-
-
-
-                    place2 = new MarkerOptions().position(destCoordinate).title("Destination");
-
-
-
-
-
-
-
+//
                 }
             }
 
@@ -267,38 +316,9 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //        initialize the starting position and destination
-//        LatLng place1_position = new LatLng(53.523220, -113.526321);
 
 
-        drew = getPoints(place1, place2);
-
-        if (!drew) {
-            String text = "Invalid Address";
-            Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-
-        }
     }
 
     /**
@@ -310,7 +330,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
      */
 
     private boolean getPoints(MarkerOptions fromAddress, MarkerOptions toAddress) {
-
 
         try {
             // May throw an IOException
