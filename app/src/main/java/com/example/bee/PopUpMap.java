@@ -93,7 +93,16 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             String passRiderID = bundle.getString("passRiderID");
             requestMoneyAmount.setText("$" + passMoneyAmount);
             riderID.setText(passRiderID);
-//            riderID.setText(request.getRiderID());
+            if(passRiderID != null){
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                ref = database.getReference("requests").child(passRiderID).child("request");
+                
+
+
+
+
+
+            }
 
 
 //            https://stackoverflow.com/questions/9998221/how-to-pass-double-value-to-a-textview-in-android
@@ -153,8 +162,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 //                        final Intent show = new Intent(PopUpMap.this, WaitingForRider.class);
 //                        startActivity(show);
 //                    }
-
-
                 }
             });
 //        set up the cancel button
@@ -200,10 +207,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 //        riderID.setText(userID);
 //
 //    }
-
-    public void SetMoneyAmount(double MoneyAmount){
-        RequestMoneyAmount.setText("$ "+ MoneyAmount);
-    }
     /**
      * This initialize the map to start
      */
@@ -239,37 +242,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
                     String passDestLatlng = bundle.getString("passDestLatlng");
                     Request request = s.getValue(Request.class);
 
-//                    String originString = passOriginLatlng.substring(1).substring(0, passOriginLatlng.length() - 2 );
-
-                    String[] afterSplitLoc = passOriginLatlng.split(",");
-
-                    double originLatitude = Double.parseDouble(afterSplitLoc[0]);
-
-                    double originLongitude = Double.parseDouble(afterSplitLoc[1]);
-                    LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
-
-                    place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
-
-//                    String destTempString = ref.child("dest").getKey();
-//                    String destString = passDestLatlng.substring(1).substring(0, passDestLatlng.length() - 2 );
-
-                    String[] afterSplitLoc1 = passDestLatlng.split(",");
-
-                    double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
-
-                    double destLongitude = Double.parseDouble(afterSplitLoc[1]);
-                    LatLng destCoordinate = new LatLng(destLatitude,destLongitude);
-
-                    place2 = new MarkerOptions().position(destCoordinate).title("Destination");
-                    drew = getPoints(place1, place2);
-
-                    if (!drew) {
-                        String text = "Invalid Address";
-                        Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-
-                    }
+//
                 }
             }
 

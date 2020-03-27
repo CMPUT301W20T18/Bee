@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
-        android:id="@+id/driver_card"
+        android:id="@+id/rider_card"
         android:layout_width="match_parent"
         android:layout_height="175dp"
         android:layout_marginRight="10dp"
@@ -103,7 +103,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/map_requestAccepted"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/driver_card"
+        app:layout_constraintTop_toTopOf="@+id/rider_card"
         app:layout_constraintVertical_bias="0.914" />
 
 

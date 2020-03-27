@@ -1,25 +1,33 @@
 package com.example.bee;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
+import com.akexorcist.googledirection.model.Info;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
@@ -29,6 +37,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -60,11 +69,13 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 //    RiderDecision riderDecision;
     Boolean riderResponse = true;
     ArrayList<Request> request;
-
+    RelativeLayout driverCard;
     Boolean myLocationPermission = false;
     MarkerOptions place1;
     MarkerOptions place2;
     Button finishButton;
+    private String distance;
+    private String time;
     double requestAmount;
 
     @Override
@@ -72,6 +83,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.waiting_for_rider);
         // set up the map to the activity
+        driverCard = findViewById(R.id.rider_card);
 
         RequestMoneyAmount = findViewById(R.id.request_money_amount2);
         SetMoneyAmount(requestAmount);
@@ -111,6 +123,13 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         }else{
             RequestStatus.setText("Waiting for comfirmation......");
         }
+        driverCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(WaitingForRider.this, SearchRide.class));
+            }
+        });
+
 
     }
     /**
@@ -124,6 +143,14 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
     /**
      * This initialize the map for waiting riders
      */
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
     private void initMap(){
         Log.d(TAG, "Initializing map");
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -209,15 +236,15 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
     private boolean getPoints(MarkerOptions fromAddress, MarkerOptions toAddress) {
 
-
         try {
             // May throw an IOException
             LatLng from_position = fromAddress.getPosition();
             LatLng to_position = toAddress.getPosition();
             map.addMarker(fromAddress.position(from_position)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_red_placeholder)));
+
             map.addMarker(toAddress.position(to_position)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+                    .icon(bitmapDescriptorFromVector(this,R.drawable.ic_green_placeholder)));
 //            add markers on the map for starting position and ending position
             LatLngBounds latLngBounds = new LatLngBounds.Builder()
                     .include(from_position)
@@ -259,14 +286,16 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                         if(direction.isOK()) {
                             Route route = direction.getRouteList().get(0);
                             Leg leg = route.getLegList().get(0);
+
                             ArrayList<LatLng> pointList = leg.getDirectionPoint();
-//                                    Info distanceInfo = leg.getDistance();
-//                                    String distance = distanceInfo.getText();
-//                                    dist = Double.parseDouble(distance.substring(0, distance.length() - 3));
+                            Info distanceInfo = leg.getDistance();
+                            Info durationInfo = leg.getDuration();
+                            distance = distanceInfo.getText();
+                            time = durationInfo.getText();
 //                            display the route as line on the map
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(WaitingForRider.this, pointList, 5,
-                                            getResources().getColor(R.color.yellow));
+                                            getResources().getColor(R.color.route));
                             map.addPolyline(polylineOptions);
                         } else {
                             String text = direction.getStatus();
