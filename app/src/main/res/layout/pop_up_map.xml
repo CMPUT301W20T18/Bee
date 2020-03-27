@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/dialog_box"
 
+
     android:orientation="vertical">
 
     <LinearLayout
@@ -33,7 +34,7 @@
             android:layout_marginTop="-7dp"
             android:hint="riderId"
             android:textColor="#000"
-            android:textSize="15dp" />
+            android:textSize="19dp" />
 
         <TextView
             android:id="@+id/money_amount_in_pop"
