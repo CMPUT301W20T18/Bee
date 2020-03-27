@@ -12,7 +12,7 @@ public class Offer implements Comparable<Offer> {
     private double lat;
     private double lng;
     private String riderId;
-    public float distance;
+    private float distance;
 
     Offer(String startingPoint, String endPoint, String fare, double lat,double lng, String riderId){
         this.startingPoint = startingPoint;
