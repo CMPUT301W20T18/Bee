@@ -1,38 +1,24 @@
 package com.example.bee;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.akexorcist.googledirection.DirectionCallback;
-import com.akexorcist.googledirection.GoogleDirection;
-import com.akexorcist.googledirection.constant.TransportMode;
-import com.akexorcist.googledirection.model.Direction;
-import com.akexorcist.googledirection.model.Info;
-import com.akexorcist.googledirection.model.Leg;
-import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -42,11 +28,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,16 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * This is a class that shows the situation after the rider confirms the driver's acceptance
@@ -105,6 +78,18 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
         fabCancel = findViewById(R.id.my_cancel);
         fabConfirm = findViewById(R.id.my_confirm);
+        fabCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCancelDialog();
+            }
+        });
+        fabConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmDialog();
+            }
+        });
 
     }
 
@@ -129,7 +114,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         request_accepted_map.setMyLocationEnabled(true);
         //request_accepted_map.getUiSettings().setCompassEnabled(true);
         DatabaseReference ref = db.getReference("requests");
-        ref.child("PAvxlWke8KfOtRbuXuqo6TheIrw1")
+        ref.child("cGwYgfbxtjcMgFSWvGoZDbe6SSK2")
                 .child("request")
                 .child("originLatlng")
                 .addValueEventListener(new ValueEventListener() {
@@ -145,7 +130,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                                 .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_green_placeholder)));
 
                         if (ori != null){
-                            ref.child("PAvxlWke8KfOtRbuXuqo6TheIrw1")
+                            ref.child("cGwYgfbxtjcMgFSWvGoZDbe6SSK2")
                                     .child("request")
                                     .child("destLatlng")
                                     .addValueEventListener(new ValueEventListener() {
@@ -223,7 +208,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     private void drawPointsList(){
         DatabaseReference ref = db.getReference("requests");
-            ref.child("PAvxlWke8KfOtRbuXuqo6TheIrw1")
+            ref.child("cGwYgfbxtjcMgFSWvGoZDbe6SSK2")
                 .child("request")
                 .child("points")
                 .addValueEventListener(new ValueEventListener() {
@@ -252,8 +237,60 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         });
     }
 
+    private void showCancelDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(RiderAfterAcceptRequest.this);
+        View view = getLayoutInflater().inflate(R.layout.activity_rider_after_accept_request_dialog,null);
+        TextView title = (TextView) view.findViewById(R.id.dialog_title);
+        title.setText("Are you sure you want to cancel the ride? ");
+        Button not_cancelBtn = view.findViewById(R.id.not_cancel_btn);
+        Button cancelBtn = view.findViewById(R.id.do_cancel_btn);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(RiderAfterAcceptRequest.this, "hohoho", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                finish();
+            }
+        });
+        not_cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
 
+    }
+
+    private void showConfirmDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(RiderAfterAcceptRequest.this);
+        View view = getLayoutInflater().inflate(R.layout.activity_rider_after_accept_request_dialog,null);
+        TextView title = (TextView) view.findViewById(R.id.dialog_title);
+        title.setText("Are you sure you reach the destination? ");
+        Button not_cancelBtn = view.findViewById(R.id.not_cancel_btn);
+        Button cancelBtn = view.findViewById(R.id.do_cancel_btn);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(RiderAfterAcceptRequest.this, "hohoho", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(RiderAfterAcceptRequest.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        not_cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+    }
 
 
 
