@@ -34,6 +34,8 @@
 
 <!--        <activity android:name=".MainActivity" />-->
 <!--        <activity android:name=".LoginActivity">-->
+
+
         <activity android:name=".SearchRide" >
 
         <intent-filter>
@@ -50,9 +52,14 @@
         <activity android:name=".DriverBasicInformation" />
         <activity android:name=".RiderAfterAcceptRequest" />
         <activity android:name=".DriverMain" />
-<!--        <activity android:name=".SearchRide" />-->
-        <activity android:name=".PopUpMap"/>
+
+
         <activity android:name=".WaitingForRider"/>
+
+        <activity android:name=".PopUpMap" />
+
+<!--        <activity android:name=".SearchRide" />-->
+
 
 
     </application>

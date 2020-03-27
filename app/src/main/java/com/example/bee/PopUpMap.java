@@ -73,10 +73,9 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private DatabaseReference ref;
 
     MarkerOptions place2;
-    Boolean drew = false;
+    private Boolean drew = false;
     Button AcceptButton;
     Button CancelButton;
-    private TextView RequestMoneyAmount;
 
 
         @Override
@@ -86,89 +85,11 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             riderID = findViewById(R.id.rider_id);
             requestMoneyAmount = findViewById(R.id.money_amount_in_pop);
 
-            user = firebaseAuth.getInstance().getCurrentUser();
-            userID = user.getUid();
-            Bundle bundle = getIntent().getExtras();
-            String passMoneyAmount = bundle.getString("passMoneyAmount");
-            String passRiderID = bundle.getString("passRiderID");
-            requestMoneyAmount.setText("$" + passMoneyAmount);
-
-            if(passRiderID != null){
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                ref = database.getReference("requests").child(passRiderID).child("request");
-                DatabaseReference originLatlngRef = ref.child("originLatlng");
-
-                originLatlngRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String originString = dataSnapshot.getValue(String.class);
-                        riderID.setText(originString);
-                        String[] afterSplitLoc = originString.split(",");
-//
-//                double originLatitude = Double.parseDouble(afterSplitLoc[0]);
-//
-//                double originLongitude = Double.parseDouble(afterSplitLoc[1]);
-//                LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
-//
-//                place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
-//
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-                DatabaseReference destLatlngRef = ref.child("destLatlng");
-                destLatlngRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String destStringTemp = dataSnapshot.getValue(String.class);
-                        String[] afterSplitLoc1 = destStringTemp.split(",");
-
-                        double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
-
-                        double destLongitude = Double.parseDouble(afterSplitLoc1[1]);
-                        LatLng destCoordinate = new LatLng(destLatitude,destLongitude);
-
-                        place2 = new MarkerOptions().position(destCoordinate).title("Destination");
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-//                String tripTime = ref.child("time").toString();
-////              LatLng destLatlng = ref.child("destLaglng");
-//                String originStringTemp = ref.child("originLatlng").get();
-//                riderID.setText(originStringTemp);
-//                String originString = originStringTemp.substring(1).substring(0, originStringTemp.length() - 2 );
-//
-//
-//
-//                String destString = destStringTemp.substring(1).substring(0, destStringTemp.length() - 2 );
-//
-
-                drew = getPoints(place1, place2);
-
-                if (!drew) {
-                    String text = "Invalid Address";
-                    Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-
-                }
-//
-//
-
-
-            }
 
 
 //            https://stackoverflow.com/questions/9998221/how-to-pass-double-value-to-a-textview-in-android
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            ref = database.getReference("requests").child(userID).child("request");
+//            FirebaseDatabase database = FirebaseDatabase.getInstance();
+//            ref = database.getReference("requests").child(userID).child("request");
 //            ref.addValueEventListener(new ValueEventListener() {
 //                @Override
 //                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -294,24 +215,87 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 //        LatLng place2_postion = new LatLng(53.484300,-113.517250);
 //        place2 = new MarkerOptions().position(place2_postion).title("Destination");
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot s : dataSnapshot.getChildren()){
-                    Bundle bundle = getIntent().getExtras();
-                    String passOriginLatlng = bundle.getString("passOriginLatlng");
-                    String passDestLatlng = bundle.getString("passDestLatlng");
-                    Request request = s.getValue(Request.class);
+        user = firebaseAuth.getInstance().getCurrentUser();
+        userID = user.getUid();
+        Bundle bundle = getIntent().getExtras();
+        String passMoneyAmount = bundle.getString("passMoneyAmount");
+        String passRiderID = bundle.getString("passRiderID");
+        requestMoneyAmount.setText("$" + passMoneyAmount);
+
+        if(passRiderID != null){
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            ref = database.getReference("requests").child(passRiderID).child("request");
+            DatabaseReference originLatlngRef = ref.child("originLatlng");
+            originLatlngRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String originString = dataSnapshot.getValue(String.class);
+                    String[] afterSplitLoc = originString.split(",");
+//                        LatLng place1_postion = new LatLng();
+//        place1 = new MarkerOptions().position(place1_postion).title("Orientation");
+//        LatLng place2_postion = new LatLng(53.484300,-113.517250);
+//        place2 = new MarkerOptions().position(place2_postion).title("Destination");
+                    double originLatitude = Double.parseDouble(afterSplitLoc[0]);
+                    double originLongitude = Double.parseDouble(afterSplitLoc[1]);
+                    LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
+                    place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            DatabaseReference destLatlngRef = ref.child("destLatlng");
+            destLatlngRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String destStringTemp = dataSnapshot.getValue(String.class);
+                    String[] afterSplitLoc1 = destStringTemp.split(",");
+
+                    double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
+                    double destLongitude = Double.parseDouble(afterSplitLoc1[1]);
+                    LatLng destCoordinate = new LatLng(destLatitude,destLongitude);
+                    riderID.setText(passRiderID);
+
+
+
+                    place2 = new MarkerOptions().position(destCoordinate).title("Destination");
+                    drew = getPoints(place1, place2);
+
+                    if (!drew) {
+                        String text = "Invalid Address";
+                        Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+//                String tripTime = ref.child("time").toString();
+//                LatLng destLatlng = ref.child("destLaglng");
+//                String originStringTemp = ref.child("originLatlng").get();
+//                riderID.setText(originStringTemp);
+//                String originString = originStringTemp.substring(1).substring(0, originStringTemp.length() - 2 );
+//
+//
+//
+//                String destString = destStringTemp.substring(1).substring(0, destStringTemp.length() - 2 );
+//
 
 //
-                }
-            }
+//
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+        }
+
 
 
 
