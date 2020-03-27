@@ -41,9 +41,9 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="279dp"
             android:layout_marginBottom="96dp"
-            android:text="$Money"
+            android:hint="$Money"
             android:textColor="#000"
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             tools:layout_editor_absoluteX="-16dp"
             tools:layout_editor_absoluteY="16dp" />
@@ -75,7 +75,7 @@
             android:layout_marginTop="94dp"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
-            android:text="enter request status"
+            android:hint="request status"
             android:textColor="#000"
             tools:layout_editor_absoluteX="144dp"
             tools:layout_editor_absoluteY="300dp" />
