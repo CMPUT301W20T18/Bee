@@ -118,17 +118,19 @@ public class SearchRide extends AppCompatActivity {
         offerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Offer tempOffer = offerInfo.get(position);
+
                 Intent show = new Intent(SearchRide.this,PopUpMap.class);
 
-                
-
-                String passRiderID = request.getRiderID();
-                String passOriginLatlng = request.getOriginLatlng();
-                String passDestLatlng = request.getDestLatlng();
-                passMoneyAmount = String.format("%.2f",request.getCost());
-                passDistance = request.getDistance();
+                String passRiderID = tempOffer.getRiderId();
+                String passOriginLatlng = tempOffer.getStartingPoint();
+                String passDestLatlng = tempOffer.getEndPoint();
+//                passMoneyAmount = String.format("%.2f",tempOffer.getFare());
+                passMoneyAmount = tempOffer.getFare();
+//                passDistance = tempOffer.get;
                 show.putExtra("passMoneyAmount",passMoneyAmount);
-                show.putExtra("passDistance",passDistance);
+//                show.putExtra("passDistance",passDistance);
                 show.putExtra("passOriginLatlng",passOriginLatlng);
                 show.putExtra("passDestLatlng",passDestLatlng);
                 show.putExtra("passRiderID",passRiderID);
