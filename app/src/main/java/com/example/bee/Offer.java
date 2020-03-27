@@ -4,20 +4,22 @@ package com.example.bee;
  * This java file is an Object of offer request
  */
 
-public class Offer {
+public class Offer implements Comparable<Offer> {
 //    setup local variables and store them later
     private String startingPoint;
     private String endPoint;
     private String fare;
-    private String latlng;
+    private double lat;
+    private double lng;
     private String riderId;
     private float distance;
 
-    Offer(String startingPoint, String endPoint, String fare, String latlng, String riderId){
+    Offer(String startingPoint, String endPoint, String fare, double lat,double lng, String riderId){
         this.startingPoint = startingPoint;
         this.endPoint = endPoint;
         this.fare = fare;
-        this.latlng = latlng;
+        this.lat = lat;
+        this.lng = lng;
         this.riderId = riderId;
         this.distance = 0;
     }
@@ -58,9 +60,11 @@ public class Offer {
      * @return
      * return request's geo location
      */
-    String getLatlng(){
-        return this.latlng;
+    double getLat(){
+        return this.lat;
     }
+
+    double getLng(){return this.lng;}
 
     /**
      * getRiderID
@@ -83,4 +87,10 @@ public class Offer {
      * return floating type distance
      */
     float getDistance(){return this.distance;}
+
+    @Override
+    public int compareTo(Offer f){
+        return Float.compare(f.getDistance(), getDistance());
+    }
+
 }
