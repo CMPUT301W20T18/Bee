@@ -11,12 +11,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -33,14 +36,12 @@ import com.google.firebase.database.ValueEventListener;
 public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     DrawerLayout drawerLayout;
-    Toolbar toolbar;
     View headerView;
     NavigationView navigationView;
-    ActionBarDrawerToggle toggle;
 
-    private Button btnLogout;
+    private ImageView button;
     private FirebaseAuth firebaseAuth;
-    private EditText displayName;
+    private TextView displayName;
     String userID;
 
 
@@ -52,50 +53,16 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
 
         drawerLayout = findViewById(R.id.drawer);
-
-        toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.navigationView);
-
         displayName = navigationView.getHeaderView(0).findViewById(R.id.profileName);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.drawerOpen,R.string.drawerClose);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        setSupportActionBar(toolbar);
-        final ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null)
-        {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.hello_world, R.string.hello_world)
-            {
-
-                public void onDrawerClosed(View view)
-                {
-                    supportInvalidateOptionsMenu();
-                    //drawerOpened = false;
-                }
-
-                public void onDrawerOpened(View drawerView)
-                {
-                    supportInvalidateOptionsMenu();
-                    //drawerOpened = true;
-                }
-            };
-            toggle.setDrawerIndicatorEnabled(true);
-            drawerLayout.setDrawerListener(toggle);
-            toggle.syncState();
-        }
 
 
 
 
-        btnLogout = findViewById(R.id.btnLogout);
+        button = findViewById(R.id.profile_btn);
         firebaseAuth = FirebaseAuth.getInstance();
         userID = firebaseAuth.getCurrentUser().getUid();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -119,33 +86,25 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
 
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(DrawerActivity.this, LoginActivity.class));
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
 
-                    firebaseAuth.signOut();
-                    finish();
-
-
-
-                }
-            });
-
-        }
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState)
     {
         super.onPostCreate(savedInstanceState);
-        toggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
         super.onConfigurationChanged(newConfig);
-        toggle.onConfigurationChanged(newConfig);
     }
 
 
