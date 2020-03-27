@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
@@ -11,6 +12,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -20,11 +22,13 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -50,6 +54,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -66,13 +71,13 @@ import java.util.List;
 /**
  *  This class takes user input of addresses and show the route on the map
  */
-public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallback, SetCost.OnFragmentInteractionListener {
+public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallback,
+        SetCost.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "TAG";
     private static final int REQUEST_CODE = 100;
     private Location currentLocation;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private GoogleMap map;
-    private FirebaseUser user;
     private EditText fromEditText;
     private EditText toEditText;
     private Button confirmBtn;
@@ -86,19 +91,26 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     private String distance;
     private String time;
     private double dist;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_enter_address_map);
+        setContentView(R.layout.activity_drawer);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        userID = user.getUid();
+        UserProfile profile = new UserProfile(userID);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLastLocation();
 
-        // Latlng of locations is null by default
-        p1 = null;
-        p2 = null;
-
+        drawerLayout = findViewById(R.id.drawer);
+        navigationView = findViewById(R.id.navigationView);
+        TextView displayName = navigationView.getHeaderView(0).findViewById(R.id.profileName);
+        navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
         fromEditText = findViewById(R.id.from_address);
         toEditText = findViewById(R.id.to_address);
         confirmBtn = findViewById(R.id.confirm_route);
@@ -142,7 +154,9 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         profileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(EnterAddressMap.this, DrawerActivity.class));
+                // Display name in drawer activity
+                displayName.setText(profile.getFirstName()+" "+profile.getLastName());
+                drawerLayout.openDrawer(Gravity.LEFT);
             }
         });
         // Confirm button for confirming route, invokes set cost dialog
@@ -152,6 +166,27 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                 new SetCost(dist*2.30).show(getSupportFragmentManager(), "set_cost");
             }
         });
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.profile:
+                startActivity(new Intent(EnterAddressMap.this, EditProfileActivity.class));
+                return true;
+            case R.id.rating:
+                Toast.makeText(EnterAddressMap.this, "My Rating Selected", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.about:
+                Toast.makeText(EnterAddressMap.this, "About us Selected", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.logout:
+                Toast.makeText(EnterAddressMap.this, "Logout Selected", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+        return false;
     }
 
 
@@ -206,9 +241,17 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
 
         // Move camera to include both points
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
-        drawRoute(p1, p2);
+        getRideInfo(p1, p2);
 
         return true;
+    }
+
+    private void getRideInfo(LatLng p1, LatLng p2) {
+        Routes routes = new Routes(p1, p2);
+        routes.getRoutes();
+        // distance in double, remove comma if there's any, remove km
+        String temp = distance.replaceAll(",", "");
+        dist = Double.parseDouble(temp.substring(0, temp.length() - 3));
     }
 
     /*
@@ -225,17 +268,17 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
-
-    /**
+/*
+    *//**
      * Draw route on the map from the given p1 and p2. They are the latitude and longitude
      * for the start location and end location respectively.
      * @param p1
      * @param p2
-     */
-    /*
+     *//*
+    *//*
     Github libray by Akexorcist https://github.com/akexorcist
     Library page: https://github.com/akexorcist/Android-GoogleDirectionLibrary
-     */
+     *//*
     private void drawRoute(LatLng p1, LatLng p2) {
         GoogleDirection.withServerKey(getString(R.string.google_maps_key))
                 .from(p1)
@@ -276,7 +319,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
 
                     }
                 });
-    }
+    }*/
 
     /**
      * Show the last location of the device on the map
@@ -303,6 +346,18 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState)
+    {
+        super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
@@ -322,6 +377,8 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                 if (markers == 2) {
                     markers = 0;
                     map.clear();
+                    fromEditText.setText("");
+                    toEditText.setText("");
                 }
                 if (inputFrom.isEmpty()) {
                     // First text box is empty
@@ -375,13 +432,9 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
      */
     @Override
     public void postRequest(double cost) {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        String userID = user.getUid();
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("requests");
-        DatabaseReference requestRef = ref.child(userID);
-
+        DatabaseReference requestRef = database.getReference("requests").child(userID);
         HashMap<String,Request> request = new HashMap<>();
 
         // Convert ArrayList of Latlng to ArrayList of String
