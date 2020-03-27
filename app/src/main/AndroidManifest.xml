@@ -34,8 +34,11 @@
 
 <!--        <activity android:name=".MainActivity" />-->
 <!--        <activity android:name=".LoginActivity">-->
-        <activity android:name=".PopUpMap">
-            <intent-filter>
+
+
+        <activity android:name=".SearchRide" >
+
+        <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -49,14 +52,16 @@
         <activity android:name=".DriverBasicInformation" />
         <activity android:name=".RiderAfterAcceptRequest" />
         <activity android:name=".DriverMain" />
-        <activity android:name=".SearchRide" />
-<<<<<<< HEAD
+
 
         <activity android:name=".WaitingForRider"/>
-=======
+
         <activity android:name=".PopUpMap" />
-        <activity android:name=".WaitingForRider" />
->>>>>>> master
+
+<!--        <activity android:name=".SearchRide" />-->
+
+
+
     </application>
 
 </manifest>
