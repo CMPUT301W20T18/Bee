@@ -147,8 +147,6 @@ public class SearchRide extends AppCompatActivity {
                      searchLatLng  = getLatLng(searchAddress);
                 }
                 if(searchLatLng!=null){
-                    System.out.println("##############################");
-                    System.out.println(searchLatLng);
                     sortOffer(searchLatLng);
 
                 }
