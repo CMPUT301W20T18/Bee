@@ -2,6 +2,7 @@ package com.example.bee;
 
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,6 +27,9 @@ import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 /** This class is is used to show requests that get from firebase
  * into a list view, and allows user to click one of them to see detailed info
@@ -86,8 +90,9 @@ public class SearchRide extends AppCompatActivity {
 //                Using for loop to obtain all current reqeusts in database and add them into list view
                 for(DataSnapshot dsp:dataSnapshot.getChildren()){
                     request = dsp.child("request").getValue(Request.class);
+                    String[] latlng = request.getOriginLatlng().split(",");
 
-                    offerInfo.add(new Offer(request.getOrigin(),request.getDest(),String.format("%.2f", request.getCost()),request.getOriginLatlng(),request.getRiderID()));
+                    offerInfo.add(new Offer(request.getOrigin(),request.getDest(),String.format("%.2f", request.getCost()),Double.valueOf(latlng[0]),Double.valueOf(latlng[1]),request.getRiderID()));
 //                  notify adapter to update listview
                     offerAdapter.notifyDataSetChanged();
                 }
@@ -114,6 +119,8 @@ public class SearchRide extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent show = new Intent(SearchRide.this,PopUpMap.class);
+
+                
 
                 String passRiderID = request.getRiderID();
                 String passOriginLatlng = request.getOriginLatlng();
@@ -142,7 +149,7 @@ public class SearchRide extends AppCompatActivity {
                 if(searchLatLng!=null){
                     System.out.println("##############################");
                     System.out.println(searchLatLng);
-
+                    sortOffer(searchLatLng);
 
                 }
 
@@ -173,8 +180,18 @@ public class SearchRide extends AppCompatActivity {
     private void sortOffer(LatLng target){
         searchingLat = target.latitude;
         searchingLng = target.longitude;
-        
 
+        for(Offer offer : offerInfo){
+            float[] dist = new float[1];
+            Location.distanceBetween(offer.getLat(),offer.getLng(),searchingLat,searchingLng,dist);
+            offer.setDistance(dist[0]);
+        }
+
+        Collections.sort(offerInfo);
+
+        Collections.reverse(offerInfo);
+
+        offerAdapter.notifyDataSetChanged();
 
     }
 
