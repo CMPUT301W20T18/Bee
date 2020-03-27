@@ -17,6 +17,11 @@ import android.widget.Toast;
  * This class shows the basic information of driver after rider accept the driver.
  */
 
+/**
+ * This is a class that shows the basic information about driver
+ */
+
+
 public class DriverBasicInformation extends AppCompatActivity {
     ImageView back;
     ImageView phone_call;
@@ -58,6 +63,9 @@ public class DriverBasicInformation extends AppCompatActivity {
             }
         });
     }
+    /**
+     * This is a method enable rider to make a phone call to driver
+     */
 
     /**
      * This method make a phone call to driver

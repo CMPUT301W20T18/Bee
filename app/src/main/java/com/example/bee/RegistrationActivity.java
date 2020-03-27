@@ -147,6 +147,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     user.put("phone",phone);
                     user.put("firstName",infirstName);
                     user.put("lastName",inlastName);
+                    user.put("rating",0);
 
                     usersRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
