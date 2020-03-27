@@ -120,7 +120,7 @@ public class SearchRide extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent show = new Intent(SearchRide.this,PopUpMap.class);
 
-
+                
 
                 String passRiderID = request.getRiderID();
                 String passOriginLatlng = request.getOriginLatlng();
@@ -147,8 +147,12 @@ public class SearchRide extends AppCompatActivity {
                      searchLatLng  = getLatLng(searchAddress);
                 }
                 if(searchLatLng!=null){
+                    System.out.println("##############################");
+                    System.out.println(searchLatLng);
                     sortOffer(searchLatLng);
+
                 }
+
             }
         });
 
