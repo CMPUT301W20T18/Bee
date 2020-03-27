@@ -92,14 +92,75 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             String passMoneyAmount = bundle.getString("passMoneyAmount");
             String passRiderID = bundle.getString("passRiderID");
             requestMoneyAmount.setText("$" + passMoneyAmount);
-            riderID.setText(passRiderID);
+
             if(passRiderID != null){
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 ref = database.getReference("requests").child(passRiderID).child("request");
-                
+                DatabaseReference originLatlngRef = ref.child("originLatlng");
 
+                originLatlngRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String originString = dataSnapshot.getValue(String.class);
+                        riderID.setText(originString);
+                        String[] afterSplitLoc = originString.split(",");
+//
+//                double originLatitude = Double.parseDouble(afterSplitLoc[0]);
+//
+//                double originLongitude = Double.parseDouble(afterSplitLoc[1]);
+//                LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
+//
+//                place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
+//
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                    }
+                });
+                DatabaseReference destLatlngRef = ref.child("destLatlng");
+                destLatlngRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String destStringTemp = dataSnapshot.getValue(String.class);
+                        String[] afterSplitLoc1 = destStringTemp.split(",");
+
+                        double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
+
+                        double destLongitude = Double.parseDouble(afterSplitLoc1[1]);
+                        LatLng destCoordinate = new LatLng(destLatitude,destLongitude);
+
+                        place2 = new MarkerOptions().position(destCoordinate).title("Destination");
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+//                String tripTime = ref.child("time").toString();
+////              LatLng destLatlng = ref.child("destLaglng");
+//                String originStringTemp = ref.child("originLatlng").get();
+//                riderID.setText(originStringTemp);
+//                String originString = originStringTemp.substring(1).substring(0, originStringTemp.length() - 2 );
+//
+//
+//
+//                String destString = destStringTemp.substring(1).substring(0, destStringTemp.length() - 2 );
+//
+
+                drew = getPoints(place1, place2);
+
+                if (!drew) {
+                    String text = "Invalid Address";
+                    Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+
+                }
+//
+//
 
 
             }
