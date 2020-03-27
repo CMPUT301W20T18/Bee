@@ -77,6 +77,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
     private String distance;
     private String time;
     double requestAmount;
+    String passRiderName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,6 +99,20 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         finishButton.setVisibility(View.GONE);
 //        hide the finish button until the rider make response
         RequestStatus = findViewById(R.id.request_status);
+
+
+
+
+        Bundle bundle = getIntent().getExtras();
+        passRiderName = bundle.getString("passRiderName");
+        String passMoneyAmount = bundle.getString("passMoneyAmount");
+        RequestMoneyAmount.setText(passMoneyAmount);
+        riderName.setText(passRiderName);
+
+
+
+
+
         // Depends rider response to process to next activity
         if(riderResponse){
             RequestStatus.setText("Confirmed ride offer");

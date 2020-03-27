@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/dialog_box"
 
+
     android:orientation="vertical">
 
     <LinearLayout
@@ -26,14 +27,14 @@
             android:src="@mipmap/ic_launcher" />
 
         <TextView
-            android:id="@+id/rider_id"
+            android:id="@+id/rider_name"
             android:layout_width="140dp"
             android:layout_height="62dp"
             android:layout_gravity="top"
             android:layout_marginTop="-7dp"
             android:hint="riderId"
             android:textColor="#000"
-            android:textSize="15dp" />
+            android:textSize="19dp" />
 
         <TextView
             android:id="@+id/money_amount_in_pop"
