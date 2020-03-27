@@ -140,7 +140,10 @@ public class SearchRide extends AppCompatActivity {
                      searchLatLng  = getLatLng(searchAddress);
                 }
                 if(searchLatLng!=null){
-                    searchingLat
+                    System.out.println("##############################");
+                    System.out.println(searchLatLng);
+
+
                 }
 
             }
@@ -165,6 +168,14 @@ public class SearchRide extends AppCompatActivity {
             e.printStackTrace();
         }
         return searchPos;
+    }
+
+    private void sortOffer(LatLng target){
+        searchingLat = target.latitude;
+        searchingLng = target.longitude;
+        
+
+
     }
 
 }
