@@ -7,7 +7,6 @@ import android.view.View;
 
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -15,6 +14,7 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
@@ -22,6 +22,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
 
 import java.util.ArrayList;
 
@@ -49,6 +52,12 @@ public class SearchRide extends AppCompatActivity {
     ArrayList<Offer> offerInfo;
     ArrayList<Request> request_list;
     ListView offerList;
+
+    private String searchAddress;
+    private LatLng searchPos;
+    private LatLng searchLatLng;
+    private double searchingLat;
+    private double searchingLng;
 
 
     @Override
@@ -100,6 +109,7 @@ public class SearchRide extends AppCompatActivity {
                 startActivity(driverMain);
             }
         });
+
 //        Xiutong's configuration: for passing value to pop up map
         offerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -124,6 +134,51 @@ public class SearchRide extends AppCompatActivity {
                 startActivity(show);
             }
         });
+
+        EditText searchText = findViewById(R.id.searchNearBy);
+        searchButton = findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchAddress = searchText.getText().toString();
+                if(! searchAddress.isEmpty()){
+                     searchLatLng  = getLatLng(searchAddress);
+                }
+                if(searchLatLng!=null){
+                    System.out.println("##############################");
+                    System.out.println(searchLatLng);
+
+
+                }
+
+            }
+        });
+
+    }
+
+    private LatLng getLatLng(String searchingAddress){
+        GeocodingResult[] address;
+        try{
+            GeoApiContext context = new GeoApiContext.Builder()
+                    .apiKey(getString(R.string.google_maps_key))
+                    .build();
+            address = GeocodingApi.geocode(context,
+                    searchingAddress).await();
+
+            if (address != null){
+                searchPos = new LatLng(address[0].geometry.location.lat,address[0].geometry.location.lng);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return searchPos;
+    }
+
+    private void sortOffer(LatLng target){
+        searchingLat = target.latitude;
+        searchingLng = target.longitude;
+        
 
 
     }

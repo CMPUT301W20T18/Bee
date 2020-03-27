@@ -11,6 +11,7 @@ public class Offer {
     private String fare;
     private String latlng;
     private String riderId;
+    private float distance;
 
     Offer(String startingPoint, String endPoint, String fare, String latlng, String riderId){
         this.startingPoint = startingPoint;
@@ -18,6 +19,7 @@ public class Offer {
         this.fare = fare;
         this.latlng = latlng;
         this.riderId = riderId;
+        this.distance = 0;
     }
 
 //  return offer's starting point
@@ -66,4 +68,19 @@ public class Offer {
      * return rider's Id of current request
      */
     String getRiderId() {return this.riderId;}
+
+    /**
+     * Set up the distance between current starting point and searching point
+     * Default value is 0
+     */
+    void setDistance(float distance){
+        this.distance = distance;
+    }
+
+    /**
+     * Get distance of of this offer request from searching point
+     * @return
+     * return floating type distance
+     */
+    float getDistance(){return this.distance;}
 }
