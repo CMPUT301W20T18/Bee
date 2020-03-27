@@ -26,7 +26,7 @@
             android:src="@mipmap/ic_launcher" />
 
         <TextView
-            android:id="@+id/rider_id"
+            android:id="@+id/rider_name"
             android:layout_width="140dp"
             android:layout_height="62dp"
             android:layout_gravity="top"
