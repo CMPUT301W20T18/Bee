@@ -1,6 +1,10 @@
 package com.example.bee;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
@@ -9,19 +13,29 @@ import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Info;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
+import com.akexorcist.googledirection.util.DirectionConverter;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
+/**
+ * This class implements the drawing of the routes on the map,
+ * and can return ride info such as distance, duration and cost.
+ */
 public class Routes {
-    private Context context;
+    Activity activity;
+    GoogleMap map;
     private LatLng p1;
     private LatLng p2;
     private String distance;
     private String time;
     private ArrayList<LatLng> pointList;
-    public Routes(Context context, LatLng p1, LatLng p2) {
-        this.context = context;
+
+    public Routes(Activity activity, GoogleMap map, LatLng p1, LatLng p2) {
+        this.activity = activity;
+        this.map = map;
         this.p1 = p1;
         this.p2 = p2;
     }
@@ -34,9 +48,9 @@ public class Routes {
     Github libray by Akexorcist https://github.com/akexorcist
     Library page: https://github.com/akexorcist/Android-GoogleDirectionLibrary
      */
-    public ArrayList<LatLng> getRoutes() {
+    public void drawRoute() {
 
-        GoogleDirection.withServerKey(context.getString(R.string.google_maps_key))
+        GoogleDirection.withServerKey(activity.getString(R.string.google_maps_key))
                 .from(p1)
                 .to(p2)
                 .transportMode(TransportMode.DRIVING)
@@ -51,15 +65,33 @@ public class Routes {
                             Info durationInfo = leg.getDuration();
                             distance = distanceInfo.getText();
                             time = durationInfo.getText();
+                            PolylineOptions polylineOptions = DirectionConverter
+                                    .createPolyline(activity, pointList, 5,
+                                            activity.getResources().getColor(R.color.route));
+                            map.addPolyline(polylineOptions);
                         }
                     }
-
                     @Override
                     public void onDirectionFailure(Throwable t) {
-                        pointList = null;
+                        String text = "Failed to get direction";
+                        Toast toast = Toast.makeText(activity, text, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
                     }
                 });
-        return pointList;
+
+    }
+
+    /**
+     * Get the ArrayList of latlng points of the route in in String
+     * @return points
+     */
+    public ArrayList<String> getPointList() {
+        ArrayList<String> points = new ArrayList<>();
+        for (LatLng latLng : pointList ){
+            points.add(latLng.latitude+","+latLng.longitude);
+        }
+        return points;
     }
 
     public String getDistance() {
@@ -68,6 +100,12 @@ public class Routes {
 
     public String getTime() {
         return time;
+    }
+
+    public double getCost() {
+        // distance in double, remove comma if there's any, remove km
+        String temp = distance.replaceAll(",", "");
+        return Double.parseDouble(temp.substring(0, temp.length() - 3)) * 2.3;
     }
 
 }

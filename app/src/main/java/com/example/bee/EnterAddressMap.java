@@ -1,7 +1,6 @@
 package com.example.bee;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -16,8 +15,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,14 +28,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.akexorcist.googledirection.DirectionCallback;
-import com.akexorcist.googledirection.GoogleDirection;
-import com.akexorcist.googledirection.constant.TransportMode;
-import com.akexorcist.googledirection.model.Direction;
-import com.akexorcist.googledirection.model.Info;
-import com.akexorcist.googledirection.model.Leg;
-import com.akexorcist.googledirection.model.Route;
-import com.akexorcist.googledirection.util.DirectionConverter;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -50,7 +39,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -59,14 +47,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
-import com.google.maps.model.GeocodingResult;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  *  This class takes user input of addresses and show the route on the map
@@ -85,15 +68,13 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     private String destAddress;
     private LatLng p1;
     private LatLng p2;
-    private ArrayList<LatLng> pointList;
     private int markers;
     private Boolean drew = false;
-    private String distance;
-    private String time;
     private double oldCost;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private String userID;
+    private Routes routes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +144,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                oldCost = routes.getCost();
                 new SetCost(oldCost).show(getSupportFragmentManager(), "set_cost");
             }
         });
@@ -188,7 +170,6 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         }
         return false;
     }
-
 
     /*
     StackOverflow post by Navneeth G https://stackoverflow.com/users/1135909/navneeth-g
@@ -241,31 +222,11 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
 
         // Move camera to include both points
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
-        //return getRideInfo(p1, p2);
-        drawRoute(p1, p2);
+        routes = new Routes(EnterAddressMap.this, map, p1, p2);
+        routes.drawRoute();
         return true;
 
     }
-
-/*    private boolean getRideInfo(LatLng p1, LatLng p2) {
-        Routes routes = new Routes(getApplicationContext(), p1, p2);
-        pointList = routes.getRoutes();
-        if (pointList != null) {
-            distance = routes.getDistance();
-            time = routes.getTime();
-            // distance in double, remove comma if there's any, remove km
-            String temp = distance.replaceAll(",", "");
-            oldCost = Double.parseDouble(temp.substring(0, temp.length() - 3)) * 2.3;
-            PolylineOptions polylineOptions = DirectionConverter
-                    .createPolyline(EnterAddressMap.this, pointList, 5,
-                            getResources().getColor(R.color.route));
-            map.addPolyline(polylineOptions);
-            return true;
-        } else {
-            // pointList is null when routes are not found
-            return false;
-        }
-    }*/
 
     /*
     StackOverflow post by Leo Droidcoder https://stackoverflow.com/users/5730321/leo-droidcoder
@@ -280,57 +241,6 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-    /**
-     * Draw route on the map from the given p1 and p2. They are the latitude and longitude
-     * for the start location and end location respectively.
-     * @param p1
-     * @param p2
-     */
-    /*
-    Github libray by Akexorcist https://github.com/akexorcist
-    Library page: https://github.com/akexorcist/Android-GoogleDirectionLibrary
-     */
-    private void drawRoute(LatLng p1, LatLng p2) {
-        GoogleDirection.withServerKey(getString(R.string.google_maps_key))
-                .from(p1)
-                .to(p2)
-                .transportMode(TransportMode.DRIVING)
-                .execute(new DirectionCallback() {
-                    @Override
-                    public void onDirectionSuccess(Direction direction) {
-                        if (direction.isOK()) {
-                            Route route = direction.getRouteList().get(0);
-                            Leg leg = route.getLegList().get(0);
-                            pointList = leg.getDirectionPoint();
-                            Info distanceInfo = leg.getDistance();
-                            Info durationInfo = leg.getDuration();
-                            distance = distanceInfo.getText();
-                            time = durationInfo.getText();
-                            // distance in double, remove comma if there's any, remove km
-                            String temp = distance.replaceAll(",", "");
-                            oldCost = Double.parseDouble(temp.substring(0, temp.length() - 3)) * 2.3;
-                            PolylineOptions polylineOptions = DirectionConverter
-                                    .createPolyline(EnterAddressMap.this, pointList, 5,
-                                            getResources().getColor(R.color.route));
-                            map.addPolyline(polylineOptions);
-                        } else {
-                            String text = direction.getStatus();
-                            Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_SHORT);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                        }
-                    }
-
-                    @Override
-                    public void onDirectionFailure(Throwable t) {
-                        String text = "Failed to get direction";
-                        Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-
-                    }
-                });
     }
 
     /**
@@ -352,6 +262,11 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                     SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                             .findFragmentById(R.id.rider_initial_map);
                     mapFragment.getMapAsync(EnterAddressMap.this);
+                } else {
+                    String text = "Poor network connectivity";
+                    Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
             }
         });
@@ -382,16 +297,19 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onMapLongClick(LatLng latLng) {
                 confirmBtn.setVisibility(View.GONE);
-                // Fill in the address box
-                String address;
-                String inputFrom = fromEditText.getText().toString();
-                String inputTo = toEditText.getText().toString();
+
+                // If two markers are on the map then clear everything
                 if (markers == 2) {
                     markers = 0;
                     map.clear();
                     fromEditText.setText("");
                     toEditText.setText("");
                 }
+
+                // Fill in the address box
+                String address;
+                String inputFrom = fromEditText.getText().toString();
+                String inputTo = toEditText.getText().toString();
                 if (inputFrom.isEmpty()) {
                     // First text box is empty
                     // if both text box is empty, the first text box has priority
@@ -448,16 +366,14 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         DatabaseReference requestRef = database.getReference("requests").child(userID);
         HashMap<String,Request> request = new HashMap<>();
 
-        // Convert ArrayList of Latlng to ArrayList of String
-        ArrayList<String> points = new ArrayList<>();
-        for (LatLng latLng : pointList ){
-            points.add(latLng.latitude+","+latLng.longitude);
-        }
-        // Convert Latlng to String
+        // Get the points of route in String
+        ArrayList<String> points = routes.getPointList();
+
+        // Convert Latlng of locations to String
         String p1Latlng = String.format("%f,%f",p1.latitude,p1.longitude);
         String p2Latlng = String.format("%f,%f",p2.latitude,p2.longitude);
         request.put("request", new Request(userID, originAddress, destAddress, p1Latlng, p2Latlng,
-                points, distance, time, newCost));
+                points, routes.getDistance(), routes.getTime(), newCost));
         requestRef.setValue(request).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
