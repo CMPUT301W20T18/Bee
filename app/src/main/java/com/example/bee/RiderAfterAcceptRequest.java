@@ -75,6 +75,16 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                 startActivity(intent);
             }
         });
+        // By Ruichen Chen
+        // For payment testing
+        Button confirmBut = findViewById(R.id.confirm_route);
+        confirmBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RiderAfterAcceptRequest.this, RiderPayActivity.class));
+            }
+        });
+        // End
 
         fabCancel = findViewById(R.id.my_cancel);
         fabConfirm = findViewById(R.id.my_confirm);
