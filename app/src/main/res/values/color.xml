@@ -12,5 +12,8 @@
     <color name="background">#FFF0C9</color>
     <color name="button">#FFCF62</color>
     <color name="route">#62bdd9</color>
+    <color name="menu_button">#FFCF62</color>
+    <color name="menu_ripple">#DBBDA2</color>
+    <color name="menu_primary_pressed">#CC9405</color>
 
 </resources>
