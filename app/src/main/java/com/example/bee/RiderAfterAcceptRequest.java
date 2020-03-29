@@ -10,8 +10,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -64,9 +67,12 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         setContentView(R.layout.activity_rider_after_accept_request);
 //        user = FirebaseAuth.getInstance().getCurrentUser();
 //        String userID = user.getUid();
+        isNetworkAvailable();
+
         db = FirebaseDatabase.getInstance();
         initMap();
         drawPointsList();
+
         driver_name = (TextView)findViewById(R.id.driver_name);
         driver_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +97,8 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             }
         });
 
+
+
     }
 
     /**
@@ -109,10 +117,18 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         Context mcontext = RiderAfterAcceptRequest.this;
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: map is ready");
-
         request_accepted_map = googleMap;
         request_accepted_map.setMyLocationEnabled(true);
         //request_accepted_map.getUiSettings().setCompassEnabled(true);
+
+        boolean result = isNetworkAvailable();
+        if (!result){
+            Toast toast = Toast.makeText(RiderAfterAcceptRequest.this, "You are offline", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+        }
+
+
         DatabaseReference ref = db.getReference("requests");
         ref.child(rq_id)
             .child("request")
@@ -312,6 +328,15 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             }
         });
 
+    }
+
+    //https://stackoverflow.com/questions/4238921/detect-whether-there-is-an-internet-connection-available-on-android
+    private boolean isNetworkAvailable() {
+
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 
