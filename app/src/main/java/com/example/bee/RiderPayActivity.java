@@ -68,7 +68,10 @@ public class RiderPayActivity extends AppCompatActivity {
                 QRCodeWriter qrCodeWriter = new QRCodeWriter();
 
                 try {
-                    BitMatrix bitMatrix = qrCodeWriter.encode(String.valueOf(cost), BarcodeFormat.QR_CODE, 200, 200);
+                    // Pass the amount through QR code
+                    //BitMatrix bitMatrix = qrCodeWriter.encode(String.valueOf(cost), BarcodeFormat.QR_CODE, 200, 200);
+                    // Pass the userID (in firestore) by QRcode
+                    BitMatrix bitMatrix = qrCodeWriter.encode(userID, BarcodeFormat.QR_CODE, 200, 200);
                     Bitmap bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.RGB_565);
                     for (int x = 0; x < 200; x++) {
                         for (int y = 0; y < 200; y++) {

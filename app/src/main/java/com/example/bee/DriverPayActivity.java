@@ -63,7 +63,8 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
 
     @Override
     public void handleResult(Result rawResult) {
-        String amount = rawResult.getText();
-        // To modify the amount and turn to next activity.
+        String riderID = rawResult.getText();
+        // To modify the amount and start to next activity.
+
     }
 }
