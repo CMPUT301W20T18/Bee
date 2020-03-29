@@ -63,5 +63,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
     testCompileOnly 'org.apiguardian:apiguardian-api:1.0.0'
 
+    implementation 'com.github.clans:fab:1.6.4'
+
 }
 apply plugin: 'com.google.gms.google-services'
