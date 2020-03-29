@@ -165,12 +165,16 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 Toast.makeText(DrawerActivity.this, "My Rating Selected", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(DrawerActivity.this, RatingActivity.class));
                 return true;
-            case R.id.about:
-                Toast.makeText(DrawerActivity.this, "About us Selected", Toast.LENGTH_SHORT).show();
+            case R.id.history:
+                Toast.makeText(DrawerActivity.this, "History Selected", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.logout:
                 Toast.makeText(DrawerActivity.this, "Logout Selected", Toast.LENGTH_SHORT).show();
-                break;
+                startActivity(new Intent(DrawerActivity.this, LoginActivity.class));
+                firebaseAuth.signOut();
+                finish();
+                return true;
+
             default:
                 break;
         }
