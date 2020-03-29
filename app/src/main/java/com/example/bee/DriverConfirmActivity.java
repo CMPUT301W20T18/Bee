@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class DriverConfirmActivity extends AppCompatActivity {
+    private Request request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
