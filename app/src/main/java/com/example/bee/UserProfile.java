@@ -10,6 +10,7 @@ public class UserProfile {
     private String password;
     private String phone;
     private String email, firstName,lastName;
+    private QRWallet wallet;
 
 
 
@@ -23,6 +24,7 @@ public class UserProfile {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.wallet = new QRWallet(username);
     }
 
     public String getFirstName() {

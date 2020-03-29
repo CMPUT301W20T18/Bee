@@ -2,9 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bee">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -23,7 +25,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DriverPayActivity"></activity>
+        <activity android:name=".DriverConfirmActivity"></activity>
+        <activity android:name=".DriverPayActivity" />
         <activity android:name=".RiderPayActivity" />
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".DrawerActivity" />
@@ -49,16 +52,8 @@
         <activity android:name=".DriverBasicInformation" />
         <activity android:name=".RiderAfterAcceptRequest" />
         <activity android:name=".DriverMain" />
-
-
-        <activity android:name=".WaitingForRider"/>
-
+        <activity android:name=".WaitingForRider" />
         <activity android:name=".PopUpMap" />
-
-<!--        <activity android:name=".SearchRide" />-->
-
-
-
     </application>
 
 </manifest>

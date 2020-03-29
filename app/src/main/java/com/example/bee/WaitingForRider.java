@@ -46,8 +46,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -74,10 +77,12 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
     MarkerOptions place1;
     MarkerOptions place2;
     Button finishButton;
+    Boolean drew = false;
     private String distance;
     private String time;
     double requestAmount;
-
+    String passRiderName;
+    String passRiderID;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,9 +93,14 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         RequestMoneyAmount = findViewById(R.id.request_money_amount2);
         SetMoneyAmount(requestAmount);
         initMap();
-        riderResponse = true;
+        riderResponse = false;
+        Bundle bundle = getIntent().getExtras();
+        passRiderName = bundle.getString("passRiderName");
+        String passMoneyAmount = bundle.getString("passMoneyAmount");
+        passRiderID = bundle.getString("passRiderID");
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        ref = database.getReference("requests").child("cGwYgfbxtjcMgFSWvGoZDbe6SSK2").child("request");
+        ref = database.getReference("requests").child(passRiderID).child("request");
 
 
         riderName = findViewById(R.id.rider_name);
@@ -98,6 +108,30 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         finishButton.setVisibility(View.GONE);
 //        hide the finish button until the rider make response
         RequestStatus = findViewById(R.id.request_status);
+        RequestMoneyAmount.setText("$" + passMoneyAmount);
+        if(passRiderName != null){
+            riderName.setText(passRiderName);
+
+        }else{
+            riderName.setText("Invalid rider name");
+        }
+        if(passMoneyAmount != null){
+            RequestMoneyAmount.setText("$" + passMoneyAmount);
+
+
+        }else{
+            RequestMoneyAmount.setText("Invalid amount");
+
+        }
+
+
+
+
+
+
+
+
+
         // Depends rider response to process to next activity
         if(riderResponse){
             RequestStatus.setText("Confirmed ride offer");
@@ -169,6 +203,186 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap){
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: Map is ready");
+
+
+
+        Bundle bundle = getIntent().getExtras();
+        String passMoneyAmount = bundle.getString("passMoneyAmount");
+        passRiderID = bundle.getString("passRiderID");
+
+
+        if(passRiderID != null){
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            ref = database.getReference("requests").child(passRiderID).child("request");
+            DatabaseReference originLatlngRef = ref.child("originLatlng");
+            originLatlngRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String originString = dataSnapshot.getValue(String.class);
+                    String[] afterSplitLoc = originString.split(",");
+//                        LatLng place1_postion = new LatLng();
+//        place1 = new MarkerOptions().position(place1_postion).title("Orientation");
+//        LatLng place2_postion = new LatLng(53.484300,-113.517250);
+//        place2 = new MarkerOptions().position(place2_postion).title("Destination");
+                    double originLatitude = Double.parseDouble(afterSplitLoc[0]);
+                    double originLongitude = Double.parseDouble(afterSplitLoc[1]);
+                    LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
+                    place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            DatabaseReference destLatlngRef = ref.child("destLatlng");
+            destLatlngRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String destStringTemp = dataSnapshot.getValue(String.class);
+                    String[] afterSplitLoc1 = destStringTemp.split(",");
+
+                    double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
+                    double destLongitude = Double.parseDouble(afterSplitLoc1[1]);
+                    LatLng destCoordinate = new LatLng(destLatitude,destLongitude);
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference userRef = database.getReference("users").child(passRiderID).child("Name");;
+                    userRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String riderNameString = dataSnapshot.getValue(String.class);
+                            if(riderNameString != null){
+                                riderName.setText(riderNameString);
+                            }else{
+                                riderName.setText("Invalid rider Name");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+
+
+                    place2 = new MarkerOptions().position(destCoordinate).title("Destination");
+                    drew = getPoints(place1, place2);
+
+                    if (!drew) {
+                        String text = "Invalid Address";
+                        Toast toast = Toast.makeText(WaitingForRider.this, text, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+
+                    }else{
+                        String tripTime = ref.child("time").toString();
+//                        mapPop.addMarker()
+//                        mapPop.addMarker(toAddress.position(to_position)
+//                                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+//                String tripTime = ref.child("time").toString();
+//                LatLng destLatlng = ref.child("destLaglng");
+//                String originStringTemp = ref.child("originLatlng").get();
+//                riderID.setText(originStringTemp);
+//                String originString = originStringTemp.substring(1).substring(0, originStringTemp.length() - 2 );
+//
+//
+//
+//                String destString = destStringTemp.substring(1).substring(0, destStringTemp.length() - 2 );
+//
+
+//
+//
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         map = googleMap;
         LatLng place1_position = new LatLng(53.523220, -113.526321);
