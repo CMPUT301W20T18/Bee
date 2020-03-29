@@ -149,6 +149,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     user.put("lastName",inlastName);
                     user.put("thumbUp",0);
                     user.put("thumbDown",0);
+                    user.put("Wallet", new QRWallet(userID));
 
                     usersRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
