@@ -3,12 +3,14 @@ package com.example.bee;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.Result;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -25,6 +27,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
     private String userID;
     private DatabaseReference ref;
     private ZXingScannerView scannerView;
+    private String currentRider;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +67,25 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
     @Override
     public void handleResult(Result rawResult) {
         String riderID = rawResult.getText();
-        // To modify the amount and start to next activity.
+        if (riderID == currentRider) {
+            // Make transaction
+            Payment payment = new Payment();
 
+            // Start next activity.
+            Intent intent = new Intent(DriverPayActivity.this, DriverConfirmActivity.class);
+            intent.putExtra("RiderID", currentRider);
+        }
+        else {
+            // Continue Scanning QR code until a legal code is scanned
+            scannerView.startCamera();
+        }
+    }
+
+    /**
+     * Get user's profile from firebase
+     */
+    public UserProfile getProfile(String userID) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref;
     }
 }
