@@ -9,8 +9,16 @@
         android:title="My Rating"/>
 
     <item
-        android:id="@+id/about"
-        android:title="About us"/>
+        android:id="@+id/history"
+        android:title="History"/>
+
+    <item
+        android:id="@+id/sRider"
+        android:title="Switch to Rider"/>
+    <item
+        android:id="@+id/sDriver"
+        android:title="Switch to Driver"/>
+
     <item
         android:id="@+id/logout"
         android:title="Logout"/>

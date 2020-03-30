@@ -34,7 +34,7 @@ import java.util.HashMap;
 public class RatingActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     private ImageView logo;
-    private TextView username;
+    private TextView username, thumbUp, thumbDown;
     private Button back;
 
     private ProgressDialog progressDialog;
@@ -53,14 +53,7 @@ public class RatingActivity extends AppCompatActivity {
 
         initializeGUI();
 
-//
-//        back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                startActivity(new Intent(RatingActivity.this, DrawerActivity.class));
-//            }
-//        });
+
 
 
     }
@@ -72,7 +65,8 @@ public class RatingActivity extends AppCompatActivity {
 
 
         username = findViewById(R.id.ratingName);
-
+        thumbUp = findViewById(R.id.thumbUp);
+        thumbDown = findViewById(R.id.thumbDown);
         progressDialog = new ProgressDialog(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -84,6 +78,9 @@ public class RatingActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
                     username.setText(dataSnapshot.child("Name").getValue().toString());
+                    thumbUp.setText(dataSnapshot.child("thumbUp").getValue().toString());
+                    thumbDown.setText(dataSnapshot.child("thumbDown").getValue().toString());
+
                 }
             }
 

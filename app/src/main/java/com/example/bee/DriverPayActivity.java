@@ -1,14 +1,20 @@
 package com.example.bee;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.Result;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -25,10 +31,18 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
     private String userID;
     private DatabaseReference ref;
     private ZXingScannerView scannerView;
+    private String currentRiderID;
+    private String currentRider;
+    private double amount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_pay);
+
+        // Get Rider's information from last activity
+        currentRider = getIntent().getExtras().getString("Rider", null);
+        currentRiderID = getIntent().getExtras().getString("RiderID", null);
+        amount = getIntent().getExtras().getDouble("amount", 0);
 
         // This is to get the driver's current request from the database
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -63,7 +77,56 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
 
     @Override
     public void handleResult(Result rawResult) {
-        String amount = rawResult.getText();
-        // To modify the amount and turn to next activity.
+        String riderID = rawResult.getText();
+        if (riderID == currentRiderID) {
+            // Make transaction
+            // First add money to driver's wallet
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference ref = database.getReference("users").child(userID).child("Wallet");
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    QRWallet driverWallet = (QRWallet) dataSnapshot.getValue();
+                    String driverDescr = String.format("%s owes me $%.2f", currentRider, amount);
+                    driverWallet.addTransaction(driverDescr, amount);
+                    database.getReference("users").child(userID).setValue(driverWallet);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            // Second, add transaction to rider
+            ref = database.getReference("users").child(riderID).child("Wallet");
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    QRWallet riderWallet = (QRWallet) dataSnapshot.getValue();
+                    String riderDescr = String.format("I owe %s $%.2f", riderWallet.getName(), amount);
+                    riderWallet.addTransaction(riderDescr, -1 * amount);
+                    database.getReference("users").child(riderID).setValue(riderWallet);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            // Thirdly, set the request finished to boolean true
+
+
+            // Then, Start next activity -- RiderConfirmActivity
+            Intent intent = new Intent(DriverPayActivity.this, DriverConfirmActivity.class);
+            intent.putExtra("amount", amount);
+            startActivity(intent);
+        }
+        else {
+            // Continue Scanning QR code until a legal code is scanned
+            scannerView.startCamera();
+        }
     }
+
 }

@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,42 +64,34 @@ import static android.content.ContentValues.TAG;
  */
 public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private FusedLocationProviderClient client_device;
-    TextView riderID, requestMoneyAmount;
+    TextView riderName, requestMoneyAmount;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
     String userID;
+    String riderNameString;
     private FirebaseDatabase firebaseDatabase;
     GoogleMap mapPop;
     MarkerOptions place1;
-    private DatabaseReference ref;
-
+    private DatabaseReference ref,userRef;
+    String passRiderID;
     MarkerOptions place2;
-    Boolean drew = false;
+    private Boolean drew = false;
     Button AcceptButton;
     Button CancelButton;
-    private TextView RequestMoneyAmount;
 
 
         @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.pop_up_map);
-            riderID = findViewById(R.id.rider_id);
+            riderName = findViewById(R.id.rider_name);
             requestMoneyAmount = findViewById(R.id.money_amount_in_pop);
 
-            user = firebaseAuth.getInstance().getCurrentUser();
-            userID = user.getUid();
-            Bundle bundle = getIntent().getExtras();
-            String passMoneyAmount = bundle.getString("passMoneyAmount");
-            String passRiderID = bundle.getString("passRiderID");
-            requestMoneyAmount.setText("$" + passMoneyAmount);
-            riderID.setText(passRiderID);
-//            riderID.setText(request.getRiderID());
 
 
 //            https://stackoverflow.com/questions/9998221/how-to-pass-double-value-to-a-textview-in-android
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            ref = database.getReference("requests").child(userID).child("request");
+//            FirebaseDatabase database = FirebaseDatabase.getInstance();
+//            ref = database.getReference("requests").child(userID).child("request");
 //            ref.addValueEventListener(new ValueEventListener() {
 //                @Override
 //                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -135,16 +128,20 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
             int width = displayMetrics.widthPixels;
             int height = displayMetrics.heightPixels;
-
+            Bundle bundle = getIntent().getExtras();
+            String passMoneyAmount = bundle.getString("passMoneyAmount");
+            passRiderID = bundle.getString("passRiderID");
             getWindow().setLayout((int) (width * 0.8), (int) (height * .6));
 //        set up the accept button
             AcceptButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    String MoneyString = requestMoneyAmount.getText().toString();
-//                    if (!MoneyString.isEmpty()) {
-//                        double newCost = Double.parseDouble(MoneyString);
-                        startActivity(new Intent(PopUpMap.this, WaitingForRider.class));
+
+                    Intent show = new Intent(PopUpMap.this,WaitingForRider.class);
+                    show.putExtra("passMoneyAmount",passMoneyAmount);
+                    show.putExtra("passRiderID",passRiderID);
+                    show.putExtra("passRiderName",riderNameString);
+                        startActivity(show);
 //                    } else {
 //                        String text = "Invalid Amount";
 //                        Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
@@ -153,8 +150,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 //                        final Intent show = new Intent(PopUpMap.this, WaitingForRider.class);
 //                        startActivity(show);
 //                    }
-
-
                 }
             });
 //        set up the cancel button
@@ -200,10 +195,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 //        riderID.setText(userID);
 //
 //    }
-
-    public void SetMoneyAmount(double MoneyAmount){
-        RequestMoneyAmount.setText("$ "+ MoneyAmount);
-    }
     /**
      * This initialize the map to start
      */
@@ -230,35 +221,70 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 //        LatLng place2_postion = new LatLng(53.484300,-113.517250);
 //        place2 = new MarkerOptions().position(place2_postion).title("Destination");
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot s : dataSnapshot.getChildren()){
-                    Bundle bundle = getIntent().getExtras();
-                    String passOriginLatlng = bundle.getString("passOriginLatlng");
-                    String passDestLatlng = bundle.getString("passDestLatlng");
-                    Request request = s.getValue(Request.class);
+        user = firebaseAuth.getInstance().getCurrentUser();
+        userID = user.getUid();
+        Bundle bundle = getIntent().getExtras();
+        String passMoneyAmount = bundle.getString("passMoneyAmount");
+        passRiderID = bundle.getString("passRiderID");
+        requestMoneyAmount.setText("$" + passMoneyAmount);
 
-//                    String originString = passOriginLatlng.substring(1).substring(0, passOriginLatlng.length() - 2 );
-
-                    String[] afterSplitLoc = passOriginLatlng.split(",");
-
+        if(passRiderID != null){
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            ref = database.getReference("requests").child(passRiderID).child("request");
+            DatabaseReference originLatlngRef = ref.child("originLatlng");
+            originLatlngRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String originString = dataSnapshot.getValue(String.class);
+                    String[] afterSplitLoc = originString.split(",");
+//                        LatLng place1_postion = new LatLng();
+//        place1 = new MarkerOptions().position(place1_postion).title("Orientation");
+//        LatLng place2_postion = new LatLng(53.484300,-113.517250);
+//        place2 = new MarkerOptions().position(place2_postion).title("Destination");
                     double originLatitude = Double.parseDouble(afterSplitLoc[0]);
-
                     double originLongitude = Double.parseDouble(afterSplitLoc[1]);
                     LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
-
                     place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
 
-//                    String destTempString = ref.child("dest").getKey();
-//                    String destString = passDestLatlng.substring(1).substring(0, passDestLatlng.length() - 2 );
+                }
 
-                    String[] afterSplitLoc1 = passDestLatlng.split(",");
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            DatabaseReference destLatlngRef = ref.child("destLatlng");
+            destLatlngRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String destStringTemp = dataSnapshot.getValue(String.class);
+                    String[] afterSplitLoc1 = destStringTemp.split(",");
 
                     double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
-
-                    double destLongitude = Double.parseDouble(afterSplitLoc[1]);
+                    double destLongitude = Double.parseDouble(afterSplitLoc1[1]);
                     LatLng destCoordinate = new LatLng(destLatitude,destLongitude);
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    userRef = database.getReference("users").child(passRiderID).child("Name");;
+                    userRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            riderNameString = dataSnapshot.getValue(String.class);
+                            if(riderNameString != null){
+                                riderName.setText(riderNameString);
+                            }else{
+                                riderName.setText("Invalid rider Name");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+
 
                     place2 = new MarkerOptions().position(destCoordinate).title("Destination");
                     drew = getPoints(place1, place2);
@@ -269,15 +295,37 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
 
+                    }else{
+                        String tripTime = ref.child("time").toString();
+//                        mapPop.addMarker()
+//                        mapPop.addMarker(toAddress.position(to_position)
+//                                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
                     }
+
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+//                String tripTime = ref.child("time").toString();
+//                LatLng destLatlng = ref.child("destLaglng");
+//                String originStringTemp = ref.child("originLatlng").get();
+//                riderID.setText(originStringTemp);
+//                String originString = originStringTemp.substring(1).substring(0, originStringTemp.length() - 2 );
+//
+//
+//
+//                String destString = destStringTemp.substring(1).substring(0, destStringTemp.length() - 2 );
+//
+
+//
+//
+
+
+        }
+
 
 
 

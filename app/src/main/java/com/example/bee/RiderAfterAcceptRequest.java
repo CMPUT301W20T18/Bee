@@ -1,35 +1,24 @@
 package com.example.bee;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.akexorcist.googledirection.DirectionCallback;
-import com.akexorcist.googledirection.GoogleDirection;
-import com.akexorcist.googledirection.constant.TransportMode;
-import com.akexorcist.googledirection.model.Direction;
-import com.akexorcist.googledirection.model.Leg;
-import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,37 +29,44 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 /**
- * This class shows the basic information of driver after rider accept the driver.
+ * This is a class that shows the situation after the rider confirms the driver's acceptance
  */
 
 public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = "accept_request_activity";
-    private static final float DEFAULT_ZOOM = 15f;
 
     GoogleMap request_accepted_map;
-    private FusedLocationProviderClient client_device;
     TextView driver_name;
 
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
-    //vars
-    private Boolean mLocationPermissionsGranted = false;
+    MarkerOptions ori, dest;
+    private static ArrayList<String> points = new ArrayList<>();
 
-    MarkerOptions place1, place2;
-    Boolean drew = false;
+    private FirebaseUser user;
+    FirebaseDatabase db;
+
+    FloatingActionButton fabConfirm, fabCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_after_accept_request);
+//        user = FirebaseAuth.getInstance().getCurrentUser();
+//        String userID = user.getUid();
+        db = FirebaseDatabase.getInstance();
         initMap();
+        drawPointsList();
         driver_name = (TextView)findViewById(R.id.driver_name);
         driver_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,9 +86,26 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         });
         // End
 
-
+        fabCancel = findViewById(R.id.my_cancel);
+        fabConfirm = findViewById(R.id.my_confirm);
+        fabCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCancelDialog();
+            }
+        });
+        fabConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmDialog();
+            }
+        });
 
     }
+
+    /**
+     * This is a method to initialize the map
+     */
 
     private void initMap(){
         Log.d(TAG, "initMap: initializing map");
@@ -101,116 +114,81 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         mapFragment.getMapAsync(RiderAfterAcceptRequest.this);
     }
 
-    /**
-     * This method is to get Device Location
-     */
-
-
-    private void getDeviceLocation(){
-        Log.d(TAG, "getDeviceLocation: getting the devices current location");
-
-        client_device = LocationServices.getFusedLocationProviderClient(this);
-
-        try{
-            if(mLocationPermissionsGranted){
-
-                final Task location = client_device.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if(task.isSuccessful()){
-                            Log.d(TAG, "onComplete: found location!");
-                            Location currentLocation = (Location) task.getResult();
-
-//                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-//                                    DEFAULT_ZOOM);
-
-                        }else{
-                            Log.d(TAG, "onComplete: current location is null");
-                            Toast.makeText(RiderAfterAcceptRequest.this, "unable to get current location", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        }catch (SecurityException e){
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
-        }
-    }
-
-
-
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Context mcontext = RiderAfterAcceptRequest.this;
+        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: map is ready");
 
         request_accepted_map = googleMap;
-
-
-        getDeviceLocation();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
         request_accepted_map.setMyLocationEnabled(true);
         //request_accepted_map.getUiSettings().setCompassEnabled(true);
+        DatabaseReference ref = db.getReference("requests");
+        ref.child("cGwYgfbxtjcMgFSWvGoZDbe6SSK2")
+                .child("request")
+                .child("originLatlng")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String part_list = dataSnapshot.getValue(String.class);
+                        String[]parts = part_list.split(",");
+                        Double lat = Double.parseDouble(parts[0]);
+                        Double lng = Double.parseDouble(parts[1]);
+                        ori = new MarkerOptions().position(new LatLng(lat,lng)).title("Orientation");
+                        request_accepted_map.addMarker(ori
+                                .position(ori.getPosition())
+                                .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_green_placeholder)));
 
-        LatLng place1_postion = new LatLng(53.523220,-113.526321);
-        place1 = new MarkerOptions().position(place1_postion).title("Orientation");
-        LatLng place2_postion = new LatLng(53.484300,-113.517250);
-        place2 = new MarkerOptions().position(place2_postion).title("Destination");
-        drew = getPoints(place1, place2);
+                        if (ori != null){
+                            ref.child("cGwYgfbxtjcMgFSWvGoZDbe6SSK2")
+                                    .child("request")
+                                    .child("destLatlng")
+                                    .addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            String part_list = dataSnapshot.getValue(String.class);
+                                            String[]parts = part_list.split(",");
+                                            Double lat = Double.parseDouble(parts[0]);
+                                            Double lng = Double.parseDouble(parts[1]);
+                                            dest = new MarkerOptions().position(new LatLng(lat,lng)).title("Destination");
+                                            request_accepted_map.addMarker(dest
+                                                    .position(dest.getPosition())
+                                                    .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_red_placeholder)));
 
-        if (!drew){
-            String text = "Invalid Address";
-            Toast toast = Toast.makeText(RiderAfterAcceptRequest.this, text, Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-        }
+                                            if(dest != null){
+                                                LatLngBounds latLngBounds = new LatLngBounds.Builder()
+                                                    .include(ori.getPosition())
+                                                    .include(dest.getPosition())
+                                                    .build();
+                                                    //Move camera to include both points
+                                                    request_accepted_map.setPadding(     0,      350,      0,     0);
+                                                    request_accepted_map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
+                                            }else{
+                                                Toast.makeText(mcontext, "Lack of destination", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
 
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+                        }else{
+                            Toast.makeText(mcontext, "Lack of origination", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
     }
-    /**
-     * This method to get two positions and draw route between two positions
-     * @param from
-     * origin
-     * @param to
-     * destination
-     */
 
 
-    private boolean getPoints(MarkerOptions from, MarkerOptions to) {
-        try {
-
-            LatLng fromPosition = from.getPosition();
-            LatLng toPosition = to.getPosition();
-
-            request_accepted_map.addMarker(from
-                    .position(fromPosition)
-                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_red_placeholder)));
-            request_accepted_map.addMarker(to
-                    .position(toPosition)
-                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
-
-            LatLngBounds latLngBounds = new LatLngBounds.Builder()
-                    .include(fromPosition)
-                    .include(toPosition)
-                    .build();
-            // Move camera to include both points
-            request_accepted_map.setPadding(     0,      350,      0,     0);
-            request_accepted_map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
-            drawRoute(fromPosition, toPosition);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true; }
-
-    /**
-     * This method set marker
+        /**
+     * This is a method to set the model of marker
      */
 
     // Convert vector drawable to bitmap
@@ -223,41 +201,106 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    private void drawRoute(LatLng p1, LatLng p2) {
-        GoogleDirection.withServerKey(getString(R.string.google_maps_key))
-                .from(p1)
-                .to(p2)
-                .transportMode(TransportMode.DRIVING)
-                .execute(new DirectionCallback() {
-                    @Override
-                    public void onDirectionSuccess(Direction direction) {
-                        if(direction.isOK()) {
-                            Route route = direction.getRouteList().get(0);
-                            Leg leg = route.getLegList().get(0);
-                            ArrayList<LatLng> pointList = leg.getDirectionPoint();
-                            PolylineOptions polylineOptions = DirectionConverter
-                                    .createPolyline(RiderAfterAcceptRequest.this, pointList, 5,
-                                            getResources().getColor(R.color.route));
-                            request_accepted_map.addPolyline(polylineOptions);
-                        } else {
-                            String text = direction.getStatus();
-                            Toast toast = Toast.makeText(RiderAfterAcceptRequest.this, text, Toast.LENGTH_SHORT);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                        }
-                    }
+//    /**
+//     * This is a method to draw route between two positions
+//     * @param p1
+//     * first place
+//     * @param p2
+//     * second place
+//     */
 
-                    @Override
-                    public void onDirectionFailure(Throwable t) {
-                        String text = "Failed to get direction";
-                        Toast toast = Toast.makeText(RiderAfterAcceptRequest.this, text, Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-
-                    }
-                });
+    private void drawRoute(ArrayList<LatLng> pointList) {
+        PolylineOptions polylineOptions = DirectionConverter
+                .createPolyline(RiderAfterAcceptRequest.this, pointList, 5,
+                        getResources().getColor(R.color.yellow));
+        request_accepted_map.addPolyline(polylineOptions);
     }
 
+    private void drawPointsList(){
+        DatabaseReference ref = db.getReference("requests");
+            ref.child("cGwYgfbxtjcMgFSWvGoZDbe6SSK2")
+                .child("request")
+                .child("points")
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> items = dataSnapshot.getChildren();
+                for(DataSnapshot child: items){
+                    String latlng_str = child.getValue(String.class);
+                    points.add(latlng_str);
+                }
+                ArrayList<LatLng> formal_points = new ArrayList<>();
+                for(String point : points){
+                    String[] parts = point.split(",");
+                    Double lat = Double.parseDouble(parts[0]);
+                    Double lng = Double.parseDouble(parts[1]);
+                    formal_points.add(new LatLng(lat,lng));
+                }
+                drawRoute(formal_points);
+
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void showCancelDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(RiderAfterAcceptRequest.this);
+        View view = getLayoutInflater().inflate(R.layout.activity_rider_after_accept_request_dialog,null);
+        TextView title = (TextView) view.findViewById(R.id.dialog_title);
+        title.setText("Are you sure you want to cancel the ride? ");
+        Button not_cancelBtn = view.findViewById(R.id.not_cancel_btn);
+        Button cancelBtn = view.findViewById(R.id.do_cancel_btn);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(RiderAfterAcceptRequest.this, "hohoho", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                finish();
+            }
+        });
+        not_cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+    }
+
+    private void showConfirmDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(RiderAfterAcceptRequest.this);
+        View view = getLayoutInflater().inflate(R.layout.activity_rider_after_accept_request_dialog,null);
+        TextView title = (TextView) view.findViewById(R.id.dialog_title);
+        title.setText("Are you sure you reach the destination? ");
+        Button not_cancelBtn = view.findViewById(R.id.not_cancel_btn);
+        Button cancelBtn = view.findViewById(R.id.do_cancel_btn);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(RiderAfterAcceptRequest.this, "hohoho", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(RiderAfterAcceptRequest.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        not_cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+    }
 
 
 
