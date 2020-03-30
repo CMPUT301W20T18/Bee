@@ -54,7 +54,6 @@ dependencies {
 
     implementation 'com.github.clans:fab:1.6.4'
 
-}
 
     // Libraries for QRwriter
     implementation 'com.google.zxing:core:3.2.1'
