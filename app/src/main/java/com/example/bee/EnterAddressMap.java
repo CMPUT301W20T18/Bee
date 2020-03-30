@@ -75,6 +75,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     private NavigationView navigationView;
     private String userID;
     private Routes routes;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,14 +155,32 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.profile:
+                Toast.makeText(EnterAddressMap.this, "Profile Selected", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(EnterAddressMap.this, EditProfileActivity.class));
                 return true;
             case R.id.rating:
                 Toast.makeText(EnterAddressMap.this, "My Rating Selected", Toast.LENGTH_SHORT).show();
-                break;
+                startActivity(new Intent(EnterAddressMap.this, RatingActivity.class));
+                return true;
+            case R.id.history:
+                Toast.makeText(EnterAddressMap.this, "History Selected", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(EnterAddressMap.this, ConfirmOfferDialog.class));
+                return true;
+            case R.id.sRider:
+                Toast.makeText(EnterAddressMap.this, "Switch to Rider", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(EnterAddressMap.this, EnterAddressMap.class));
+                return true;
+            case R.id.sDriver:
+                Toast.makeText(EnterAddressMap.this, "Switch to Driver", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(EnterAddressMap.this, DriverMain.class));
+                return true;
             case R.id.logout:
                 Toast.makeText(EnterAddressMap.this, "Logout Selected", Toast.LENGTH_SHORT).show();
-                break;
+                startActivity(new Intent(EnterAddressMap.this, LoginActivity.class));
+                firebaseAuth.signOut();
+                finish();
+                return true;
+
             default:
                 break;
         }
