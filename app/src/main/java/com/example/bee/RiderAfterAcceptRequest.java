@@ -40,7 +40,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
 /**
  * This is a class that shows the situation after the rider confirms the driver's acceptance
  */
@@ -61,17 +60,18 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     FloatingActionButton fabConfirm, fabCancel;
     private static final String rq_id = "Fyt793VEkcNmvLTMTX3sdUa69Mf1";
 
+    public static final String SHARED_PREFS = "sharedPrefs";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_after_accept_request);
 //        user = FirebaseAuth.getInstance().getCurrentUser();
 //        String userID = user.getUid();
-        isNetworkAvailable();
-
         db = FirebaseDatabase.getInstance();
+        db.setPersistenceEnabled(true);
         initMap();
-        drawPointsList();
+
 
         driver_name = (TextView)findViewById(R.id.driver_name);
         driver_name.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +114,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Context mcontext = RiderAfterAcceptRequest.this;
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: map is ready");
         request_accepted_map = googleMap;
@@ -127,64 +126,10 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             toast.setGravity(Gravity.CENTER,0,0);
             toast.show();
         }
+        setOriDest();
+        drawPointsList();
 
 
-        DatabaseReference ref = db.getReference("requests");
-        ref.child(rq_id)
-            .child("request")
-            .addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Request r = dataSnapshot.getValue(Request.class);
-                    String ori_list = r.getOriginLatlng();
-
-                    String[]ori_parts = ori_list.split(",");
-                    Double ori_lat = Double.parseDouble(ori_parts[0]);
-                    Double ori_lng = Double.parseDouble(ori_parts[1]);
-                    ori = new MarkerOptions().position(new LatLng(ori_lat,ori_lng)).title("Orientation");
-                    request_accepted_map.addMarker(ori
-                            .position(ori.getPosition())
-                            .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_green_placeholder)));
-                    String dest_list = r.getDestLatlng();
-                    String[]parts = dest_list.split(",");
-                    Double dest_lat = Double.parseDouble(parts[0]);
-                    Double dest_lng = Double.parseDouble(parts[1]);
-                    dest = new MarkerOptions().position(new LatLng(dest_lat,dest_lng)).title("Destination");
-                    request_accepted_map.addMarker(dest
-                            .position(dest.getPosition())
-                            .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_red_placeholder)));
-                    if(dest != null && ori != null){
-                        LatLngBounds latLngBounds = new LatLngBounds.Builder()
-                                .include(ori.getPosition())
-                                .include(dest.getPosition())
-                                .build();
-                        //Move camera to include both points
-                        request_accepted_map.setPadding(     0,      350,      0,     0);
-                        request_accepted_map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
-                    }
-                    if (r.getReached()){
-                        Toast.makeText(RiderAfterAcceptRequest.this, "Driver has arrived the destination, please confirm", Toast.LENGTH_SHORT).show();
-
-                    }
-
-//                    ArrayList<String> points = r.getPoints();
-//                    if(r.getPoints() == null){
-//                        Toast.makeText(RiderAfterAcceptRequest.this, "NO!!!!!!!!!!!!!!!", Toast.LENGTH_SHORT).show();
-//                    }else{
-//                        for(String i : points){
-//                            Toast.makeText(RiderAfterAcceptRequest.this, i, Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-
-
-                }
-
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
 
     }
 
@@ -338,6 +283,69 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+    private void setOriDest(){
+        Context mcontext = RiderAfterAcceptRequest.this;
+        DatabaseReference ref = db.getReference("requests");
+        ref.child(rq_id)
+                .child("request")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Request r = dataSnapshot.getValue(Request.class);
+                        String ori_list = r.getOriginLatlng();
+
+                        String[]ori_parts = ori_list.split(",");
+                        Double ori_lat = Double.parseDouble(ori_parts[0]);
+                        Double ori_lng = Double.parseDouble(ori_parts[1]);
+                        ori = new MarkerOptions().position(new LatLng(ori_lat,ori_lng)).title("Orientation");
+                        request_accepted_map.addMarker(ori
+                                .position(ori.getPosition())
+                                .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_green_placeholder)));
+                        String dest_list = r.getDestLatlng();
+                        String[]parts = dest_list.split(",");
+                        Double dest_lat = Double.parseDouble(parts[0]);
+                        Double dest_lng = Double.parseDouble(parts[1]);
+                        dest = new MarkerOptions().position(new LatLng(dest_lat,dest_lng)).title("Destination");
+                        request_accepted_map.addMarker(dest
+                                .position(dest.getPosition())
+                                .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_red_placeholder)));
+                        if(dest != null && ori != null){
+                            LatLngBounds latLngBounds = new LatLngBounds.Builder()
+                                    .include(ori.getPosition())
+                                    .include(dest.getPosition())
+                                    .build();
+                            //Move camera to include both points
+                            request_accepted_map.setPadding(     0,      350,      0,     0);
+                            request_accepted_map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
+                        }
+                        if (r.getReached()){
+                            Toast.makeText(RiderAfterAcceptRequest.this, "Driver has arrived the destination, please confirm", Toast.LENGTH_SHORT).show();
+
+                        }
+
+//                    ArrayList<String> points = r.getPoints();
+//                    if(r.getPoints() == null){
+//                        Toast.makeText(RiderAfterAcceptRequest.this, "NO!!!!!!!!!!!!!!!", Toast.LENGTH_SHORT).show();
+//                    }else{
+//                        for(String i : points){
+//                            Toast.makeText(RiderAfterAcceptRequest.this, i, Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+
+                    }
+
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
+
+
+
 
 
 
