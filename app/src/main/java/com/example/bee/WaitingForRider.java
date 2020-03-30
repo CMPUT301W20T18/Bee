@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -65,6 +66,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
     private String originAddress;
     private String destAddress;
     TextView riderName;
+    String riderNameString;
     private DatabaseReference ref;
     TextView RequestMoneyAmount;
     GoogleMap map;
@@ -91,7 +93,6 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         driverCard = findViewById(R.id.rider_card);
 
         RequestMoneyAmount = findViewById(R.id.request_money_amount2);
-        SetMoneyAmount(requestAmount);
         initMap();
         riderResponse = false;
         Bundle bundle = getIntent().getExtras();
@@ -101,12 +102,11 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         ref = database.getReference("requests").child(passRiderID).child("request");
-
-
         riderName = findViewById(R.id.rider_name);
+        //        hide the finish button until the rider make response
         finishButton = findViewById(R.id.finish_button);
         finishButton.setVisibility(View.GONE);
-//        hide the finish button until the rider make response
+
         RequestStatus = findViewById(R.id.request_status);
         RequestMoneyAmount.setText("$" + passMoneyAmount);
         if(passRiderName != null){
@@ -125,14 +125,22 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         }
 
 
-
-
-
-
-
-
-
         // Depends rider response to process to next activity
+        DatabaseReference statusRef = database.getReference("requests").child(passRiderID).child("request").child("status");
+        statusRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                 String riderResponseString = dataSnapshot.getValue(String.class);
+//                riderResponse = Boolean.parseBoolean(riderResponseString);
+                    riderResponse = dataSnapshot.getValue(Boolean.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         if(riderResponse){
             RequestStatus.setText("Confirmed ride offer");
             finishButton.setVisibility(View.VISIBLE);
@@ -143,9 +151,10 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                     finish();
                 }
             });
-        }else if(!riderResponse){
-            RequestStatus.setText("Declined ride offer");
-            finishButton.setVisibility(View.VISIBLE);
+        }
+        if(!riderResponse){
+            RequestStatus.setText("Waiting for comfirmation......");
+            finishButton.setVisibility(View.GONE);
             finishButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -154,26 +163,20 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                 }
             });
 
-        }else{
-            RequestStatus.setText("Waiting for comfirmation......");
         }
+//        else{
+//            RequestStatus.setText("Declined ride offer");
+//        }
         driverCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WaitingForRider.this, SearchRide.class));
+                startActivity(new Intent(WaitingForRider.this, PopUpMap.class));
             }
         });
 
 
     }
-    /**
-     * This set up the amount of request money amount
-     * @param MoneyAmount
-     * This is a candidate money amount to store
-     */
-    public void SetMoneyAmount(double MoneyAmount){
-        RequestMoneyAmount.setText("$ "+ MoneyAmount);
-    }
+
     /**
      * This initialize the map for waiting riders
      */
@@ -189,7 +192,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         Log.d(TAG, "Initializing map");
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_requestAccepted);
-
+//        synchronize the map in the activity
         supportMapFragment.getMapAsync(WaitingForRider.this);
 
     }
@@ -203,14 +206,10 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap){
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: Map is ready");
-
-
-
+        map = googleMap;
         Bundle bundle = getIntent().getExtras();
         String passMoneyAmount = bundle.getString("passMoneyAmount");
         passRiderID = bundle.getString("passRiderID");
-
-
         if(passRiderID != null){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReference("requests").child(passRiderID).child("request");
@@ -246,14 +245,17 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                     double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
                     double destLongitude = Double.parseDouble(afterSplitLoc1[1]);
                     LatLng destCoordinate = new LatLng(destLatitude,destLongitude);
+
+
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference userRef = database.getReference("users").child(passRiderID).child("Name");;
                     userRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String riderNameString = dataSnapshot.getValue(String.class);
+                            riderNameString = dataSnapshot.getValue(String.class);
                             if(riderNameString != null){
                                 riderName.setText(riderNameString);
+
                             }else{
                                 riderName.setText("Invalid rider Name");
                             }
@@ -265,11 +267,8 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                         }
                     });
 
-
-
-
-
                     place2 = new MarkerOptions().position(destCoordinate).title("Destination");
+
                     drew = getPoints(place1, place2);
 
                     if (!drew) {
@@ -312,102 +311,31 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        map = googleMap;
-        LatLng place1_position = new LatLng(53.523220, -113.526321);
-        LatLng place2_position = new LatLng(53.484300, -113.517250);
-        getDeviceLocation();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        map.setMyLocationEnabled(true);
-//        initialize the starting position and destination on the map displayed
-        place1 = new MarkerOptions().position(place1_position).title("Starting position");
-
-        place2 = new MarkerOptions().position(place2_position).title("Destination");
-
-        boolean drew = getPoints(place1, place2);
-//      display message of invalid address
-        if (!drew) {
-            String text = "Invalid Address";
-            Toast toast = Toast.makeText(WaitingForRider.this, text, Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-
-        }
+//
+//        map = googleMap;
+////        LatLng place1_position = new LatLng(53.523220, -113.526321);
+////        LatLng place2_position = new LatLng(53.484300, -113.517250);
+//        getDeviceLocation();
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+//                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            return;
+//        }
+//        map.setMyLocationEnabled(true);
+////        initialize the starting position and destination on the map displayed
+//        place1 = new MarkerOptions().position(place1_position).title("Starting position");
+//
+//        place2 = new MarkerOptions().position(place2_position).title("Destination");
+//
+//        boolean drew = getPoints(place1, place2);
+////      display message of invalid address
+//        if (!drew) {
+//            String text = "Invalid Address";
+//            Toast toast = Toast.makeText(WaitingForRider.this, text, Toast.LENGTH_SHORT);
+//            toast.setGravity(Gravity.CENTER, 0, 0);
+//            toast.show();
+//
+//        }
     }
     /**
      * This locate the current location for the user device
@@ -426,7 +354,6 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                         if(task.isSuccessful()){
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
-
 
                         }else{
                             Log.d(TAG, "onComplete: current location is null");
@@ -454,12 +381,12 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
             // May throw an IOException
             LatLng from_position = fromAddress.getPosition();
             LatLng to_position = toAddress.getPosition();
+
             map.addMarker(fromAddress.position(from_position)
                     .icon(bitmapDescriptorFromVector(this, R.drawable.ic_red_placeholder)));
-
             map.addMarker(toAddress.position(to_position)
-                    .icon(bitmapDescriptorFromVector(this,R.drawable.ic_green_placeholder)));
-//            add markers on the map for starting position and ending position
+                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
+//            display the two locations as the marker in the map
             LatLngBounds latLngBounds = new LatLngBounds.Builder()
                     .include(from_position)
                     .include(to_position)
@@ -467,7 +394,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
             map.setPadding(0, 150, 0, 0);
             map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
             drawRoute(from_position, to_position);
-//            generate the route between starting position and destination
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -489,8 +416,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
 
     private void drawRoute(LatLng p1, LatLng p2) {
-
-        GoogleDirection.withServerKey(getString(R.string.google_api_key))
+        GoogleDirection.withServerKey(getString(R.string.google_maps_key))
                 .from(p1)
                 .to(p2)
                 .transportMode(TransportMode.DRIVING)
@@ -498,19 +424,25 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                     @Override
                     public void onDirectionSuccess(Direction direction) {
                         if(direction.isOK()) {
+
                             Route route = direction.getRouteList().get(0);
                             Leg leg = route.getLegList().get(0);
-
                             ArrayList<LatLng> pointList = leg.getDirectionPoint();
                             Info distanceInfo = leg.getDistance();
-                            Info durationInfo = leg.getDuration();
-                            distance = distanceInfo.getText();
-                            time = durationInfo.getText();
-//                            display the route as line on the map
+                            String distance = distanceInfo.getText();
+                            Toast.makeText(WaitingForRider.this, distance, Toast.LENGTH_SHORT).show();
                             PolylineOptions polylineOptions = DirectionConverter
                                     .createPolyline(WaitingForRider.this, pointList, 5,
                                             getResources().getColor(R.color.route));
                             map.addPolyline(polylineOptions);
+//                            display the route as line on the map
+//                            Route route = direction.getRouteList().get(0);
+//                            Leg leg = route.getLegList().get(0);
+//                            ArrayList<LatLng> pointList = leg.getDirectionPoint();
+//                            PolylineOptions polylineOptions = DirectionConverter
+//                                    .createPolyline(PopUpMap.this, pointList, 5,
+//                                            getResources().getColor(R.color.yellow));
+//                            mapPop.addPolyline(polylineOptions);
                         } else {
                             String text = direction.getStatus();
                             Toast toast = Toast.makeText(WaitingForRider.this, text, Toast.LENGTH_SHORT);

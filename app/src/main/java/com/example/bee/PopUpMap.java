@@ -112,10 +112,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 //            });
 
 
-
-
-
-
             initMap();
 
 
