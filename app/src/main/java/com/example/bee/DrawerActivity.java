@@ -53,7 +53,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
         drawerLayout = findViewById(R.id.drawer);
 
-        toolbar = findViewById(R.id.toolbar);
+        //toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.navigationView);
 
         displayName = navigationView.getHeaderView(0).findViewById(R.id.profileName);
@@ -95,7 +95,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
 
 
-        btnLogout = findViewById(R.id.btnLogout);
+        //btnLogout = findViewById(R.id.btnLogout);
         firebaseAuth = FirebaseAuth.getInstance();
         userID = firebaseAuth.getCurrentUser().getUid();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();

@@ -90,12 +90,14 @@ public class SearchRide extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 //                Using for loop to obtain all current reqeusts in database and add them into list view
                 for(DataSnapshot dsp:dataSnapshot.getChildren()){
-                    request = dsp.child("request").getValue(Request.class);
-                    String[] latlng = request.getOriginLatlng().split(",");
+                    if (dsp.child("request").exists()) {
+                        request = dsp.child("request").getValue(Request.class);
+                        String[] latlng = request.getOriginLatlng().split(",");
 
-                    offerInfo.add(new Offer(request.getOrigin(),request.getDest(),String.format("%.2f", request.getCost()),Double.valueOf(latlng[0]),Double.valueOf(latlng[1]),request.getRiderID()));
-//                  notify adapter to update listview
-                    offerAdapter.notifyDataSetChanged();
+                        offerInfo.add(new Offer(request.getOrigin(), request.getDest(), String.format("%.2f", request.getCost()), Double.valueOf(latlng[0]), Double.valueOf(latlng[1]), request.getRiderID()));
+                        //   notify adapter to update listview
+                        offerAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 

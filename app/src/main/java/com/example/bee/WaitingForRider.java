@@ -106,7 +106,11 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         //        hide the finish button until the rider make response
         finishButton = findViewById(R.id.finish_button);
         finishButton.setVisibility(View.GONE);
+<<<<<<< HEAD
 
+=======
+        //hide the finish button until the rider make response
+>>>>>>> 4033e7fccc1efabe3aa498bb8216706e57f1f853
         RequestStatus = findViewById(R.id.request_status);
         RequestMoneyAmount.setText("$" + passMoneyAmount);
         if(passRiderName != null){
@@ -147,8 +151,11 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
             finishButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                Intent intent = new Intent(WaitingForRider.this, );
-                    finish();
+                    Intent intent = new Intent(WaitingForRider.this, DriverPayActivity.class);
+                    intent.putExtra("Rider", passRiderName);
+                    intent.putExtra("RiderID", passRiderID);
+                    intent.putExtra("amount", Double.parseDouble(passMoneyAmount));
+                    startActivity(intent);
                 }
             });
         }

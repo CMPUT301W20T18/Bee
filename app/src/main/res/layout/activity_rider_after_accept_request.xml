@@ -85,20 +85,7 @@
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
-    <Button
-        android:layout_width="wrap_content"
-        android:id="@+id/confirm_route"
-        android:layout_height="wrap_content"
-        android:text="Finished"
-        android:textColor="@color/black"
-        android:background="@drawable/rounded_corner"
-        android:backgroundTint="@color/button"
-        android:layout_alignParentBottom="true"
-        android:elevation="10dp"
-        android:layout_centerHorizontal="true"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:layout_marginBottom="20dp" />
+
 
 <!--    https://github.com/Clans/FloatingActionButton-->
 

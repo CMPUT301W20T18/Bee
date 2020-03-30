@@ -115,9 +115,13 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
                 }
             });
 
+            // Thirdly, set the request finished to boolean true
+
+
             // Then, Start next activity -- RiderConfirmActivity
             Intent intent = new Intent(DriverPayActivity.this, DriverConfirmActivity.class);
             intent.putExtra("amount", amount);
+            startActivity(intent);
         }
         else {
             // Continue Scanning QR code until a legal code is scanned
