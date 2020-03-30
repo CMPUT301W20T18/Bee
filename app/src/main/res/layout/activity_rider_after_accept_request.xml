@@ -9,21 +9,22 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:elevation="20dp"
-        android:background="#fff"
+        android:background="@drawable/rounded_corner"
         android:id = "@+id/driver_card"
         android:padding="16dp">
+
         <ImageView
+            android:id="@+id/driver_profile"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:src = "@mipmap/ic_launcher"
-            android:id = "@+id/driver_profile"/>
+            android:src="@mipmap/ic_launcher" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_marginLeft="100dp"
+            android:layout_marginStart="100dp"
             android:layout_alignParentTop="true"
             android:text="John Doe"
             android:textSize="25sp"
@@ -55,7 +56,7 @@
             android:layout_marginLeft="130dp"
             android:layout_marginTop="66dp"
             android:layout_alignParentTop="true"
-            android:text="0"
+            android:text="15"
             android:textSize="25sp"
             android:textColor="#DD252424" />
         <ImageView
@@ -70,9 +71,10 @@
             android:layout_marginLeft="240dp"
             android:layout_marginTop="66dp"
             android:layout_alignParentTop="true"
-            android:text="0"
+            android:text="2"
             android:textSize="25sp"
             android:textColor="#DD252424" />
+
 
         </RelativeLayout>
 
@@ -83,6 +85,20 @@
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
+    <Button
+        android:layout_width="wrap_content"
+        android:id="@+id/confirm_route"
+        android:layout_height="wrap_content"
+        android:text="Finished"
+        android:textColor="@color/black"
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="@color/button"
+        android:layout_alignParentBottom="true"
+        android:elevation="10dp"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:layout_marginBottom="20dp" />
 
 <!--    https://github.com/Clans/FloatingActionButton-->
 
