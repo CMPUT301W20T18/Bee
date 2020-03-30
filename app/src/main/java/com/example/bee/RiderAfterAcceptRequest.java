@@ -58,7 +58,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     FirebaseDatabase db;
 
     FloatingActionButton fabConfirm, fabCancel;
-    private static final String rq_id = "Fyt793VEkcNmvLTMTX3sdUa69Mf1";
+    private static final String rq_id = "RCgTZRBDuJfDrshixp49aZxXsgb2";
 
     public static final String SHARED_PREFS = "sharedPrefs";
 
@@ -128,9 +128,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         }
         setOriDest();
         drawPointsList();
-
-
-
     }
 
 
@@ -298,7 +295,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                         String[]ori_parts = ori_list.split(",");
                         Double ori_lat = Double.parseDouble(ori_parts[0]);
                         Double ori_lng = Double.parseDouble(ori_parts[1]);
-                        ori = new MarkerOptions().position(new LatLng(ori_lat,ori_lng)).title("Orientation");
+                        ori = new MarkerOptions().position(new LatLng(ori_lat,ori_lng)).title(r.getOrigin());
                         request_accepted_map.addMarker(ori
                                 .position(ori.getPosition())
                                 .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_green_placeholder)));
@@ -306,7 +303,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                         String[]parts = dest_list.split(",");
                         Double dest_lat = Double.parseDouble(parts[0]);
                         Double dest_lng = Double.parseDouble(parts[1]);
-                        dest = new MarkerOptions().position(new LatLng(dest_lat,dest_lng)).title("Destination");
+                        dest = new MarkerOptions().position(new LatLng(dest_lat,dest_lng)).title(r.getDest());
                         request_accepted_map.addMarker(dest
                                 .position(dest.getPosition())
                                 .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_red_placeholder)));
