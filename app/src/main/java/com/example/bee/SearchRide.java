@@ -95,9 +95,8 @@ public class SearchRide extends AppCompatActivity {
                         String[] latlng = request.getOriginLatlng().split(",");
 
                         offerInfo.add(new Offer(request.getOrigin(), request.getDest(), String.format("%.2f", request.getCost()), Double.valueOf(latlng[0]), Double.valueOf(latlng[1]), request.getRiderID()));
-                        //                  notify adapter to update listview
+                        //   notify adapter to update listview
                         offerAdapter.notifyDataSetChanged();
-                        System.out.println("########################");
                     }
                 }
             }
