@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".EnterAddressMap">
 
+    <!--<include layout="@layout/activity_drawer"/>-->
+
     <fragment
         android:id="@+id/rider_initial_map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -22,10 +24,9 @@
         android:inputType="text"
         android:hint="Pickup location"
         android:background="@drawable/rounded_corner"
-        android:maxLength="40"
         android:padding="10dp"
         android:textColor="@color/black"
-        android:textColorHint="#C9C9C9"/>
+        android:textColorHint="#A9A9A9"/>
 
 
     <EditText
@@ -33,7 +34,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/to_address"
         android:padding="10dp"
-        android:maxLength="40"
         android:elevation="10dp"
         android:layout_alignLeft="@+id/from_address"
         android:layout_alignRight="@+id/from_address"
@@ -42,14 +42,16 @@
         android:inputType="text"
         android:textColor="@color/black"
         android:imeOptions="actionDone"
-        android:textColorHint="#C9C9C9"
+        android:textColorHint="#A9A9A9"
         android:background="@drawable/rounded_corner" />
 
     <ImageView
         android:id="@+id/profile_btn"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:src="@drawable/ic_to_drawer_foreground"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/show_route"
+        android:src="@drawable/ic_menu"
+        android:elevation="10dp"
         android:layout_below="@+id/show_route" />
 
     <Button
