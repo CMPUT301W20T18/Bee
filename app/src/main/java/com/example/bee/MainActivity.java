@@ -31,12 +31,9 @@ public class MainActivity extends AppCompatActivity {
         //Button btnMap = (Button) findViewById(R.id.btnMap);
         final Button transfer_request_Btn = findViewById(R.id.transfer_to_request);
 
-        transfer_request_Btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RiderAfterAcceptRequest.class);
-                startActivityForResult(intent, 1);
-            }
+        transfer_request_Btn.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, RiderAfterAcceptRequest.class);
+            startActivityForResult(intent, 1);
         });
 
 
