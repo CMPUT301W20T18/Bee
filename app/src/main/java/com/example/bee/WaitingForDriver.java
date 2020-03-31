@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -64,7 +65,7 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = Utils.getDatabase();
         ref = database.getReference("requests").child(userID).child("request");
 
         ref.addValueEventListener(new ValueEventListener() {
@@ -100,6 +101,18 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        CheckNetwork check = new CheckNetwork(getApplicationContext());
+        boolean result = check.isNetworkAvailable();
+        if (!result){
+            String text = "You are offline, unable to update your status";
+            Toast toast = Toast.makeText(WaitingForDriver.this, text, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+        }
+    }
 
     /**
      * Shows a confirm message that ask the user to confirm their cancel of request

@@ -292,14 +292,6 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void onResume() {
         super.onResume();
-        CheckNetwork check = new CheckNetwork(getApplicationContext());
-        boolean result = check.isNetworkAvailable();
-        if (!result){
-            String text = "You are offline, some functionalities may be unavailable";
-            Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER,0,0);
-            toast.show();
-        }
         DatabaseReference ref = database.getReference("requests").child(userID).child("request");
         // Check if the user has post any request
         // If there is a request then jump to the correct activity
@@ -313,6 +305,15 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                         startActivity(new Intent(EnterAddressMap.this, WaitingForDriver.class));
                     } else if (!reached) {
                         startActivity(new Intent(EnterAddressMap.this, RiderAfterAcceptRequest.class));
+                    }
+                } else {
+                    CheckNetwork check = new CheckNetwork(getApplicationContext());
+                    boolean result = check.isNetworkAvailable();
+                    if (!result){
+                        String text = "You are offline, some functionalities may be unavailable";
+                        Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER,0,0);
+                        toast.show();
                     }
                 }
             }

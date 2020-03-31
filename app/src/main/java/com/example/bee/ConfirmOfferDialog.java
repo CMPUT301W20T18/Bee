@@ -46,7 +46,6 @@ public class ConfirmOfferDialog extends DialogFragment {
 
     ConfirmOfferDialog(String driverID) {
         this.driverID = driverID;
-        // Toast.makeText(getActivity(), name+"2", Toast.LENGTH_SHORT).show();
     }
 
     public interface OnFragmentInteractionListener {
@@ -82,17 +81,16 @@ public class ConfirmOfferDialog extends DialogFragment {
         dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
         dialog.setCanceledOnTouchOutside(false);
         setCancelable(false);
+        driverName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), DriverBasicInformation.class));
+            }
+        });
         //if (name.isEmpty())
         //driverName.setText(name);
         //phoneNum.setText(phone);
 
-        /*driverName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ConfirmOfferDialog.this, DriverBasicInformation.class);
-                startActivity(intent);
-            }
-        });*/
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -107,6 +105,10 @@ public class ConfirmOfferDialog extends DialogFragment {
                     driverName.setText(name);
                     String phone = dataSnapshot.child("phone").getValue(String.class);
                     phoneNum.setText(phone);
+                    int thumbUp = dataSnapshot.child("thumbUp").getValue(Integer.class);
+                    rateUpText.setText(thumbUp);
+                    int thumbDown = dataSnapshot.child("thumbDown").getValue(Integer.class);
+                    rateDownText.setText(thumbDown);
                 }
             }
             @Override
