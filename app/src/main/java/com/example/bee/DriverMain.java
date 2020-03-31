@@ -72,7 +72,7 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback, 
         user = FirebaseAuth.getInstance().getCurrentUser();
         uid = user.getUid();
         profile = new UserProfile(uid);
-//        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
 
 
