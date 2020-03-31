@@ -85,6 +85,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
         UserProfile profile = new UserProfile(userID);
+        firebaseAuth = FirebaseAuth.getInstance();
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLastLocation();
