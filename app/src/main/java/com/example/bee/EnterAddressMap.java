@@ -45,8 +45,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,6 +61,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
         SetCost.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "TAG";
     private static final int REQUEST_CODE = 100;
+    private FirebaseDatabase database;
     private Location currentLocation;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private GoogleMap map;
@@ -80,6 +84,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
+        database = Utils.getDatabase();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
@@ -263,7 +268,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                             .findFragmentById(R.id.rider_initial_map);
                     mapFragment.getMapAsync(EnterAddressMap.this);
                 } else {
-                    String text = "Poor network connectivity";
+                    String text = "Poor network connection";
                     Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
@@ -285,6 +290,40 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        CheckNetwork check = new CheckNetwork(getApplicationContext());
+        boolean result = check.isNetworkAvailable();
+        if (!result){
+            String text = "You are offline, some functionalities may be unavailable";
+            Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+        }
+        DatabaseReference ref = database.getReference("requests").child(userID).child("request");
+        // Check if the user has post any request
+        // If there is a request then jump to the correct activity
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Boolean status = dataSnapshot.child("status").getValue(Boolean.class);
+                    Boolean reached = dataSnapshot.child("reached").getValue(Boolean.class);
+                    if (!status) {
+                        startActivity(new Intent(EnterAddressMap.this, WaitingForDriver.class));
+                    } else if (!reached) {
+                        startActivity(new Intent(EnterAddressMap.this, RiderAfterAcceptRequest.class));
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, databaseError.toString());
+            }
+        });
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
@@ -297,7 +336,6 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onMapLongClick(LatLng latLng) {
                 confirmBtn.setVisibility(View.GONE);
-
                 // If two markers are on the map then clear everything
                 if (markers == 2) {
                     markers = 0;
@@ -361,8 +399,6 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
      */
     @Override
     public void postRequest(double newCost) {
-
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference requestRef = database.getReference("requests").child(userID);
         HashMap<String,Request> request = new HashMap<>();
 

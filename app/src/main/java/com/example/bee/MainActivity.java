@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));}
         else{
             // if a user signed in, start drawerActivity
-            startActivity(new Intent(MainActivity.this, DrawerActivity.class));
+            startActivity(new Intent(MainActivity.this, EnterAddressMap.class));
         }
         finish();
 
