@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,7 @@ import com.akexorcist.googledirection.model.Info;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -77,11 +80,13 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
 
     MarkerOptions ori, dest;
-    Boolean drew = false;
     private static ArrayList<String> points = new ArrayList<>();
 
     private FirebaseUser user;
     FirebaseDatabase db;
+
+    FloatingActionButton fabConfirm, fabCancel;
+    private static final String rq_id = "PAvxlWke8KfOtRbuXuqo6TheIrw1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +96,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 //        String userID = user.getUid();
         db = FirebaseDatabase.getInstance();
         initMap();
-        drawPointsList();
         driver_name = (TextView)findViewById(R.id.driver_name);
         driver_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +104,22 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                 startActivity(intent);
             }
         });
+
+        fabCancel = findViewById(R.id.my_cancel);
+        fabConfirm = findViewById(R.id.my_confirm);
+        fabCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCancelDialog();
+            }
+        });
+        fabConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmDialog();
+            }
+        });
+
 
 
     }
@@ -117,15 +137,23 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Context mcontext = RiderAfterAcceptRequest.this;
+
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: map is ready");
 
         request_accepted_map = googleMap;
         request_accepted_map.setMyLocationEnabled(true);
         //request_accepted_map.getUiSettings().setCompassEnabled(true);
+        setOriDest();
+        drawPointsList();
+
+    }
+
+
+    private void setOriDest() {
+        Context mcontext = RiderAfterAcceptRequest.this;
         DatabaseReference ref = db.getReference("requests");
-        ref.child("PAvxlWke8KfOtRbuXuqo6TheIrw1")
+        ref.child(rq_id)
                 .child("request")
                 .child("originLatlng")
                 .addValueEventListener(new ValueEventListener() {
@@ -135,13 +163,13 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                         String[]parts = part_list.split(",");
                         Double lat = Double.parseDouble(parts[0]);
                         Double lng = Double.parseDouble(parts[1]);
-                        ori = new MarkerOptions().position(new LatLng(lat,lng)).title("Orientation");
+                        ori = new MarkerOptions().position(new LatLng(lat,lng)).title("Pick up location");
                         request_accepted_map.addMarker(ori
                                 .position(ori.getPosition())
                                 .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_green_placeholder)));
 
                         if (ori != null){
-                            ref.child("PAvxlWke8KfOtRbuXuqo6TheIrw1")
+                            ref.child(rq_id)
                                     .child("request")
                                     .child("destLatlng")
                                     .addValueEventListener(new ValueEventListener() {
@@ -158,12 +186,12 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
                                             if(dest != null){
                                                 LatLngBounds latLngBounds = new LatLngBounds.Builder()
-                                                    .include(ori.getPosition())
-                                                    .include(dest.getPosition())
-                                                    .build();
-                                                    //Move camera to include both points
-                                                    request_accepted_map.setPadding(     0,      350,      0,     0);
-                                                    request_accepted_map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
+                                                        .include(ori.getPosition())
+                                                        .include(dest.getPosition())
+                                                        .build();
+                                                //Move camera to include both points
+                                                request_accepted_map.setPadding(     0,      350,      0,     0);
+                                                request_accepted_map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
                                             }else{
                                                 Toast.makeText(mcontext, "Lack of destination", Toast.LENGTH_SHORT).show();
                                             }
@@ -184,19 +212,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
                     }
                 });
-
     }
-
-
-    private boolean getOriDest() {
-        try {
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true ; }
 
         /**
      * This is a method to set the model of marker
@@ -229,7 +245,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     private void drawPointsList(){
         DatabaseReference ref = db.getReference("requests");
-            ref.child("PAvxlWke8KfOtRbuXuqo6TheIrw1")
+            ref.child(rq_id)
                 .child("request")
                 .child("points")
                 .addValueEventListener(new ValueEventListener() {
@@ -256,6 +272,87 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
             }
         });
+    }
+
+    private void showCancelDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(RiderAfterAcceptRequest.this);
+        View view = getLayoutInflater().inflate(R.layout.activity_rider_after_accept_request_dialog,null);
+        TextView title = (TextView) view.findViewById(R.id.dialog_title);
+        title.setText("Are you sure you want to cancel the ride? ");
+        Button not_cancelBtn = view.findViewById(R.id.not_cancel_btn);
+        Button cancelBtn = view.findViewById(R.id.do_cancel_btn);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(RiderAfterAcceptRequest.this, "hohoho", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                DatabaseReference ref = db.getReference("requests").child(rq_id).child("request").child("cancel");
+                ref.setValue(true);
+                finish();
+            }
+        });
+        not_cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+    }
+
+    private void showConfirmDialog(){
+
+        Context mcontext = RiderAfterAcceptRequest.this;
+        AlertDialog.Builder builder = new AlertDialog.Builder(RiderAfterAcceptRequest.this);
+        View view = getLayoutInflater().inflate(R.layout.activity_rider_after_accept_request_dialog,null);
+        TextView title = (TextView) view.findViewById(R.id.dialog_title);
+        title.setText("Are you sure you reach the destination? ");
+        Button cancelBtn = view.findViewById(R.id.not_cancel_btn);
+        Button confirmBtn = view.findViewById(R.id.do_cancel_btn);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseReference ref = db.getReference("requests");
+                ref.child(rq_id)
+                        .child("request")
+                        .child("reached").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        boolean is_reach = (boolean)dataSnapshot.getValue();
+                        if (!is_reach){
+                            Toast.makeText(mcontext, "driver has not reach the destination!", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }else{
+                            DatabaseReference ref2 = db.getReference("requests").child(rq_id).child("request").child("finished");
+                            ref2.setValue(true);
+                            Intent intent = new Intent(RiderAfterAcceptRequest.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
     }
 
 

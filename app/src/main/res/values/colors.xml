@@ -4,4 +4,9 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="yellow">#f3bd37</color>
+    <color name="menu_button">#FFCF62</color>
+    <color name="menu_ripple">#DBBDA2</color>
+    <color name="menu_primary_pressed">#CC9405</color>
+    <color name="black">#0A0A0A</color>
+    <color name="red">#DA5454</color>
 </resources>
