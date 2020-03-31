@@ -39,7 +39,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 /**
  * This is a class that shows the situation after the rider confirms the driver's acceptance
@@ -127,6 +130,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             toast.setGravity(Gravity.CENTER,0,0);
             toast.show();
             loadOriDest();
+            loadRoute();
         }else{
             setOriDest();
             drawPointsList();
@@ -178,7 +182,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                             String latlng_str = child.getValue(String.class);
                             points.add(latlng_str);
                         }
-                        saveRoute(points);
+
                         ArrayList<LatLng> formal_points = new ArrayList<>();
                         for(String point : points){
                             String[] parts = point.split(",");
@@ -187,6 +191,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                             formal_points.add(new LatLng(lat,lng));
                         }
                         drawRoute(formal_points);
+                        saveRoute(formal_points);
 
 
                     }
@@ -330,30 +335,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     }
 
-    private void saveOriDest(String ori_list, String dest_list, String ori_name,String dest_name){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("ori_list",ori_list);
-        editor.putString("dest_list",dest_list);
-        editor.putString("ori_name",ori_name);
-        editor.putString("dest_name",dest_name);
-        editor.apply();
-
-    }
-
-
-    private void loadOriDest(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        String ori_list = sharedPreferences.getString("ori_list", "");
-        String dest_list = sharedPreferences.getString("dest_list", "");
-        String ori_name = sharedPreferences.getString("ori_name", "");
-        String dest_name = sharedPreferences.getString("dest_name", "");
-        if(!ori_list.equals("") && !dest_list.equals("") && !ori_name.equals("") && !dest_name.equals("")){
-            addSign(ori_list,dest_list,ori_name,dest_name);
-        }
-
-    }
-
     private void addSign(String ori_list, String dest_list,String ori_name, String dest_name){
         Context mcontext = RiderAfterAcceptRequest.this;
         String[]ori_parts = ori_list.split(",");
@@ -382,8 +363,55 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         }
     }
 
-    private void saveRoute(ArrayList<String> points){
-        
+    private void saveOriDest(String ori_list, String dest_list, String ori_name,String dest_name){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("ori_list",ori_list);
+        editor.putString("dest_list",dest_list);
+        editor.putString("ori_name",ori_name);
+        editor.putString("dest_name",dest_name);
+        editor.apply();
+
+    }
+
+
+    private void loadOriDest(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String ori_list = sharedPreferences.getString("ori_list", "");
+        String dest_list = sharedPreferences.getString("dest_list", "");
+        String ori_name = sharedPreferences.getString("ori_name", "");
+        String dest_name = sharedPreferences.getString("dest_name", "");
+        if(!ori_list.equals("") && !dest_list.equals("") && !ori_name.equals("") && !dest_name.equals("")){
+            addSign(ori_list,dest_list,ori_name,dest_name);
+        }
+
+    }
+
+
+
+    private void saveRoute(ArrayList<LatLng> points){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(points);
+        editor.putString("route",json);
+        editor.apply();
+        Toast.makeText(RiderAfterAcceptRequest.this, "save route", Toast.LENGTH_SHORT).show();
+    }
+
+    private void loadRoute(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("route",null);
+        Type type = new TypeToken<ArrayList<LatLng>>() {}.getType();
+        ArrayList<LatLng> store_points = gson.fromJson(json,type);
+
+        if(store_points == null){
+            Toast.makeText(RiderAfterAcceptRequest.this, "no data!", Toast.LENGTH_SHORT).show();
+        }else{
+            drawRoute(store_points);
+        }
+
     }
 
     private void removeRequest(){
