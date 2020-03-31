@@ -224,7 +224,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                 dialog.dismiss();
                 DatabaseReference ref = db.getReference("requests").child(userID).child("request").child("cancel");
                 ref.setValue(true);
-                finish();
+                startActivity(new Intent(RiderAfterAcceptRequest.this, EnterAddressMap.class));
             }
         });
         not_cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -262,12 +262,12 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                         Request r = dataSnapshot.getValue(Request.class);
                         boolean is_reach = r.getReached();
                         if (!is_reach){
-                            Toast.makeText(mcontext, "driver has not reach the destination!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mcontext, "Driver has not reach the destination!", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }else{
                             DatabaseReference ref2 = db.getReference("requests").child(userID).child("request").child("finished");
-                            ref2.setValue(false);
-                            Intent intent = new Intent(RiderAfterAcceptRequest.this, MainActivity.class);
+                            ref2.setValue(true);
+                            Intent intent = new Intent(RiderAfterAcceptRequest.this, RiderPayActivity.class);
                             startActivity(intent);
                         }
                     }
@@ -428,13 +428,4 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         ref.removeValue();
 
     }
-
-
-
-
-
-
-
-
-
 }

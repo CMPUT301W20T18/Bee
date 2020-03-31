@@ -31,7 +31,7 @@ import java.util.HashMap;
 /**
  *  This class supports user to edit their contact information
  */
-public class EditProfileActivity extends AppCompatActivity {
+public class EditProfileActivityD extends AppCompatActivity {
     public static final String TAG = "TAG";
     private ImageView logo;
     private TextView username;
@@ -67,7 +67,7 @@ public class EditProfileActivity extends AppCompatActivity {
  *  validate changed info
  */
                 if (email.getText().toString().contains("@") == false ){
-                    Toast.makeText(EditProfileActivity.this,"invalid email",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProfileActivityD.this,"invalid email",Toast.LENGTH_SHORT).show();
                     return;
 
                 }
@@ -75,15 +75,15 @@ public class EditProfileActivity extends AppCompatActivity {
                 ref.child(userID).child("phone").setValue(phone.getText().toString());
                 ref.child(userID).child("email").setValue(email.getText().toString());
 
-                startActivity(new Intent(EditProfileActivity.this, EnterAddressMap.class));
+                startActivity(new Intent(EditProfileActivityD.this, DriverMain.class));
             }
         });
 
     }
 
-/**
- *  This method initializes GUI and gets the user's current information
- */
+    /**
+     *  This method initializes GUI and gets the user's current information
+     */
     private void initializeGUI() {
 
         logo = findViewById(R.id.ivRegLogo);

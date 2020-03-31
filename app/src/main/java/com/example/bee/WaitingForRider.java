@@ -117,19 +117,15 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         RequestMoneyAmount.setText("$" + passMoneyAmount);
         if(passRiderName != null){
             riderName.setText(passRiderName);
-
         }else{
             riderName.setText("Invalid rider name");
         }
         if(passMoneyAmount != null){
             RequestMoneyAmount.setText("$" + passMoneyAmount);
-
-
         }else{
             RequestMoneyAmount.setText("Invalid amount");
 
         }
-
 
         // Depends rider response to process to next activity
         DatabaseReference statusRef = database.getReference("requests").child(passRiderID).child("request").child("status");
@@ -140,7 +136,6 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 //                riderResponse = Boolean.parseBoolean(riderResponseString);
                     riderResponse = dataSnapshot.getValue(Boolean.class);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -172,14 +167,6 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                         if(!riderResponse){
                             RequestStatus.setText("Waiting for comfirmation......");
                             finishButton.setVisibility(View.GONE);
-                            finishButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-//                Intent intent = new Intent(WaitingForRider.this, )
-                                    finish();
-                                }
-                            });
-
                         }
                     }
                 }
@@ -189,7 +176,6 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                 Log.d(TAG, databaseError.toString());
             }
         });
-
 
         driverCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,7 +218,6 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         Log.d(TAG, "onMapReady: Map is ready");
         map = googleMap;
         Bundle bundle = getIntent().getExtras();
-        String passMoneyAmount = bundle.getString("passMoneyAmount");
         passRiderID = bundle.getString("passRiderID");
         if(passRiderID != null){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -307,7 +292,6 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 //                        mapPop.addMarker(toAddress.position(to_position)
 //                                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
                     }
-
                 }
 
                 @Override

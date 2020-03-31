@@ -22,5 +22,7 @@
     <string name="FirstName"> First Name</string>
     <string name="LastName"> Last Name</string>
     <string name="hello_world"> Last Name</string>
+    <string name="rating_hint">Want to do better? Click here!</string>
+    <string name="driver_hint">Ready to offer your first ride? Click here!</string>
 
 </resources>
