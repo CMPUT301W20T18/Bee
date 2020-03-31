@@ -142,6 +142,7 @@ public class SearchRide extends AppCompatActivity {
                 show.putExtra("passOriginLatlng",passOriginLatlng);
                 show.putExtra("passDestLatlng",passDestLatlng);
                 show.putExtra("passRiderID",passRiderID);
+                show.putExtra("passDriverID",driverId);
 
                 startActivity(show);
             }
