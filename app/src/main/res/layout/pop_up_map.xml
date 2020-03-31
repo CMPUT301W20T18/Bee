@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+
+    android:id="@+id/pop_up_layout"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:background="@drawable/dialog_box"
 
 
@@ -28,19 +31,25 @@
 
         <TextView
             android:id="@+id/rider_name"
+            android:textStyle="bold"
             android:layout_width="140dp"
             android:layout_height="62dp"
             android:layout_gravity="top"
             android:layout_marginTop="-7dp"
             android:hint="riderId"
+            android:text="riderID"
+
             android:textColor="#000"
-            android:textSize="19dp" />
+            android:textSize="25dp" />
 
         <TextView
             android:id="@+id/money_amount_in_pop"
-            android:layout_width="153dp"
-            android:layout_height="82dp"
+            android:layout_width="140dp"
+            android:layout_height="62dp"
             android:hint="AmountOfMoney"
+            android:layout_marginTop="-7dp"
+
+            android:text="$amount"
             android:textColor="#000"
             android:textSize="18dp"
             android:textStyle="bold" />
@@ -67,12 +76,14 @@
 
         <Button
             android:id="@+id/accept_button"
-            android:layout_width="119dp"
+            android:layout_width="196dp"
             android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
 
-            android:layout_marginEnd="202dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="197dp"
             android:layout_marginBottom="0dp"
             android:background="#fff"
             android:text="Accept"
@@ -80,16 +91,16 @@
 
         <Button
             android:id="@+id/cancel_button"
-            android:layout_width="117dp"
+            android:layout_width="200dp"
 
             android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="85dp"
-            android:layout_marginBottom="0dp"
+
+            android:layout_marginStart="131dp"
+            android:layout_marginEnd="62dp"
             android:layout_weight="1"
             android:background="#fff"
-
             android:text="Cancel"
             android:textColor="#000" />
         <!--            android:layout_marginStart="216dp"-->

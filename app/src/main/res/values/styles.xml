@@ -10,8 +10,11 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@color/white</item>
-    </style>
 
+    </style>
+    <style name="Theme.DoNotDim" parent="android:Theme">
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/zoom_in</item>
         <item name="android:windowExitAnimation">@anim/zoom_out</item>

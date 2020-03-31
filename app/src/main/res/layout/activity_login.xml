@@ -9,13 +9,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="510dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
 
         android:layout_centerInParent="true"
-        android:layout_marginStart="-3dp"
-        android:layout_marginBottom="130dp">
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="87dp">
 
 
         <LinearLayout
@@ -37,12 +37,12 @@
                 android:src="@drawable/logo" />
 
 
-
             <AutoCompleteTextView
                 android:id="@+id/atvUsernameReg"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginBottom="10dp"
+                android:background="@drawable/rounded_rect"
                 android:drawableStart="@drawable/icon_person"
                 android:drawableLeft="@drawable/icon_person"
                 android:drawablePadding="10dp"
@@ -51,7 +51,6 @@
                 android:paddingEnd="10dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/gray"
-                android:background="@drawable/rounded_rect"
                 android:textSize="15sp" />
 
 
@@ -60,19 +59,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginBottom="10dp"
+                android:background="@drawable/rounded_rect"
                 android:drawableStart="@drawable/icon_password"
                 android:drawableLeft="@drawable/icon_password"
                 android:drawablePadding="10dp"
                 android:hint="Password"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:imeOptions="actionDone"
                 android:textColor="@color/gray"
                 android:textColorHint="@color/gray"
-                android:background="@drawable/rounded_rect"
                 android:textSize="15sp" />
-
 
 
             <Button
