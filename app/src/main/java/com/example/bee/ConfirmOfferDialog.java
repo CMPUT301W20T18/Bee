@@ -38,14 +38,16 @@ public class ConfirmOfferDialog extends DialogFragment {
     private static final String TAG = "TAG";
     private FirebaseUser user;
     private DatabaseReference ref;
-    private String driverID;
     private String name;
     private String phone;
-    private String rateUp;
-    private String rateDown;
+    private int rateUp;
+    private int rateDown;
 
-    ConfirmOfferDialog(String driverID) {
-        this.driverID = driverID;
+    ConfirmOfferDialog(String name, String phone, int rateUp, int rateDown) {
+        this.name = name;
+        this.phone = phone;
+        this.rateUp = rateUp;
+        this.rateDown = rateDown;
     }
 
     public interface OnFragmentInteractionListener {
@@ -87,12 +89,17 @@ public class ConfirmOfferDialog extends DialogFragment {
                 startActivity(new Intent(getContext(), DriverBasicInformation.class));
             }
         });
-        //if (name.isEmpty())
-        //driverName.setText(name);
-        //phoneNum.setText(phone);
+
+        if (driverName.getText().toString().isEmpty()) {
+            // Initialize the dialog with driver's info
+            driverName.setText(name);
+            phoneNum.setText(phone);
+            rateUpText.setText(String.valueOf(rateUp));
+            rateDownText.setText(String.valueOf(rateDown));
+        }
 
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        /*user = FirebaseAuth.getInstance().getCurrentUser();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         ref = database.getReference("users").child(driverID);
@@ -115,7 +122,7 @@ public class ConfirmOfferDialog extends DialogFragment {
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(TAG, databaseError.toString());
             }
-        });
+        });*/
 
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +143,4 @@ public class ConfirmOfferDialog extends DialogFragment {
         dialog.show();
         return dialog;
     }
-
-
-
 }

@@ -67,6 +67,7 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
 
         FirebaseDatabase database = Utils.getDatabase();
         ref = database.getReference("requests").child(userID).child("request");
+        // ref.child("driverID").setValue("UtuKe7xERVPMOdfDeWLL12sdioJ3");
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -81,8 +82,25 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
                 if (request != null) {
                     driverID = request.getDriverID();
                     if (driverID != null) {
-                        // Show confirm ride offer dialog
-                        new ConfirmOfferDialog(driverID).show(getSupportFragmentManager(), "show_driver");
+                        DatabaseReference newRef = database.getReference("users").child(driverID);
+                        newRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String name = dataSnapshot.child("firstName").getValue(String.class)
+                                        + " " + dataSnapshot.child("lastName").getValue(String.class);
+                                String phone = dataSnapshot.child("phone").getValue(String.class);
+                                int thumbUp = dataSnapshot.child("thumbUp").getValue(Integer.class);
+                                int thumbDown = dataSnapshot.child("thumbDown").getValue(Integer.class);
+                                // Show confirm ride offer dialog
+                                new ConfirmOfferDialog(name, phone, thumbUp, thumbDown)
+                                        .show(getSupportFragmentManager(), "show_driver");
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Log.d(TAG, databaseError.toString());
+                            }
+                        });
                     }
                 }
             }
@@ -153,7 +171,10 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
      * Rider side will notify the driver that the offer has been accepted
      */
     public void acceptOffer() {
-        // Update request in Firebase with status = true;
+        // Update request in FireBase with status = true;
+        ref.child("status").setValue(true);
+        startActivity(new Intent(WaitingForDriver.this, RiderAfterAcceptRequest.class));
+        /*
         request.setStatus(true);
         HashMap<String,Request> updatedRequest = new HashMap<>();
         updatedRequest.put("request", request);
@@ -161,14 +182,14 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "onSuccess: rider accepted the offer");
-                //startActivity(new Intent(WaitingForDriver.this, RiderAfter));
+                startActivity(new Intent(WaitingForDriver.this, RiderAfterAcceptRequest.class));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG, "onFailure: " + e.toString());
             }
-        });
+        });*/
     }
 
     /**
@@ -176,7 +197,8 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
      */
     public void declineOffer() {
         // Update request in Firebase with driverID = null
-        request.setDriverID(null);
+        ref.child("driverID").setValue(null);
+        /*request.setDriverID(null);
         HashMap<String,Request> updatedRequest = new HashMap<>();
         updatedRequest.put("request", request);
         ref.getParent().setValue(updatedRequest).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -189,7 +211,7 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG, "onFailure: " + e.toString());
             }
-        });
+        });*/
     }
 
     @Override
