@@ -75,6 +75,7 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback, 
 
 
 
+
         //  Search button method
         final Button searchButton = findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener(){

@@ -86,11 +86,15 @@ public class SearchRide extends AppCompatActivity {
         ref = database.getReference("requests");
 
 
-
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                Using for loop to obtain all current reqeusts in database and add them into list view
+                // empty the list array if it has requests in it before update from firebase
+                if (!offerInfo.isEmpty()){
+                    offerInfo.clear();
+                }
+                //                Using for loop to obtain all current reqeusts in database and add them into list view
+
                 for(DataSnapshot dsp:dataSnapshot.getChildren()){
                     // Adding condition so that driver can't see request made by his/her own account
                     if (dsp.child("request").exists() && !dsp.getKey().equals(driverId)) {
@@ -103,12 +107,13 @@ public class SearchRide extends AppCompatActivity {
                     }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+
+
 
 //        Going back to driver's main activity
         backButton = findViewById(R.id.backButtonDriver);
