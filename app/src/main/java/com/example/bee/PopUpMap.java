@@ -1,5 +1,6 @@
 package com.example.bee;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -89,10 +90,9 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.pop_up_map);
-//            mapPop.getMapType().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            linearLayout = findViewById(R.id.pop_up_layout);
 
+            setContentView(R.layout.pop_up_map);
+            linearLayout = findViewById(R.id.pop_up_layout);
             riderName = findViewById(R.id.rider_name);
             requestMoneyAmount = findViewById(R.id.money_amount_in_pop);
 
@@ -123,7 +123,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             initMap();
 
 
-//            setUpGUI();
             AcceptButton = findViewById(R.id.accept_button);
             CancelButton = findViewById(R.id.cancel_button);
 //        initialize the map as a pop up window
@@ -136,26 +135,17 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             String passMoneyAmount = bundle.getString("passMoneyAmount");
             passRiderID = bundle.getString("passRiderID");
             getWindow().setLayout((int) (width * 0.8), (int) (height * .6));
-            getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
 
 //        set up the accept button
             AcceptButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+//                    pass the value to the next activity
                     Intent show = new Intent(PopUpMap.this,WaitingForRider.class);
                     show.putExtra("passMoneyAmount",passMoneyAmount);
                     show.putExtra("passRiderID",passRiderID);
                     show.putExtra("passRiderName",riderNameString);
                         startActivity(show);
-//                    } else {
-//                        String text = "Invalid Amount";
-//                        Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
-//                        toast.setGravity(Gravity.TOP, 0, 0);
-//                        toast.show();
-//                        final Intent show = new Intent(PopUpMap.this, WaitingForRider.class);
-//                        startActivity(show);
-//                    }
                 }
             });
 //        set up the cancel button
@@ -169,6 +159,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
 
         }
+//        load the bitmap
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
         vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
@@ -177,30 +168,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
-//        set up the User information on the interface
-//    public void setUpGUI() {
-////        user = FirebaseAuth.getInstance().getCurrentUser();
-////        if(user != null){
-////            userID = firebaseAuth.getCurrentUser().getUid();
-////        }
-////
-////        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-////        final DatabaseReference ref = database.getReference("users");
-////        ref.child(userID).addValueEventListener(new ValueEventListener() {
-////            @Override
-////            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-////                    riderID.setText(userID);
-////            }
-////
-////            @Override
-////            public void onCancelled(@NonNull DatabaseError databaseError) {
-////
-////            }
-////        });
-//        userID =
-//        riderID.setText(userID);
-//
-//    }
+
     /**
      * This initialize the map to start
      */
@@ -222,10 +190,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: Map is ready");
         mapPop = googleMap;
-//        LatLng place1_postion = new LatLng(53.523220,-113.526321);
-//        place1 = new MarkerOptions().position(place1_postion).title("Orientation");
-//        LatLng place2_postion = new LatLng(53.484300,-113.517250);
-//        place2 = new MarkerOptions().position(place2_postion).title("Destination");
 
         user = firebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
@@ -243,10 +207,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     String originString = dataSnapshot.getValue(String.class);
                     String[] afterSplitLoc = originString.split(",");
-//                        LatLng place1_postion = new LatLng();
-//        place1 = new MarkerOptions().position(place1_postion).title("Orientation");
-//        LatLng place2_postion = new LatLng(53.484300,-113.517250);
-//        place2 = new MarkerOptions().position(place2_postion).title("Destination");
                     double originLatitude = Double.parseDouble(afterSplitLoc[0]);
                     double originLongitude = Double.parseDouble(afterSplitLoc[1]);
                     LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
@@ -300,14 +260,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
                         Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
-
-                    }else{
-                        String tripTime = ref.child("time").toString();
-//                        mapPop.addMarker()
-//                        mapPop.addMarker(toAddress.position(to_position)
-//                                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_green_placeholder)));
                     }
-
                 }
 
                 @Override
@@ -315,20 +268,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
                 }
             });
-//                String tripTime = ref.child("time").toString();
-//                LatLng destLatlng = ref.child("destLaglng");
-//                String originStringTemp = ref.child("originLatlng").get();
-//                riderID.setText(originStringTemp);
-//                String originString = originStringTemp.substring(1).substring(0, originStringTemp.length() - 2 );
-//
-//
-//
-//                String destString = destStringTemp.substring(1).substring(0, destStringTemp.length() - 2 );
-//
-
-//
-//
-
 
         }
         boolean result = isNetworkAvailable();
