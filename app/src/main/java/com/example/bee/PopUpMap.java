@@ -134,6 +134,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             Bundle bundle = getIntent().getExtras();
             String passMoneyAmount = bundle.getString("passMoneyAmount");
             passRiderID = bundle.getString("passRiderID");
+            String passDriverID = bundle.getString("passDriverID");
             getWindow().setLayout((int) (width * 0.8), (int) (height * .6));
 
 //        set up the accept button
@@ -145,6 +146,11 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
                     show.putExtra("passMoneyAmount",passMoneyAmount);
                     show.putExtra("passRiderID",passRiderID);
                     show.putExtra("passRiderName",riderNameString);
+
+                    DatabaseReference driverIDRef = ref.child("driverID");
+                    driverIDRef.setValue(passDriverID);
+
+
                         startActivity(show);
                 }
             });
