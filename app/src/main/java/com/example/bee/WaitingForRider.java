@@ -180,7 +180,13 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         driverCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WaitingForRider.this, PopUpMap.class));
+                Intent intent = new Intent(WaitingForRider.this, PopUpMap.class);
+//                intent.putExtra("passMoneyAmount",passMoneyAmount);
+//                intent.putExtra("passRiderID",passRiderID);
+//                intent.putExtra("passRiderName",riderNameString);
+                startActivity(intent);
+
+
             }
         });
 
