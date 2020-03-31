@@ -41,11 +41,8 @@ public class SearchRide extends AppCompatActivity {
 
 //    initializing local variables
     private static final String TAG = "TAG";
-    private FirebaseUser fDriver;
     private String driverId;
     private DatabaseReference ref;
-    private String from;
-    private String to;
     String passDistance;
     Request request;
     String passMoneyAmount;
@@ -54,7 +51,6 @@ public class SearchRide extends AppCompatActivity {
     ImageView backButton;
     ArrayAdapter<Offer> offerAdapter;
     ArrayList<Offer> offerInfo;
-    ArrayList<Request> request_list;
     ListView offerList;
 
     private String searchAddress;
@@ -129,11 +125,8 @@ public class SearchRide extends AppCompatActivity {
                 String passRiderID = tempOffer.getRiderId();
                 String passOriginLatlng = tempOffer.getStartingPoint();
                 String passDestLatlng = tempOffer.getEndPoint();
-//                passMoneyAmount = String.format("%.2f",tempOffer.getFare());
                 passMoneyAmount = tempOffer.getFare();
-//                passDistance = tempOffer.get;
                 show.putExtra("passMoneyAmount",passMoneyAmount);
-//                show.putExtra("passDistance",passDistance);
                 show.putExtra("passOriginLatlng",passOriginLatlng);
                 show.putExtra("passDestLatlng",passDestLatlng);
                 show.putExtra("passRiderID",passRiderID);
