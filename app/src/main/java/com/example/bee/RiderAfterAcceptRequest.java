@@ -69,7 +69,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
 
         db = FirebaseDatabase.getInstance();
-        db.setPersistenceEnabled(true);
+        //db.setPersistenceEnabled(true);
         initMap();
 
 
