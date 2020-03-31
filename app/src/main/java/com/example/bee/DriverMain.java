@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  *This is a class that used for Driver, the map with current location
@@ -49,6 +51,9 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback, 
     private FirebaseAuth firebaseAuth;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private String uid;
+    private UserProfile profile;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -62,6 +67,12 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback, 
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getCurrentLocation();
+
+        // assign current user id and profile object
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        uid = user.getUid();
+        profile = new UserProfile(uid);
+
 
 
         //  Search button method
@@ -84,10 +95,13 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback, 
 //                startActivity(profile);
 //            }
 //        });
+
+        TextView displayName = navigationView.getHeaderView(0).findViewById(R.id.profileName);
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Display drawer activity
+                displayName.setText(String.format("%s %s", profile.getFirstName(), profile.getLastName()));
                 drawerLayout.openDrawer(Gravity.LEFT);
             }
         });
