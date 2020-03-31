@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -22,7 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DriverConfirmActivity"></activity>
+        <activity android:name=".RiderRatingActivity"></activity>
+        <activity android:name=".DriverConfirmActivity" />
         <activity android:name=".DriverPayActivity" />
         <activity android:name=".RiderPayActivity" />
         <activity android:name=".EditProfileActivity" />
@@ -49,9 +49,7 @@
         <activity android:name=".DriverBasicInformation" />
         <activity android:name=".RiderAfterAcceptRequest" />
         <activity android:name=".DriverMain" />
-        <activity android:name=".WaitingForRider" />
-<!--        <activity android:name=".SearchRide" />-->
-
+        <activity android:name=".WaitingForRider" /> <!-- <activity android:name=".SearchRide" /> -->
         <activity android:name=".PopUpMap" />
     </application>
 
