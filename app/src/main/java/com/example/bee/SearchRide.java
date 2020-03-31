@@ -129,11 +129,8 @@ public class SearchRide extends AppCompatActivity {
                 String passRiderID = tempOffer.getRiderId();
                 String passOriginLatlng = tempOffer.getStartingPoint();
                 String passDestLatlng = tempOffer.getEndPoint();
-//                passMoneyAmount = String.format("%.2f",tempOffer.getFare());
                 passMoneyAmount = tempOffer.getFare();
-//                passDistance = tempOffer.get;
                 show.putExtra("passMoneyAmount",passMoneyAmount);
-//                show.putExtra("passDistance",passDistance);
                 show.putExtra("passOriginLatlng",passOriginLatlng);
                 show.putExtra("passDestLatlng",passDestLatlng);
                 show.putExtra("passRiderID",passRiderID);

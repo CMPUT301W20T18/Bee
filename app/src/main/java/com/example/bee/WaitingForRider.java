@@ -63,6 +63,9 @@ import static android.content.ContentValues.TAG;
 public class WaitingForRider extends FragmentActivity implements OnMapReadyCallback {
     private FirebaseFirestore db;
     private FirebaseUser user;
+    private Request request;
+    private String driverID;
+
     private String originAddress;
     private String destAddress;
     TextView riderName;
@@ -73,7 +76,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
     TextView RequestStatus;
 //    RiderDecision riderDecision;
     Boolean riderResponse = true;
-    ArrayList<Request> request;
+//    ArrayList<Request> request;
     RelativeLayout driverCard;
     Boolean myLocationPermission = false;
     MarkerOptions place1;
@@ -106,11 +109,8 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         //        hide the finish button until the rider make response
         finishButton = findViewById(R.id.finish_button);
         finishButton.setVisibility(View.GONE);
-<<<<<<< HEAD
 
-=======
         //hide the finish button until the rider make response
->>>>>>> 4033e7fccc1efabe3aa498bb8216706e57f1f853
         RequestStatus = findViewById(R.id.request_status);
         RequestMoneyAmount.setText("$" + passMoneyAmount);
         if(passRiderName != null){
@@ -144,36 +144,51 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
             }
         });
-
-        if(riderResponse){
-            RequestStatus.setText("Confirmed ride offer");
-            finishButton.setVisibility(View.VISIBLE);
-            finishButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(WaitingForRider.this, DriverPayActivity.class);
-                    intent.putExtra("Rider", passRiderName);
-                    intent.putExtra("RiderID", passRiderID);
-                    intent.putExtra("amount", Double.parseDouble(passMoneyAmount));
-                    startActivity(intent);
-                }
-            });
-        }
-        if(!riderResponse){
-            RequestStatus.setText("Waiting for comfirmation......");
-            finishButton.setVisibility(View.GONE);
-            finishButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                request = dataSnapshot.getValue(Request.class);
+                if (request != null) {
+                    driverID = request.getDriverID();
+                    if (driverID == null) {
+                        RequestStatus.setText("Declined offer");
+                    }else{
+                        if(riderResponse){
+                            RequestStatus.setText("Confirmed ride offer");
+                            finishButton.setVisibility(View.VISIBLE);
+                            finishButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(WaitingForRider.this, DriverPayActivity.class);
+                                    intent.putExtra("Rider", passRiderName);
+                                    intent.putExtra("RiderID", passRiderID);
+                                    intent.putExtra("amount", Double.parseDouble(passMoneyAmount));
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                        if(!riderResponse){
+                            RequestStatus.setText("Waiting for comfirmation......");
+                            finishButton.setVisibility(View.GONE);
+                            finishButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 //                Intent intent = new Intent(WaitingForRider.this, )
-                    finish();
-                }
-            });
+                                    finish();
+                                }
+                            });
 
-        }
-//        else{
-//            RequestStatus.setText("Declined ride offer");
-//        }
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, databaseError.toString());
+            }
+        });
+
+
         driverCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
