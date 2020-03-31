@@ -58,7 +58,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     FirebaseDatabase db;
 
     FloatingActionButton fabConfirm, fabCancel;
-    private static final String rq_id = "RCgTZRBDuJfDrshixp49aZxXsgb2";
+    private static final String rq_id = "PAvxlWke8KfOtRbuXuqo6TheIrw1";
 
     public static final String SHARED_PREFS = "sharedPrefs";
 
@@ -69,7 +69,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 //        user = FirebaseAuth.getInstance().getCurrentUser();
 //        String userID = user.getUid();
         db = FirebaseDatabase.getInstance();
-        db.setPersistenceEnabled(true);
+//        db.setPersistenceEnabled(true);
         initMap();
 
 
