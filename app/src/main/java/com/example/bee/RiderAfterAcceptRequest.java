@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -39,7 +40,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 /**
  * This is a class that shows the situation after the rider confirms the driver's acceptance
@@ -60,16 +64,18 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     FloatingActionButton fabConfirm, fabCancel;
 
+    //private static final String rq_id = "PAvxlWke8KfOtRbuXuqo6TheIrw1";
+
+    public static final String SHARED_PREFS = "sharedPrefs";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_after_accept_request);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-
-
         db = FirebaseDatabase.getInstance();
-        db.setPersistenceEnabled(true);
+        //db.setPersistenceEnabled(true);
         initMap();
 
 
@@ -125,9 +131,14 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             Toast toast = Toast.makeText(RiderAfterAcceptRequest.this, "You are offline", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER,0,0);
             toast.show();
+            loadOriDest();
+            loadRoute();
+        }else{
+            setOriDest();
+            drawPointsList();
         }
-        setOriDest();
-        drawPointsList();
+
+        //removeRequest();
     }
 
 
@@ -162,8 +173,8 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     private void drawPointsList(){
         String userID = user.getUid();
-
         DatabaseReference ref = db.getReference("requests");
+        //ref.child(rq_id)
         ref.child(userID)
                 .child("request")
                 .child("points")
@@ -175,6 +186,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                             String latlng_str = child.getValue(String.class);
                             points.add(latlng_str);
                         }
+
                         ArrayList<LatLng> formal_points = new ArrayList<>();
                         for(String point : points){
                             String[] parts = point.split(",");
@@ -183,7 +195,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                             formal_points.add(new LatLng(lat,lng));
                         }
                         drawRoute(formal_points);
-
+                        saveRoute(formal_points);
 
                     }
                     @Override
@@ -212,7 +224,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                 dialog.dismiss();
                 DatabaseReference ref = db.getReference("requests").child(userID).child("request").child("cancel");
                 ref.setValue(true);
-                finish();
+                startActivity(new Intent(RiderAfterAcceptRequest.this, EnterAddressMap.class));
             }
         });
         not_cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -242,6 +254,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             @Override
             public void onClick(View v) {
                 DatabaseReference ref = db.getReference("requests");
+                //ref.child(rq_id)
                 ref.child(userID)
                         .child("request").addValueEventListener(new ValueEventListener() {
                     @Override
@@ -249,12 +262,12 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                         Request r = dataSnapshot.getValue(Request.class);
                         boolean is_reach = r.getReached();
                         if (!is_reach){
-                            Toast.makeText(mcontext, "driver has not reach the destination!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mcontext, "Driver has not reach the destination!", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }else{
                             DatabaseReference ref2 = db.getReference("requests").child(userID).child("request").child("finished");
-                            ref2.setValue(false);
-                            Intent intent = new Intent(RiderAfterAcceptRequest.this, MainActivity.class);
+                            ref2.setValue(true);
+                            Intent intent = new Intent(RiderAfterAcceptRequest.this, RiderPayActivity.class);
                             startActivity(intent);
                         }
                     }
@@ -288,8 +301,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     private void setOriDest(){
         String userID = user.getUid();
-
-        Context mcontext = RiderAfterAcceptRequest.this;
+        //Context mcontext = RiderAfterAcceptRequest.this;
         DatabaseReference ref = db.getReference("requests");
         ref.child(userID)
                 .child("request")
@@ -297,32 +309,15 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Request r = dataSnapshot.getValue(Request.class);
+//                        if (r == null){
+//                            System.out.println("nulll!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//                        }
                         String ori_list = r.getOriginLatlng();
-
-                        String[]ori_parts = ori_list.split(",");
-                        Double ori_lat = Double.parseDouble(ori_parts[0]);
-                        Double ori_lng = Double.parseDouble(ori_parts[1]);
-                        ori = new MarkerOptions().position(new LatLng(ori_lat,ori_lng)).title(r.getOrigin());
-                        request_accepted_map.addMarker(ori
-                                .position(ori.getPosition())
-                                .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_green_placeholder)));
                         String dest_list = r.getDestLatlng();
-                        String[]parts = dest_list.split(",");
-                        Double dest_lat = Double.parseDouble(parts[0]);
-                        Double dest_lng = Double.parseDouble(parts[1]);
-                        dest = new MarkerOptions().position(new LatLng(dest_lat,dest_lng)).title(r.getDest());
-                        request_accepted_map.addMarker(dest
-                                .position(dest.getPosition())
-                                .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_red_placeholder)));
-                        if(dest != null && ori != null){
-                            LatLngBounds latLngBounds = new LatLngBounds.Builder()
-                                    .include(ori.getPosition())
-                                    .include(dest.getPosition())
-                                    .build();
-                            //Move camera to include both points
-                            request_accepted_map.setPadding(     0,      350,      0,     0);
-                            request_accepted_map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
-                        }
+                        String ori_name = r.getOrigin();
+                        String dest_name = r.getDest();
+                        addSign(ori_list,dest_list,ori_name,dest_name);
+                        saveOriDest(ori_list,dest_list,ori_name,dest_name);
                         if (r.getReached()){
                             Toast.makeText(RiderAfterAcceptRequest.this, "Driver has arrived the destination, please confirm", Toast.LENGTH_SHORT).show();
 
@@ -348,12 +343,89 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     }
 
+    private void addSign(String ori_list, String dest_list,String ori_name, String dest_name){
+        Context mcontext = RiderAfterAcceptRequest.this;
+        String[]ori_parts = ori_list.split(",");
+        Double ori_lat = Double.parseDouble(ori_parts[0]);
+        Double ori_lng = Double.parseDouble(ori_parts[1]);
+        ori = new MarkerOptions().position(new LatLng(ori_lat,ori_lng)).title(ori_name);
+        request_accepted_map.addMarker(ori
+                .position(ori.getPosition())
+                .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_green_placeholder)));
+
+        String[]parts = dest_list.split(",");
+        Double dest_lat = Double.parseDouble(parts[0]);
+        Double dest_lng = Double.parseDouble(parts[1]);
+        dest = new MarkerOptions().position(new LatLng(dest_lat,dest_lng)).title(dest_name);
+        request_accepted_map.addMarker(dest
+                .position(dest.getPosition())
+                .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_red_placeholder)));
+        if(dest != null && ori != null){
+            LatLngBounds latLngBounds = new LatLngBounds.Builder()
+                    .include(ori.getPosition())
+                    .include(dest.getPosition())
+                    .build();
+            //Move camera to include both points
+            request_accepted_map.setPadding(     0,      350,      0,     0);
+            request_accepted_map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200));
+        }
+    }
+
+    private void saveOriDest(String ori_list, String dest_list, String ori_name,String dest_name){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("ori_list",ori_list);
+        editor.putString("dest_list",dest_list);
+        editor.putString("ori_name",ori_name);
+        editor.putString("dest_name",dest_name);
+        editor.apply();
+
+    }
+
+
+    private void loadOriDest(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String ori_list = sharedPreferences.getString("ori_list", "");
+        String dest_list = sharedPreferences.getString("dest_list", "");
+        String ori_name = sharedPreferences.getString("ori_name", "");
+        String dest_name = sharedPreferences.getString("dest_name", "");
+        if(!ori_list.equals("") && !dest_list.equals("") && !ori_name.equals("") && !dest_name.equals("")){
+            addSign(ori_list,dest_list,ori_name,dest_name);
+        }
+
+    }
 
 
 
+    private void saveRoute(ArrayList<LatLng> points){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(points);
+        editor.putString("route",json);
+        editor.apply();
+        Toast.makeText(RiderAfterAcceptRequest.this, "save route", Toast.LENGTH_SHORT).show();
+    }
 
+    private void loadRoute(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("route",null);
+        Type type = new TypeToken<ArrayList<LatLng>>() {}.getType();
+        ArrayList<LatLng> store_points = gson.fromJson(json,type);
 
+        if(store_points == null){
+            Toast.makeText(RiderAfterAcceptRequest.this, "no data!", Toast.LENGTH_SHORT).show();
+        }else{
+            drawRoute(store_points);
+        }
 
+    }
 
+    private void removeRequest(){
+        DatabaseReference ref = db.getReference("requests").child("0bEdwmBMMpSuzycdNfJn0EAvWiw1");
 
+        ref.removeValue();
+
+    }
 }

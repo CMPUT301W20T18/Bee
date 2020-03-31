@@ -113,7 +113,7 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback, 
         switch (menuItem.getItemId()){
             case R.id.profile:
                 Toast.makeText(DriverMain.this, "Profile Selected", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(DriverMain.this, EditProfileActivity.class));
+                startActivity(new Intent(DriverMain.this, EditProfileActivityD.class));
                 return true;
             case R.id.rating:
                 Toast.makeText(DriverMain.this, "My Rating Selected", Toast.LENGTH_SHORT).show();
@@ -121,7 +121,7 @@ public class DriverMain extends FragmentActivity implements OnMapReadyCallback, 
                 return true;
             case R.id.history:
                 Toast.makeText(DriverMain.this, "History Selected", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(DriverMain.this, ConfirmOfferDialog.class));
+                startActivity(new Intent(DriverMain.this, DriverHistory.class));
                 return true;
             case R.id.sRider:
                 Toast.makeText(DriverMain.this, "Switch to Rider", Toast.LENGTH_SHORT).show();
