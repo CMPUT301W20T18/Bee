@@ -34,7 +34,7 @@ import java.util.HashMap;
 public class RatingActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     private ImageView logo;
-    private TextView username, thumbUp, thumbDown;
+    private TextView username, thumbUp, thumbDown, driverHint, ratingHint;
     private Button back;
 
     private ProgressDialog progressDialog;
@@ -52,6 +52,12 @@ public class RatingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rating);
 
         initializeGUI();
+        driverHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(RatingActivity.this,DriverMain.class));
+            }
+        });
 
 
 
@@ -67,6 +73,8 @@ public class RatingActivity extends AppCompatActivity {
         username = findViewById(R.id.ratingName);
         thumbUp = findViewById(R.id.thumbUp);
         thumbDown = findViewById(R.id.thumbDown);
+        driverHint = findViewById(R.id.tvDriverHint);
+        ratingHint = findViewById(R.id.tvRatingHint);
         progressDialog = new ProgressDialog(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
