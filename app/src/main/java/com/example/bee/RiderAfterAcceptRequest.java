@@ -68,8 +68,8 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         setContentView(R.layout.activity_rider_after_accept_request);
 //        user = FirebaseAuth.getInstance().getCurrentUser();
 //        String userID = user.getUid();
-        db = FirebaseDatabase.getInstance();
-//        db.setPersistenceEnabled(true);
+
+        db = Utils.getDatabase();
         initMap();
 
 
@@ -104,6 +104,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     /**
      * This is a method to initialize the map
      */
+    static {
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    }
 
     private void initMap(){
         Log.d(TAG, "initMap: initializing map");
