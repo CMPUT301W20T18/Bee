@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EnterAddressMap">
+
+    <!--<include layout="@layout/activity_drawer"/>-->
+
+    <fragment
+        android:id="@+id/rider_initial_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/from_address"
+        android:elevation="10dp"
+        android:layout_margin="10dp"
+        android:inputType="text"
+        android:hint="Pickup location"
+        android:background="@drawable/rounded_corner"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textColorHint="#A9A9A9"/>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/to_address"
+        android:padding="10dp"
+        android:elevation="10dp"
+        android:layout_alignLeft="@+id/from_address"
+        android:layout_alignRight="@+id/from_address"
+        android:layout_below="@+id/from_address"
+        android:hint="Destination"
+        android:inputType="text"
+        android:textColor="@color/black"
+        android:imeOptions="actionDone"
+        android:textColorHint="#A9A9A9"
+        android:background="@drawable/rounded_corner" />
+
+    <ImageView
+        android:id="@+id/profile_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/show_route"
+        android:src="@drawable/ic_menu"
+        android:elevation="10dp"
+        android:layout_below="@+id/show_route" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/show_route"
+        android:layout_below="@+id/to_address"
+        android:background="@drawable/rounded_corner"
+        android:layout_margin="10dp"
+        android:elevation="10dp"
+        android:textColor="@color/black"
+        android:text="Show Route" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:id="@+id/confirm_route"
+        android:layout_height="wrap_content"
+        android:text="Confirm"
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="@color/button"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/black"
+        android:elevation="10dp"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:layout_marginBottom="20dp" />
+
+</RelativeLayout>
