@@ -181,9 +181,9 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(WaitingForRider.this, PopUpMap.class);
-//                intent.putExtra("passMoneyAmount",passMoneyAmount);
-//                intent.putExtra("passRiderID",passRiderID);
-//                intent.putExtra("passRiderName",riderNameString);
+                intent.putExtra("passMoneyAmount",passMoneyAmount);
+                intent.putExtra("passRiderID",passRiderID);
+                intent.putExtra("passRiderName",riderNameString);
                 startActivity(intent);
 
 
