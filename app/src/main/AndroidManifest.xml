@@ -33,7 +33,7 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".MainActivity" />
-        <activity android:name=".SearchRide" />
+        
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,6 +50,8 @@
         <activity android:name=".RiderAfterAcceptRequest" />
         <activity android:name=".DriverMain" />
         <activity android:name=".WaitingForRider" />
+<!--        <activity android:name=".SearchRide" />-->
+
         <activity android:name=".PopUpMap" />
     </application>
 

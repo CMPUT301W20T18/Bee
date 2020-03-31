@@ -5,7 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -13,6 +17,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +69,7 @@ import static android.content.ContentValues.TAG;
  */
 public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private FusedLocationProviderClient client_device;
+    LinearLayout linearLayout;
     TextView riderName, requestMoneyAmount;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
@@ -84,9 +90,11 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.pop_up_map);
+//            mapPop.getMapType().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            linearLayout = findViewById(R.id.pop_up_layout);
+
             riderName = findViewById(R.id.rider_name);
             requestMoneyAmount = findViewById(R.id.money_amount_in_pop);
-
 
 
 //            https://stackoverflow.com/questions/9998221/how-to-pass-double-value-to-a-textview-in-android
@@ -112,10 +120,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 //            });
 
 
-
-
-
-
             initMap();
 
 
@@ -132,6 +136,8 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             String passMoneyAmount = bundle.getString("passMoneyAmount");
             passRiderID = bundle.getString("passRiderID");
             getWindow().setLayout((int) (width * 0.8), (int) (height * .6));
+            getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+
 //        set up the accept button
             AcceptButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -325,6 +331,15 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
 
         }
+        boolean result = isNetworkAvailable();
+        if (!result){
+            Toast toast = Toast.makeText(PopUpMap.this, "You are offline", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+            CancelButton.setEnabled(false);
+            riderName.setText("Please check internet activity");
+
+        }
 
 
 
@@ -334,7 +349,13 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
 
     }
+    private boolean isNetworkAvailable() {
 
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
     /**
      * This set up the marker points on the map
      * @param fromAddress

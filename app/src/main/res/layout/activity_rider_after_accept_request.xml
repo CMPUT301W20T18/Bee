@@ -74,9 +74,8 @@
             android:text="2"
             android:textSize="25sp"
             android:textColor="#DD252424" />
+    </RelativeLayout>
 
-
-        </RelativeLayout>
 
     <fragment
         android:id="@+id/map_requestAccepted"
@@ -87,7 +86,7 @@
         tools:layout_editor_absoluteY="0dp" />
 
 
-<!--    https://github.com/Clans/FloatingActionButton-->
+    <!--    https://github.com/Clans/FloatingActionButton-->
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/my_menu"
@@ -126,16 +125,16 @@
         fab:menu_openDirection = "up">
 
         <com.github.clans.fab.FloatingActionButton
-        android:id="@+id/my_confirm"
-        fab:fab_colorNormal="@color/menu_button"
-        fab:fab_colorPressed="@color/menu_primary_pressed"
-        fab:fab_colorRipple="@color/menu_ripple"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src = "@drawable/ic_action_confirm"
-        fab:fab_label = "destination confirmation"
-        fab:fab_size = "mini"
-        />
+            android:id="@+id/my_confirm"
+            fab:fab_colorNormal="@color/menu_button"
+            fab:fab_colorPressed="@color/menu_primary_pressed"
+            fab:fab_colorRipple="@color/menu_ripple"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src = "@drawable/ic_action_confirm"
+            fab:fab_label = "destination confirmation"
+            fab:fab_size = "mini"
+            />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/my_cancel"
