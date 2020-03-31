@@ -4,6 +4,7 @@ package com.example.bee;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 
 import android.widget.AdapterView;
@@ -11,11 +12,13 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
@@ -42,6 +45,7 @@ public class SearchRide extends AppCompatActivity {
 //    initializing local variables
     private static final String TAG = "TAG";
     private String driverId;
+//    private FirebaseUser;
     private DatabaseReference ref;
     String passDistance;
     Request request;
@@ -76,9 +80,11 @@ public class SearchRide extends AppCompatActivity {
         offerAdapter = new CustomList(this,offerInfo);
         offerList.setAdapter(offerAdapter);
 
-//      connect to firebase realtime database
+//      connect to firebase realtime database & get current driver's uid
+        driverId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         ref = database.getReference("requests");
+
 
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -86,7 +92,8 @@ public class SearchRide extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 //                Using for loop to obtain all current reqeusts in database and add them into list view
                 for(DataSnapshot dsp:dataSnapshot.getChildren()){
-                    if (dsp.child("request").exists()) {
+                    // Adding condition so that driver can't see request made by his/her own account
+                    if (dsp.child("request").exists() && !dsp.getKey().equals(driverId)) {
                         request = dsp.child("request").getValue(Request.class);
                         String[] latlng = request.getOriginLatlng().split(",");
 
@@ -143,11 +150,28 @@ public class SearchRide extends AppCompatActivity {
                 searchAddress = searchText.getText().toString();
                 if(! searchAddress.isEmpty()){
                      searchLatLng  = getLatLng(searchAddress);
+                    if(searchLatLng!=null){
+                        sortOffer(searchLatLng);
+                        String text = "Requests sorted";
+                        Toast toast = Toast.makeText(SearchRide.this,text,Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER,0,0);
+                        toast.show();
+                    }
+                    else{
+                        String text = "Searching Place Not Found";
+                        Toast toast = Toast.makeText(SearchRide.this,text,Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER,0,0);
+                        toast.show();
+                    }
                 }
-                if(searchLatLng!=null){
-                    sortOffer(searchLatLng);
+                else{
+                    String text = "Please Enter a location";
+                    Toast toast = Toast.makeText(SearchRide.this,text,Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                }
 
-                }
+
 
             }
         });
