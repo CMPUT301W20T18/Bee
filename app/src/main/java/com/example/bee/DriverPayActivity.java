@@ -23,6 +23,8 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.util.ArrayList;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class DriverPayActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
@@ -78,6 +80,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
     @Override
     public void handleResult(Result rawResult) {
         String riderID = rawResult.getText();
+        String driverID = userID;
         if (riderID == currentRiderID) {
             // Make transaction
             // First add money to driver's wallet
@@ -115,8 +118,22 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
                 }
             });
 
-            // Thirdly, set the request finished to boolean true
+            // Thirdly, delete the request under requests branch
+            // And add it to history branch
+            ref = database.getReference("requests").child(riderID);
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Request request = (Request) dataSnapshot.getValue();
+                    addRequestToHistory(riderID, request);
+                    addRequestToHistory(driverID, request);
+                }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
             // Then, Start next activity -- RiderConfirmActivity
             Intent intent = new Intent(DriverPayActivity.this, DriverConfirmActivity.class);
@@ -127,6 +144,29 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
             // Continue Scanning QR code until a legal code is scanned
             scannerView.startCamera();
         }
+    }
+
+    /**
+     * This method is to add a request under user's history
+     * @param ID -- userID
+     * @param request
+     */
+    private void addRequestToHistory(String ID, Request request) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("history").child(ID);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<Request> requests = (ArrayList) dataSnapshot.getValue();
+                requests.add(request);
+                ref.child(ID).setValue(requests);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }
