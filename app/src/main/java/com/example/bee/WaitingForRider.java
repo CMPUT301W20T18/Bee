@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -329,7 +331,15 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
 
         }
+        boolean result = isNetworkAvailable();
+        if (!result){
+            Toast toast = Toast.makeText(WaitingForRider.this, "You are offline", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+            driverCard.setEnabled(false);
+            RequestStatus.setText("Please check internet activity");
 
+        }
 
 
 
@@ -358,6 +368,13 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 //            toast.show();
 //
 //        }
+    }
+    private boolean isNetworkAvailable() {
+
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
     /**
      * This locate the current location for the user device

@@ -8,6 +8,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -329,6 +331,15 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
 
         }
+        boolean result = isNetworkAvailable();
+        if (!result){
+            Toast toast = Toast.makeText(PopUpMap.this, "You are offline", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+            CancelButton.setEnabled(false);
+            riderName.setText("Please check internet activity");
+
+        }
 
 
 
@@ -338,7 +349,13 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
 
     }
+    private boolean isNetworkAvailable() {
 
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
     /**
      * This set up the marker points on the map
      * @param fromAddress
