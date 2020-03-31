@@ -304,8 +304,8 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     }
 
     private void setOriDest(){
-        //String userID = user.getUid();
-        //Context mcontext = RiderAfterAcceptRequest.this;
+        String userID = user.getUid();
+        Context mcontext = RiderAfterAcceptRequest.this;
         DatabaseReference ref = db.getReference("requests");
         ref.child(userID)
                 .child("request")
