@@ -64,7 +64,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     FloatingActionButton fabConfirm, fabCancel;
 
-    private static final String rq_id = "PAvxlWke8KfOtRbuXuqo6TheIrw1";
+    //private static final String rq_id = "PAvxlWke8KfOtRbuXuqo6TheIrw1";
 
     public static final String SHARED_PREFS = "sharedPrefs";
 
@@ -74,8 +74,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         setContentView(R.layout.activity_rider_after_accept_request);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-
-
         db = FirebaseDatabase.getInstance();
         //db.setPersistenceEnabled(true);
         initMap();
@@ -175,11 +173,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     private void drawPointsList(){
         String userID = user.getUid();
-
         DatabaseReference ref = db.getReference("requests");
-
-        ref.child(rq_id)
-        //ref.child(userID)
+        //ref.child(rq_id)
+        ref.child(userID)
                 .child("request")
                 .child("points")
                 .addValueEventListener(new ValueEventListener() {
@@ -258,8 +254,8 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             @Override
             public void onClick(View v) {
                 DatabaseReference ref = db.getReference("requests");
-                ref.child(rq_id)
-                //ref.child(userID)
+                //ref.child(rq_id)
+                ref.child(userID)
                         .child("request").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -304,7 +300,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     }
 
     private void setOriDest(){
-        //String userID = user.getUid();
+        String userID = user.getUid();
         //Context mcontext = RiderAfterAcceptRequest.this;
         DatabaseReference ref = db.getReference("requests");
         ref.child(userID)
