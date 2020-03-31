@@ -74,7 +74,6 @@ public class RatingActivity extends AppCompatActivity {
         thumbUp = findViewById(R.id.thumbUp);
         thumbDown = findViewById(R.id.thumbDown);
         driverHint = findViewById(R.id.tvDriverHint);
-        ratingHint = findViewById(R.id.tvRatingHint);
         progressDialog = new ProgressDialog(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
