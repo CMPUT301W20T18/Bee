@@ -33,7 +33,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -63,7 +62,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     FirebaseDatabase db;
 
     FloatingActionButton fabConfirm, fabCancel;
-
     private static final String rq_id = "PAvxlWke8KfOtRbuXuqo6TheIrw1";
 
     public static final String SHARED_PREFS = "sharedPrefs";
@@ -72,10 +70,8 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_after_accept_request);
-
-        user = FirebaseAuth.getInstance().getCurrentUser();
-
-
+//        user = FirebaseAuth.getInstance().getCurrentUser();
+//        String userID = user.getUid();
         db = FirebaseDatabase.getInstance();
         //db.setPersistenceEnabled(true);
         initMap();
@@ -169,17 +165,13 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     private void drawRoute(ArrayList<LatLng> pointList) {
         PolylineOptions polylineOptions = DirectionConverter
                 .createPolyline(RiderAfterAcceptRequest.this, pointList, 5,
-                        getResources().getColor(R.color.route));
+                        getResources().getColor(R.color.yellow));
         request_accepted_map.addPolyline(polylineOptions);
     }
 
     private void drawPointsList(){
-        String userID = user.getUid();
-
         DatabaseReference ref = db.getReference("requests");
-
         ref.child(rq_id)
-        //ref.child(userID)
                 .child("request")
                 .child("points")
                 .addValueEventListener(new ValueEventListener() {
@@ -201,6 +193,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                         drawRoute(formal_points);
                         saveRoute(formal_points);
 
+
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -210,8 +203,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     }
 
     private void showCancelDialog(){
-        final String userID = user.getUid();
-
         AlertDialog.Builder builder = new AlertDialog.Builder(RiderAfterAcceptRequest.this);
         View view = getLayoutInflater().inflate(R.layout.activity_rider_after_accept_request_dialog,null);
         TextView title = (TextView) view.findViewById(R.id.dialog_title);
@@ -226,7 +217,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             public void onClick(View v) {
                 //Toast.makeText(RiderAfterAcceptRequest.this, "hohoho", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
-                DatabaseReference ref = db.getReference("requests").child(userID).child("request").child("cancel");
+                DatabaseReference ref = db.getReference("requests").child(rq_id).child("request").child("cancel");
                 ref.setValue(true);
                 finish();
             }
@@ -242,9 +233,8 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     }
 
     private void showConfirmDialog(){
-        Context mcontext = RiderAfterAcceptRequest.this;
-        final String userID = user.getUid();
 
+        Context mcontext = RiderAfterAcceptRequest.this;
         AlertDialog.Builder builder = new AlertDialog.Builder(RiderAfterAcceptRequest.this);
         View view = getLayoutInflater().inflate(R.layout.activity_rider_after_accept_request_dialog,null);
         TextView title = (TextView) view.findViewById(R.id.dialog_title);
@@ -259,7 +249,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             public void onClick(View v) {
                 DatabaseReference ref = db.getReference("requests");
                 ref.child(rq_id)
-                //ref.child(userID)
                         .child("request").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -269,7 +258,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                             Toast.makeText(mcontext, "driver has not reach the destination!", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }else{
-                            DatabaseReference ref2 = db.getReference("requests").child(userID).child("request").child("finished");
+                            DatabaseReference ref2 = db.getReference("requests").child(rq_id).child("request").child("finished");
                             ref2.setValue(false);
                             Intent intent = new Intent(RiderAfterAcceptRequest.this, MainActivity.class);
                             startActivity(intent);
@@ -304,10 +293,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     }
 
     private void setOriDest(){
-        //String userID = user.getUid();
-        //Context mcontext = RiderAfterAcceptRequest.this;
+
         DatabaseReference ref = db.getReference("requests");
-        ref.child(userID)
+        ref.child(rq_id)
                 .child("request")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
