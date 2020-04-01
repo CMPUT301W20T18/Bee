@@ -22,6 +22,7 @@ public class RiderHistory extends AppCompatActivity{
     private RequestAdapter rAdapter;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
+    private Request request;
     FirebaseFirestore db;
     String userID;
 
@@ -31,14 +32,21 @@ public class RiderHistory extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_history);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        userID = firebaseAuth.getCurrentUser().getUid();
+        Bundle bundle = getIntent().getExtras();
+        userID = bundle.getString("riderID");
+
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference ref = database.getReference("requests");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
+                    if (snap.getValue().toString() == userID){
+                        request = (Request) snap.child("request").getValue();
+                        requests.add(request);
+
+                    }
+
 
 
 

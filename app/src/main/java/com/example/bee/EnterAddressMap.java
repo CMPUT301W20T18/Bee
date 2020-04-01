@@ -170,7 +170,9 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                 return true;
             case R.id.history:
                 Toast.makeText(EnterAddressMap.this, "History Selected", Toast.LENGTH_SHORT).show();
-                // startActivity(new Intent(EnterAddressMap.this, ConfirmOfferDialog.class));
+                Intent intent = new Intent(EnterAddressMap.this, ConfirmOfferDialog.class);
+                intent.putExtra("riderID",userID);
+                startActivity(intent);
                 return true;
             case R.id.sRider:
                 Toast.makeText(EnterAddressMap.this, "Switch to Rider", Toast.LENGTH_SHORT).show();

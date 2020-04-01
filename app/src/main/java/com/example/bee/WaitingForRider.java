@@ -160,8 +160,6 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                         finishButton.setVisibility(View.VISIBLE);
                         RequestStatus.setText("Declined offer");
                         finishButton.setText("BACK");
-                        ref.getParent().removeValue();
-
 
                         finishButton.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -180,7 +178,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                                     if(cancelValue){
                                         ref.getParent().removeValue();
                                         finishButton.setVisibility(View.VISIBLE);
-                                        RequestStatus.setText("Declined offer");
+                                        RequestStatus.setText("Request has been cancelled");
                                         finishButton.setText("BACK");
                                         finishButton.setOnClickListener(new View.OnClickListener() {
                                             @Override
