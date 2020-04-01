@@ -94,16 +94,4 @@
         android:paddingRight="20dp"
         android:layout_marginBottom="60dp" />
 
-    <Button
-        android:id="@+id/test_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="160dp"
-        android:layout_marginBottom="169dp"
-        android:text="Testing" />
-
-
 </RelativeLayout>

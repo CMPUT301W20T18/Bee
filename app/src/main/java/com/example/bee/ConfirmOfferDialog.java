@@ -35,9 +35,6 @@ import java.util.HashMap;
  */
 public class ConfirmOfferDialog extends DialogFragment {
     private OnFragmentInteractionListener listener;
-    private static final String TAG = "TAG";
-    private FirebaseUser user;
-    private DatabaseReference ref;
     private String name;
     private String phone;
     private int rateUp;
@@ -136,7 +133,9 @@ public class ConfirmOfferDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 // Rider declined the offer
+                //FirebaseDatabase database = Utils.getDatabase();
                 listener.declineOffer();
+                //dialog.dismiss();
             }
         });
 
