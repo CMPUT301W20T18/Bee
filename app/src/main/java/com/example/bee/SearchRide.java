@@ -186,6 +186,12 @@ public class SearchRide extends AppCompatActivity {
 
     }
 
+    /**
+     * getLatLng method is used to convert a location name into geolocation with type LatLng
+     * @param searchingAddress
+     * @return
+     * LatLng searchPos
+     */
     private LatLng getLatLng(String searchingAddress){
         GeocodingResult[] address;
         try{
