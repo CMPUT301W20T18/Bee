@@ -136,7 +136,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Request request = (Request) dataSnapshot.getValue(Request.class);
+                    Request request = (Request) dataSnapshot.child("request").getValue(Request.class);
                     addRequestToHistory(riderID, request);
                     addRequestToHistory(driverID, request);
                 }
@@ -146,7 +146,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
 
                 }
             });
-            //ref.removeValue();
+            ref.removeValue();
             // Then, Start next activity -- RiderConfirmActivity
             Intent intent = new Intent(DriverPayActivity.this, DriverConfirmActivity.class);
             intent.putExtra("amount", amount);

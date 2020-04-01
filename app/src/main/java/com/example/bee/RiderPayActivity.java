@@ -96,12 +96,14 @@ public class RiderPayActivity extends AppCompatActivity {
         // After the Driver Scan the QRcode and finish transaction, turn to RiderRatingActivity
         // When the driver scan the QRcode, the request under uid will be deleted
         // Once request is deleted go to next activity
-        DatabaseReference ref2 = database.getReference("requests").child(userID).child("request");
+        DatabaseReference ref2 = database.getReference("requests").child(userID);
         ref2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Request request = (Request) dataSnapshot.getValue(Request.class);
-                if (request == null) {
+                if (dataSnapshot.exists()) {
+
+                }
+                else {
                     Intent intent = new Intent(RiderPayActivity.this, RiderRatingActivity.class);
                     intent.putExtra("DriverID", driverID);
                     startActivity(intent);
