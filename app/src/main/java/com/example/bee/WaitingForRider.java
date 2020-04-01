@@ -151,10 +151,24 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                         finishButton.setVisibility(View.VISIBLE);
                         RequestStatus.setText("Declined offer");
                         finishButton.setText("BACK");
+                        DatabaseReference cancelRef = ref.child("cancel");
+                        cancelRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Boolean cancelValue = dataSnapshot.getValue(Boolean.class);
+                                if(!cancelValue){
+                                    ref.getParent().removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                         finishButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                ref.getParent().removeValue();
                                 startActivity(new Intent(WaitingForRider.this, SearchRide.class));
 
                             }
