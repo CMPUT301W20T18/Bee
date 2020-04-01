@@ -40,7 +40,7 @@ public class RiderProfile extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rider_profile);
-        riderName = findViewById(R.id.inputName);
+        riderName = findViewById(R.id.riderName);
         Bundle bundle = getIntent().getExtras();
 
 
