@@ -113,20 +113,21 @@
 
         <Button
             android:id="@+id/finish_button"
-            android:layout_width="109dp"
-            android:layout_height="59dp"
+            android:layout_width="155dp"
+            android:layout_height="94dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
 
             android:layout_gravity="center"
-            android:layout_marginStart="146dp"
-            android:layout_marginTop="407dp"
-            android:layout_marginEnd="138dp"
-            android:layout_marginBottom="99dp"
-            android:background="#fff"
+            android:layout_marginStart="125dp"
+            android:layout_marginTop="366dp"
+            android:layout_marginEnd="125dp"
+            android:layout_marginBottom="97dp"
+            android:background="@drawable/rounded_corner"
             android:text="FINISH"
+
             android:textColor="#000"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/map_requestAccepted"

@@ -268,6 +268,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                             DatabaseReference ref2 = db.getReference("requests").child(userID).child("request").child("finished");
                             ref2.setValue(true);
                             Intent intent = new Intent(RiderAfterAcceptRequest.this, RiderPayActivity.class);
+                            intent.putExtra("DriverID", r.getDriverID());
                             startActivity(intent);
                         }
                     }

@@ -99,11 +99,14 @@ public class SearchRide extends AppCompatActivity {
                     // Adding condition so that driver can't see request made by his/her own account
                     if (dsp.child("request").exists() && !dsp.getKey().equals(driverId)) {
                         request = dsp.child("request").getValue(Request.class);
-                        String[] latlng = request.getOriginLatlng().split(",");
-
-                        offerInfo.add(new Offer(request.getOrigin(), request.getDest(), String.format("%.2f", request.getCost()), Double.valueOf(latlng[0]), Double.valueOf(latlng[1]), request.getRiderID()));
-                        //   notify adapter to update listview
-                        offerAdapter.notifyDataSetChanged();
+                        // eliminate requests that already accepted by other driver
+                        if (request.getDriverID()== null) {
+                            System.out.println(request.getDriverID());
+                            String[] latlng = request.getOriginLatlng().split(",");
+                            offerInfo.add(new Offer(request.getOrigin(), request.getDest(), String.format("%.2f", request.getCost()), Double.valueOf(latlng[0]), Double.valueOf(latlng[1]), request.getRiderID()));
+                            //   notify adapter to update listview
+                            offerAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }

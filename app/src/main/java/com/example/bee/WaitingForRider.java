@@ -72,7 +72,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
     private String destAddress;
     TextView riderName;
     String riderNameString;
-    private DatabaseReference ref;
+    private DatabaseReference ref, riderFirstNameRef,riderLastNameRef;
     TextView RequestMoneyAmount;
     GoogleMap map;
     TextView RequestStatus;
@@ -127,6 +127,14 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
         }
 
+        riderName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WaitingForRider.this, RiderProfile.class);
+                intent.putExtra("passRiderID",passRiderID);
+                startActivity(intent);
+            }
+        });
         // Depends rider response to process to next activity
         DatabaseReference statusRef = database.getReference("requests").child(passRiderID).child("request").child("status");
         statusRef.addValueEventListener(new ValueEventListener() {
@@ -148,25 +156,55 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                 if (request != null) {
                     driverID = request.getDriverID();
                     if (driverID == null) {
+                        finishButton.setVisibility(View.VISIBLE);
                         RequestStatus.setText("Declined offer");
+                        finishButton.setText("BACK");
+                        DatabaseReference cancelRef = ref.child("cancel");
+                        cancelRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Boolean cancelValue = dataSnapshot.getValue(Boolean.class);
+                                if(!cancelValue){
+                                    ref.getParent().removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                        finishButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(WaitingForRider.this, SearchRide.class));
+
+                            }
+                        });
+
                     }else{
                         if(riderResponse){
                             RequestStatus.setText("Confirmed ride offer");
                             finishButton.setVisibility(View.VISIBLE);
+                            DatabaseReference reachRef = ref.child("reached");
                             finishButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    reachRef.setValue(true);
                                     Intent intent = new Intent(WaitingForRider.this, DriverPayActivity.class);
                                     intent.putExtra("Rider", passRiderName);
                                     intent.putExtra("RiderID", passRiderID);
                                     intent.putExtra("amount", Double.parseDouble(passMoneyAmount));
                                     startActivity(intent);
+
                                 }
                             });
                         }
                         if(!riderResponse){
-                            RequestStatus.setText("Waiting for comfirmation......");
                             finishButton.setVisibility(View.GONE);
+
+                            RequestStatus.setText("Waiting for comfirmation......");
+
                         }
                     }
                 }
@@ -180,7 +218,13 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         driverCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WaitingForRider.this, PopUpMap.class));
+                Intent intent = new Intent(WaitingForRider.this, PopUpMap.class);
+                intent.putExtra("passMoneyAmount",passMoneyAmount);
+                intent.putExtra("passRiderID",passRiderID);
+                intent.putExtra("passRiderName",riderNameString);
+                startActivity(intent);
+
+
             }
         });
 
@@ -223,15 +267,12 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReference("requests").child(passRiderID).child("request");
             DatabaseReference originLatlngRef = ref.child("originLatlng");
+//            set up the origin on the map
             originLatlngRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     String originString = dataSnapshot.getValue(String.class);
                     String[] afterSplitLoc = originString.split(",");
-//                        LatLng place1_postion = new LatLng();
-//        place1 = new MarkerOptions().position(place1_postion).title("Orientation");
-//        LatLng place2_postion = new LatLng(53.484300,-113.517250);
-//        place2 = new MarkerOptions().position(place2_postion).title("Destination");
                     double originLatitude = Double.parseDouble(afterSplitLoc[0]);
                     double originLongitude = Double.parseDouble(afterSplitLoc[1]);
                     LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
@@ -244,6 +285,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
                 }
             });
+//            retreive destination coordinate from firebase
             DatabaseReference destLatlngRef = ref.child("destLatlng");
             destLatlngRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -257,24 +299,37 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
 
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference userRef = database.getReference("users").child(passRiderID).child("Name");;
-                    userRef.addValueEventListener(new ValueEventListener() {
+                    riderFirstNameRef = database.getReference("users").child(passRiderID).child("firstName");;
+                    riderFirstNameRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            riderNameString = dataSnapshot.getValue(String.class);
-                            if(riderNameString != null){
-                                riderName.setText(riderNameString);
+                            String riderFirstNameString = dataSnapshot.getValue(String.class);
+                            if(riderFirstNameString != null){
+                                riderLastNameRef = database.getReference("users").child(passRiderID).child("lastName");
+                                riderLastNameRef.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        String riderLastNameString = dataSnapshot.getValue(String.class);
+                                        if(riderLastNameString != null) {
+                                            riderName.setText(riderFirstNameString + " " + riderLastNameString);
+                                        }else{
+                                            riderName.setText("Invalid rider name");
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                                    }
+                                });
                             }else{
-                                riderName.setText("Invalid rider Name");
+                                riderName.setText("Invalid rider name");
                             }
                         }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
+                    }
+                });
 
                     place2 = new MarkerOptions().position(destCoordinate).title("Destination");
 
