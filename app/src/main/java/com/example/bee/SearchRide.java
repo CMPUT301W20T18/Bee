@@ -198,6 +198,7 @@ public class SearchRide extends AppCompatActivity {
             GeoApiContext context = new GeoApiContext.Builder()
                     .apiKey(getString(R.string.google_maps_key))
                     .build();
+            // the GeocodingApi convert location SearchingAddress into array with lat and lng
             address = GeocodingApi.geocode(context,
                     searchingAddress).await();
 
