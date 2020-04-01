@@ -84,7 +84,8 @@ public class SearchRide extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         ref = database.getReference("requests");
 
-
+        // most important part in SearchRide
+        // retrieve data from firebase and set conditions to filter unexpected data
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
