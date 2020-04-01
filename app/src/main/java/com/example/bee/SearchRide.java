@@ -212,6 +212,13 @@ public class SearchRide extends AppCompatActivity {
         return searchPos;
     }
 
+    /**
+     * sortOffer method is used to sort list array with given latlng information
+     * and sort by distance with ascending order
+     * @param target
+     * Latlng target is the expected latlng infomation given by user
+     * and be used to sort the list array
+     */
     private void sortOffer(LatLng target){
         searchingLat = target.latitude;
         searchingLng = target.longitude;
