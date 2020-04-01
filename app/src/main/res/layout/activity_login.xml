@@ -11,11 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="510dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
 
+        android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="87dp">
+        android:layout_marginStart="-6dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="40dp">
 
 
         <LinearLayout

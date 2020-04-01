@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".RatingActivity"
 
-    android:background="@color/background">
+    android:background="#F3F2F2">
 
 
     <RelativeLayout
