@@ -160,6 +160,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                         finishButton.setVisibility(View.VISIBLE);
                         RequestStatus.setText("Declined offer");
                         finishButton.setText("BACK");
+                        ref.getParent().removeValue();
 
 
                         finishButton.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +179,16 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                                     Boolean cancelValue = dataSnapshot.getValue(Boolean.class);
                                     if(cancelValue){
                                         ref.getParent().removeValue();
+                                        finishButton.setVisibility(View.VISIBLE);
+                                        RequestStatus.setText("Declined offer");
+                                        finishButton.setText("BACK");
+                                        finishButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                startActivity(new Intent(WaitingForRider.this, SearchRide.class));
+
+                                            }
+                                        });
                                     }
                                     else{
                                         RequestStatus.setText("Confirmed ride offer");
