@@ -148,7 +148,15 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                 if (request != null) {
                     driverID = request.getDriverID();
                     if (driverID == null) {
+                        finishButton.setVisibility(View.VISIBLE);
                         RequestStatus.setText("Declined offer");
+                        finishButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(WaitingForRider.this, SearchRide.class));
+                            }
+                        });
+
                     }else{
                         if(riderResponse){
                             RequestStatus.setText("Confirmed ride offer");
@@ -165,8 +173,10 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                             });
                         }
                         if(!riderResponse){
-                            RequestStatus.setText("Waiting for comfirmation......");
                             finishButton.setVisibility(View.GONE);
+
+                            RequestStatus.setText("Waiting for comfirmation......");
+
                         }
                     }
                 }
