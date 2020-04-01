@@ -24,6 +24,8 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -42,7 +44,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
         setContentView(R.layout.activity_driver_pay);
 
         // Get Rider's information from last activity
-        currentRider = getIntent().getExtras().getString("Rider", null);
+        currentRider = getIntent().getExtras().getString("Rider", "[Rider Name pass fail]");
         currentRiderID = getIntent().getExtras().getString("RiderID", null);
         amount = getIntent().getExtras().getDouble("amount", 0);
 
@@ -85,14 +87,19 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
             // Make transaction
             // First add money to driver's wallet
             FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference ref = database.getReference("users").child(userID).child("Wallet");
+            DatabaseReference ref = database.getReference("users").child(userID).child("amount");
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    QRWallet driverWallet = (QRWallet) dataSnapshot.getValue(QRWallet.class);
+                    double balance = dataSnapshot.getValue(double.class);
                     String driverDescr = String.format("%s owes me $%.2f", currentRider, amount);
-                    driverWallet.addTransaction(driverDescr, amount);
-                    database.getReference("users").child(userID).setValue(driverWallet);
+
+                    // Update Amount and transaction
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put("/users/" + driverID + "/amount", balance + amount);
+                    String key = database.getReference().child("users").child(driverID).push().getKey();
+                    childUpdates.put("/users/" + driverID + "/transaction/" + key, driverDescr);
+                    database.getReference().updateChildren(childUpdates);
                 }
 
                 @Override
@@ -102,14 +109,19 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
             });
 
             // Second, add transaction to rider
-            ref = database.getReference("users").child(riderID).child("Wallet");
+            ref = database.getReference("users").child(riderID).child("amount");
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    QRWallet riderWallet = (QRWallet) dataSnapshot.getValue(QRWallet.class);
-                    String riderDescr = String.format("I owe %s $%.2f", riderWallet.getName(), amount);
-                    riderWallet.addTransaction(riderDescr, -1 * amount);
-                    database.getReference("users").child(riderID).setValue(riderWallet);
+                    double balance = dataSnapshot.getValue(double.class);
+                    String riderDescr = String.format("I owe %s $%.2f", driverID, amount);
+
+                    // Update Amount and transaction
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put("/users/" + riderID + "/amount", balance - amount);
+                    String key = database.getReference().child("users").child(riderID).push().getKey();
+                    childUpdates.put("/users/" + riderID + "/transaction/" + key, riderDescr);
+                    database.getReference().updateChildren(childUpdates);
                 }
 
                 @Override
@@ -134,7 +146,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
 
                 }
             });
-            ref.removeValue();
+            //ref.removeValue();
             // Then, Start next activity -- RiderConfirmActivity
             Intent intent = new Intent(DriverPayActivity.this, DriverConfirmActivity.class);
             intent.putExtra("amount", amount);
@@ -157,9 +169,12 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<Request> requests = (ArrayList) dataSnapshot.getValue(ArrayList.class);
-                requests.add(request);
-                ref.child(ID).setValue(requests);
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference ref = database.getReference("history").child(ID);
+                String key = ref.push().getKey();
+                HashMap<String, Object> map = new HashMap<>();
+                map.put(key, request);
+                ref.updateChildren(map);
             }
 
             @Override
