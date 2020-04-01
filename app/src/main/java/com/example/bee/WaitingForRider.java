@@ -286,13 +286,24 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
             originLatlngRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String originString = dataSnapshot.getValue(String.class);
-                    String[] afterSplitLoc = originString.split(",");
-                    double originLatitude = Double.parseDouble(afterSplitLoc[0]);
-                    double originLongitude = Double.parseDouble(afterSplitLoc[1]);
-                    LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
-                    place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
-
+                    if(dataSnapshot.exists()) {
+                        String originString = dataSnapshot.getValue(String.class);
+                        String[] afterSplitLoc = originString.split(",");
+                        double originLatitude = Double.parseDouble(afterSplitLoc[0]);
+                        double originLongitude = Double.parseDouble(afterSplitLoc[1]);
+                        LatLng originCoordinate = new LatLng(originLatitude, originLongitude);
+                        place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
+                    }
+                    else{
+                        boolean result = isNetworkAvailable();
+                        if (!result) {
+                            Toast toast = Toast.makeText(WaitingForRider.this, "You are offline", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                            driverCard.setEnabled(false);
+                            RequestStatus.setText("Please check internet activity");
+                        }
+                    }
                 }
 
                 @Override
@@ -305,13 +316,24 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
             destLatlngRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String destStringTemp = dataSnapshot.getValue(String.class);
-                    String[] afterSplitLoc1 = destStringTemp.split(",");
-
-                    double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
-                    double destLongitude = Double.parseDouble(afterSplitLoc1[1]);
-                    LatLng destCoordinate = new LatLng(destLatitude,destLongitude);
-
+                    if(dataSnapshot.exists()) {
+                        String destStringTemp = dataSnapshot.getValue(String.class);
+                        String[] afterSplitLoc1 = destStringTemp.split(",");
+                        double destLatitude = Double.parseDouble(afterSplitLoc1[0]);
+                        double destLongitude = Double.parseDouble(afterSplitLoc1[1]);
+                        LatLng destCoordinate = new LatLng(destLatitude, destLongitude);
+                        place2 = new MarkerOptions().position(destCoordinate).title("Destination");
+                    }
+                    else{
+                        boolean result = isNetworkAvailable();
+                        if (!result) {
+                            Toast toast = Toast.makeText(WaitingForRider.this, "You are offline", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                            driverCard.setEnabled(false);
+                            RequestStatus.setText("Please check internet activity");
+                        }
+                    }
 
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     riderFirstNameRef = database.getReference("users").child(passRiderID).child("firstName");;
@@ -346,7 +368,6 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                     }
                 });
 
-                    place2 = new MarkerOptions().position(destCoordinate).title("Destination");
 
                     drew = getPoints(place1, place2);
 
@@ -385,13 +406,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
 
         }
-        boolean result = isNetworkAvailable();
-        if (!result){
-            Toast toast = Toast.makeText(WaitingForRider.this, "You are offline", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER,0,0);
-            toast.show();
-            driverCard.setEnabled(false);
-            RequestStatus.setText("Please check internet activity");
+
 
         }
 
@@ -422,7 +437,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 //            toast.show();
 //
 //        }
-    }
+
     private boolean isNetworkAvailable() {
 
         ConnectivityManager connectivityManager
