@@ -45,7 +45,6 @@ public class SearchRide extends AppCompatActivity {
 //    initializing local variables
     private static final String TAG = "TAG";
     private String driverId;
-//    private FirebaseUser;
     private DatabaseReference ref;
     String passDistance;
     Request request;
