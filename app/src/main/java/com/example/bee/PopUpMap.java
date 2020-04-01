@@ -98,26 +98,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
 
 //            https://stackoverflow.com/questions/9998221/how-to-pass-double-value-to-a-textview-in-android
-//            FirebaseDatabase database = FirebaseDatabase.getInstance();
-//            ref = database.getReference("requests").child(userID).child("request");
-//            ref.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-////                    for(DataSnapshot s: dataSnapshot.getChildren()){
-////
-////                    }
-//                    Request request = dataSnapshot.getValue(Request.class);
-//                    if(request != null){
-//
-//
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//                    Log.d(TAG, databaseError.toString());
-//                }
-//            });
 
             initMap();
             AcceptButton = findViewById(R.id.accept_button);
