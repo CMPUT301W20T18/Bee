@@ -46,7 +46,6 @@ public class RiderProfile extends AppCompatActivity {
 
         passRiderID = bundle.getString("passRiderID");
 
-
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference ref = database.getReference("users");
         ref.child(passRiderID).addValueEventListener(new ValueEventListener() {
@@ -55,7 +54,9 @@ public class RiderProfile extends AppCompatActivity {
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
                     riderPhone = dataSnapshot.child("phone").getValue().toString();
                     riderEmail = dataSnapshot.child("email").getValue().toString();
-                    riderName.setText(dataSnapshot.child("Name").getValue().toString());
+                    String name = dataSnapshot.child("firstName").getValue(String.class)
+                            + " " + dataSnapshot.child("lastName").getValue(String.class);
+                    riderName.setText(name);
 
                 }
 
