@@ -278,8 +278,8 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                         ArrayList<LatLng> formal_points = new ArrayList<>();
                         for(String point : points){
                             String[] parts = point.split(",");
-                            Double lat = Double.parseDouble(parts[0]);
-                            Double lng = Double.parseDouble(parts[1]);
+                            double lat = Double.parseDouble(parts[0]);
+                            double lng = Double.parseDouble(parts[1]);
                             formal_points.add(new LatLng(lat,lng));
                         }
                         drawRoute(formal_points);
@@ -312,6 +312,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                 dialog.dismiss();
                 DatabaseReference ref = db.getReference("requests").child(userID).child("request").child("cancel");
                 ref.setValue(true);
+                removeRequest();
                 startActivity(new Intent(RiderAfterAcceptRequest.this, EnterAddressMap.class));
             }
         });
@@ -348,6 +349,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Request r = dataSnapshot.getValue(Request.class);
+                        if (r == null){
+                            return;
+                        }
                         boolean is_reach = r.getReached();
                         if (!is_reach){
                             Toast.makeText(mcontext, "Driver has not reach the destination!", Toast.LENGTH_SHORT).show();
@@ -398,9 +402,10 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Request r = dataSnapshot.getValue(Request.class);
-//                        if (r == null){
-//                            System.out.println("nulll!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//                        }
+                        if (r == null){
+                            Toast.makeText(RiderAfterAcceptRequest.this, "Request is cancelled", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         String ori_list = r.getOriginLatlng();
                         String dest_list = r.getDestLatlng();
                         String ori_name = r.getOrigin();
@@ -435,16 +440,16 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     private void addSign(String ori_list, String dest_list,String ori_name, String dest_name){
         Context mcontext = RiderAfterAcceptRequest.this;
         String[]ori_parts = ori_list.split(",");
-        Double ori_lat = Double.parseDouble(ori_parts[0]);
-        Double ori_lng = Double.parseDouble(ori_parts[1]);
+        double ori_lat = Double.parseDouble(ori_parts[0]);
+        double ori_lng = Double.parseDouble(ori_parts[1]);
         ori = new MarkerOptions().position(new LatLng(ori_lat,ori_lng)).title(ori_name);
         request_accepted_map.addMarker(ori
                 .position(ori.getPosition())
                 .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_green_placeholder)));
 
         String[]parts = dest_list.split(",");
-        Double dest_lat = Double.parseDouble(parts[0]);
-        Double dest_lng = Double.parseDouble(parts[1]);
+        double dest_lat = Double.parseDouble(parts[0]);
+        double dest_lng = Double.parseDouble(parts[1]);
         dest = new MarkerOptions().position(new LatLng(dest_lat,dest_lng)).title(dest_name);
         request_accepted_map.addMarker(dest
                 .position(dest.getPosition())
@@ -514,9 +519,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     }
 
     private void removeRequest(){
-        DatabaseReference ref = db.getReference("requests").child("0bEdwmBMMpSuzycdNfJn0EAvWiw1");
-
-        ref.removeValue();
+        String userID = user.getUid();
+        DatabaseReference ref = db.getReference("requests").child(userID).child("request");
+        ref.getParent().removeValue();
 
     }
 }
