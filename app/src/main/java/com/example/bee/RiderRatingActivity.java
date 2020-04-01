@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,8 +22,8 @@ import java.util.Map;
 
 public class RiderRatingActivity extends AppCompatActivity {
     private TextView textView;
-    private Button upButton;
-    private Button downButton;
+    private FloatingActionButton upButton;
+    private FloatingActionButton downButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
