@@ -81,7 +81,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
     public void handleResult(Result rawResult) {
         String riderID = rawResult.getText();
         String driverID = userID;
-        if (riderID == currentRiderID) {
+        if (riderID.equals(currentRiderID)) {
             // Make transaction
             // First add money to driver's wallet
             FirebaseDatabase database = FirebaseDatabase.getInstance();
