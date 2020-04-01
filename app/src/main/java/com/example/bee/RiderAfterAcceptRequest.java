@@ -120,7 +120,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                         long up = (long)dataSnapshot.child("thumbUp").getValue();
                         long down = (long)dataSnapshot.child("thumbDown").getValue();
                         String email = dataSnapshot.child("email").getValue(String.class);
-                        String r_drName = firstName+lastName;
+                        String r_drName = firstName + " " + lastName;
                         driver_name.setText(r_drName);
                         telephone.setText(phone);
                         t_up.setText(String.valueOf(up));
@@ -170,7 +170,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         editor.putString("mail",mail);
         editor.putString("up",up);
         editor.putString("down",down);
-        Toast.makeText(this, "Driver saved", Toast.LENGTH_SHORT).show();
         editor.apply();
     }
 

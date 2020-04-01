@@ -2,6 +2,7 @@ package com.example.bee;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,11 +27,12 @@ public class DriverConfirmActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
         button = findViewById(R.id.floatingActionButton);
 
-        textView.setText(String.valueOf(amount));
+        textView.setText("You earn $" + String.valueOf(amount) + "!");
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(DriverConfirmActivity.this, DriverMain.class);
+                startActivity(intent);
             }
         });
     }

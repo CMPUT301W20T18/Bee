@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".DriverConfirmActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -12,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="368dp"
         android:clickable="true"
-        app:backgroundTint="@color/yellow"
+        app:backgroundTint="@color/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
@@ -25,6 +26,9 @@
         android:layout_marginTop="82dp"
         android:layout_marginBottom="368dp"
         android:text="TextView"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

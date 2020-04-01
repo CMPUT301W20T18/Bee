@@ -33,7 +33,7 @@ public class RequestAdapter extends ArrayAdapter<Request> {
         start.setText(request.getOrigin());
         end.setText(request.getDest());
         String cost = String.valueOf(request.getCost());
-        price.setText(cost);
+        price.setText("$ " + cost);
         return v;
     }
 

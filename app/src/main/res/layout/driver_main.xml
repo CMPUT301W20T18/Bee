@@ -27,9 +27,10 @@
 
     <ImageView
         android:id="@+id/profile_btn"
-        android:layout_width="59dp"
-        android:layout_height="56dp"
-        android:elevation="20dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:elevation="10dp"
         android:src="@drawable/ic_menu" />
 
 </RelativeLayout>

@@ -84,7 +84,9 @@ public class RatingActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
-                    username.setText(dataSnapshot.child("Name").getValue().toString());
+                    String name = dataSnapshot.child("firstName").getValue(String.class)
+                            + " " + dataSnapshot.child("lastName").getValue(String.class);
+                    username.setText(name);
                     thumbUp.setText(dataSnapshot.child("thumbUp").getValue().toString());
                     thumbDown.setText(dataSnapshot.child("thumbDown").getValue().toString());
 
