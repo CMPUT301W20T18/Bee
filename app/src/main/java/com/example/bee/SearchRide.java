@@ -101,10 +101,8 @@ public class SearchRide extends AppCompatActivity {
                         if (dsp.child("request").exists() && !dsp.getKey().equals(driverId)) {
                             request = dsp.child("request").getValue(Request.class);
                             // eliminate requests that already accepted by other driver
-                            System.out.println("#####################3-1");
                             if (request.getDriverID() == null) {
                                 System.out.println(request.getDriverID());
-                                System.out.println("###############");
                                 String[] latlng = request.getOriginLatlng().split(",");
                                 offerInfo.add(new Offer(request.getOrigin(), request.getDest(), String.format("%.2f", request.getCost()), Double.valueOf(latlng[0]), Double.valueOf(latlng[1]), request.getRiderID()));
                                 //   notify adapter to update listview
