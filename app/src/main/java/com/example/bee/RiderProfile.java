@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ public class RiderProfile extends AppCompatActivity {
     ImageView phone_call;
     ImageView email_send;
     ImageView back;
+    TextView riderName;
     private static final String CALL_PERMISSION = Manifest.permission.CALL_PHONE;
 
     String passRiderID, riderPhone, riderEmail;
@@ -38,6 +40,7 @@ public class RiderProfile extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rider_profile);
+        riderName = findViewById(R.id.inputName);
         Bundle bundle = getIntent().getExtras();
 
 
@@ -52,6 +55,7 @@ public class RiderProfile extends AppCompatActivity {
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
                     riderPhone = dataSnapshot.child("phone").getValue().toString();
                     riderEmail = dataSnapshot.child("email").getValue().toString();
+                    riderName.setText(dataSnapshot.child("Name").getValue().toString());
 
                 }
 
