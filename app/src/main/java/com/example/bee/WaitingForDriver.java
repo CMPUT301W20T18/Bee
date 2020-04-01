@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -31,7 +32,7 @@ import java.util.HashMap;
  * The class is the waiting page for the rider, it shows the pick up location and destination,
  * and the cost of the ride.
  */
-public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferDialog.OnFragmentInteractionListener{
+public class WaitingForDriver extends AppCompatActivity {
     private static final String TAG = "TAG";
     private FirebaseUser user;
     private DatabaseReference ref;
@@ -40,7 +41,10 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
     private TextView toText;
     private TextView fromText;
     private TextView costText;
-    private String driverID;
+    private String name;
+    private String phone;
+    private int thumbUp;
+    private int thumbDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,22 +54,13 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
         fromText = findViewById(R.id.show_from);
         costText = findViewById(R.id.show_cost);
         Button cancelRequestBtn = findViewById(R.id.cancel_request);
-        // Ruichen's Testing -- Local Variable start
-        Button testBtn = findViewById(R.id.test_button);
-        testBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(WaitingForDriver.this, RiderAfterAcceptRequest.class));
-            }
-        });
-        // Ruichen's Testing -- Local Variable end
-
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = Utils.getDatabase();
         ref = database.getReference("requests").child(userID).child("request");
+        //ref.child("driverID").setValue("UtuKe7xERVPMOdfDeWLL12sdioJ3");
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -78,10 +73,31 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
                     costText.setText(String.format("%.2f", request.getCost()));
                 }
                 if (request != null) {
-                    driverID = request.getDriverID();
+                    String driverID = request.getDriverID();
                     if (driverID != null) {
-                        // Show confirm ride offer dialog
-                        new ConfirmOfferDialog(driverID).show(getSupportFragmentManager(), "show_driver");
+                        DatabaseReference newRef = database.getReference("users").child(driverID);
+                        newRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                name = dataSnapshot.child("firstName").getValue(String.class)
+                                        + " " + dataSnapshot.child("lastName").getValue(String.class);
+                                phone = dataSnapshot.child("phone").getValue(String.class);
+                                thumbUp = dataSnapshot.child("thumbUp").getValue(Integer.class);
+                                thumbDown = dataSnapshot.child("thumbDown").getValue(Integer.class);
+                                // Show confirm ride offer dialog
+                                /*new ConfirmOfferDialog(name, phone, thumbUp, thumbDown)
+                                        .show(getSupportFragmentManager(), "show_driver");*/
+                                toConfirmOffer();
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Log.d(TAG, databaseError.toString());
+                            }
+                        });
+                        //new ConfirmOfferDialog("John Doe", "7801231234", 0, 0)
+                          //      .show(getSupportFragmentManager(), "show_driver");
                     }
                 }
             }
@@ -100,6 +116,18 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        CheckNetwork check = new CheckNetwork(getApplicationContext());
+        boolean result = check.isNetworkAvailable();
+        if (!result){
+            String text = "You are offline, unable to update your status";
+            Toast toast = Toast.makeText(WaitingForDriver.this, text, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+        }
+    }
 
     /**
      * Shows a confirm message that ask the user to confirm their cancel of request
@@ -135,48 +163,64 @@ public class WaitingForDriver extends AppCompatActivity implements ConfirmOfferD
 
         dialog.show();
     }
+   private void toConfirmOffer() {
+        Dialog dialog = new Dialog(WaitingForDriver.this, android.R.style.Theme_Dialog);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.confirm_offer_fragment);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        TextView driverName = dialog.findViewById(R.id.driver_name1);
+        TextView phoneNum = dialog.findViewById(R.id.phone_number);
+        TextView rateUpText = dialog.findViewById(R.id.rate_up);
+        TextView rateDownText = dialog.findViewById(R.id.rate_down);
+        Button startBtn = dialog.findViewById(R.id.start_btn);
+        Button rejectBtn = dialog.findViewById(R.id.reject_btn);
+        driverName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(WaitingForDriver.this, DriverBasicInformation.class));
+            }
+        });
+
+        if (driverName.getText().toString().isEmpty()) {
+            // Initialize the dialog with driver's info
+            driverName.setText(name);
+            phoneNum.setText(phone);
+            rateUpText.setText(String.valueOf(thumbUp));
+            rateDownText.setText(String.valueOf(thumbDown));
+        }
+
+        startBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Rider accepted the offer
+                dialog.dismiss();
+                acceptOffer();
+            }
+        });
+
+        rejectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Rider declined the offer
+                dialog.dismiss();
+                ref.child("driverID").setValue(null);
+            }
+        });
+
+        dialog.show();
+
+    }
 
     /**
      * Rider side will notify the driver that the offer has been accepted
      */
-    public void acceptOffer() {
-        // Update request in Firebase with status = true;
-        request.setStatus(true);
-        HashMap<String,Request> updatedRequest = new HashMap<>();
-        updatedRequest.put("request", request);
-        ref.getParent().setValue(updatedRequest).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "onSuccess: rider accepted the offer");
-                //startActivity(new Intent(WaitingForDriver.this, RiderAfter));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onFailure: " + e.toString());
-            }
-        });
-    }
-
-    /**
-     * Rider side will notify the driver that the offer has been declined
-     */
-    public void declineOffer() {
-        // Update request in Firebase with driverID = null
-        request.setDriverID(null);
-        HashMap<String,Request> updatedRequest = new HashMap<>();
-        updatedRequest.put("request", request);
-        ref.getParent().setValue(updatedRequest).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "onSuccess: rider declined the offer");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onFailure: " + e.toString());
-            }
-        });
+    private void acceptOffer() {
+        // Update request in FireBase with status = true;
+        ref.child("status").setValue(true);
+        startActivity(new Intent(WaitingForDriver.this, RiderAfterAcceptRequest.class));
     }
 
     @Override
