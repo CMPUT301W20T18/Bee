@@ -114,6 +114,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="60dp"
             android:layout_alignParentBottom="true"
+            android:backgroundTint="@color/button"
             android:background="@drawable/rounded_corner"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
