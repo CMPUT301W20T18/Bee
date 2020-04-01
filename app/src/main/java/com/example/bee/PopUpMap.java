@@ -135,7 +135,14 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             String passDriverID = bundle.getString("passDriverID");
 //            set up the size of the pop up window
             getWindow().setLayout((int) (width * 0.8), (int) (height * .6));
-
+            riderName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PopUpMap.this, RiderProfile.class);
+                    intent.putExtra("passRiderID",passRiderID);
+                    startActivity(intent);
+                }
+            });
 //        set up the accept button
             AcceptButton.setOnClickListener(new View.OnClickListener() {
                 @Override
