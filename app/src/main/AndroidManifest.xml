@@ -51,6 +51,9 @@
         <activity android:name=".DriverBasicInformation" />
         <activity android:name=".RiderAfterAcceptRequest" />
         <activity android:name=".DriverMain" />
+        <activity android:name=".DriverHistory" />
+        <activity android:name=".RiderHistory" />
+        <activity android:name=".RiderProfile" />
 
         <activity android:name=".WaitingForRider" />
         <activity android:name=".SearchRide" />
