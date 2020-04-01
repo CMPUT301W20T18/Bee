@@ -166,22 +166,10 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
     private void addRequestToHistory(String ID, Request request) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("history").child(ID);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference ref = database.getReference("history").child(ID);
-                String key = ref.push().getKey();
-                HashMap<String, Object> map = new HashMap<>();
-                map.put(key, request);
-                ref.updateChildren(map);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        String key = ref.push().getKey();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put(key, request);
+        ref.updateChildren(map);
     }
 
 }
