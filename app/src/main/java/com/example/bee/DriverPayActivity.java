@@ -146,7 +146,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
 
                 }
             });
-            //ref.removeValue();
+            ref.removeValue();
             // Then, Start next activity -- RiderConfirmActivity
             Intent intent = new Intent(DriverPayActivity.this, DriverConfirmActivity.class);
             intent.putExtra("amount", amount);
