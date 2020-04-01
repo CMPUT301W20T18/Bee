@@ -87,6 +87,7 @@
         android:background="@drawable/rounded_corner"
         android:backgroundTint="@color/button"
         android:text="Cancel Request"
+        android:textColor="@color/black"
         android:layout_alignParentBottom="true"
         android:elevation="10dp"
         android:layout_centerHorizontal="true"
