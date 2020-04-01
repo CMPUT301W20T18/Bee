@@ -53,7 +53,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     private static final String TAG = "accept_request_activity";
 
     GoogleMap request_accepted_map;
-    TextView driver_name;
+    TextView driver_name, telephone, t_up, t_down;
 
     ArrayList<String> points = new ArrayList<>();
     MarkerOptions ori, dest;
@@ -62,7 +62,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     FirebaseDatabase db;
 
     FloatingActionButton fabConfirm, fabCancel;
-    private static final String rq_id = "PAvxlWke8KfOtRbuXuqo6TheIrw1";
+    private static final String rq_id = "CLwijmFH7rNNr54uUTPbvyhVKyC2";
 
     public static final String SHARED_PREFS = "sharedPrefs";
 
@@ -75,9 +75,10 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         db = FirebaseDatabase.getInstance();
         //db.setPersistenceEnabled(true);
         initMap();
-
-
         driver_name = (TextView)findViewById(R.id.driver_name);
+        telephone = findViewById(R.id.telephone);
+        t_up = findViewById(R.id.up_num);
+        t_down = findViewById(R.id.down_num);
         driver_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +104,88 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
 
 
+    }
+
+    private void showDriver(String dr){
+        DatabaseReference ref = db.getReference("users");
+        ref.child(dr)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String firstName = dataSnapshot.child("firstName").getValue(String.class);
+                        String lastName = dataSnapshot.child("lastName").getValue(String.class);
+                        String phone = dataSnapshot.child("phone").getValue(String.class);
+                        long up = (long)dataSnapshot.child("thumbUp").getValue();
+                        long down = (long)dataSnapshot.child("thumbDown").getValue();
+                        String email = dataSnapshot.child("email").getValue(String.class);
+                        String r_drName = firstName+lastName;
+                        driver_name.setText(r_drName);
+                        telephone.setText(phone);
+                        t_up.setText(String.valueOf(up));
+                        t_down.setText(String.valueOf(down));
+                        saveDriver(r_drName,phone,email,String.valueOf(up),String.valueOf(down));
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
+
+    private void getDriver(){
+        DatabaseReference ref = db.getReference("requests");
+        ref.child(rq_id)
+                .child("request")
+                .child("driverID")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String drID = dataSnapshot.getValue(String.class);
+                        if(drID == null){
+                            Log.d(TAG, "Data error");
+                        }else{
+                            showDriver(drID);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void saveDriver(String name,String phone,String mail,String up,String down){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("dr_name",name);
+        editor.putString("phone",phone);
+        editor.putString("mail",mail);
+        editor.putString("up",up);
+        editor.putString("down",down);
+        Toast.makeText(this, "Driver saved", Toast.LENGTH_SHORT).show();
+        editor.apply();
+    }
+
+    private void loadDriver(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String name = sharedPreferences.getString("dr_name", "");
+        String phone = sharedPreferences.getString("phone", "");
+        String mail = sharedPreferences.getString("mail", "");
+        String up = sharedPreferences.getString("up", "");
+        String down = sharedPreferences.getString("down", "");
+        if(!name.equals("") && !phone.equals("") && !mail.equals("") && !up.equals("")&&!down.equals("")){
+            driver_name.setText(name);
+            telephone.setText(phone);
+            t_up.setText(up);
+            t_down.setText(down);
+        }else{
+            Toast.makeText(this, "data error", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -131,9 +214,11 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
             toast.show();
             loadOriDest();
             loadRoute();
+            loadDriver();
         }else{
             setOriDest();
             drawPointsList();
+            getDriver();
         }
 
         //removeRequest();
@@ -215,7 +300,6 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(RiderAfterAcceptRequest.this, "hohoho", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
                 DatabaseReference ref = db.getReference("requests").child(rq_id).child("request").child("cancel");
                 ref.setValue(true);
@@ -383,6 +467,8 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         String dest_name = sharedPreferences.getString("dest_name", "");
         if(!ori_list.equals("") && !dest_list.equals("") && !ori_name.equals("") && !dest_name.equals("")){
             addSign(ori_list,dest_list,ori_name,dest_name);
+        }else{
+            Toast.makeText(this, "Data error", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -396,7 +482,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         String json = gson.toJson(points);
         editor.putString("route",json);
         editor.apply();
-        Toast.makeText(RiderAfterAcceptRequest.this, "save route", Toast.LENGTH_SHORT).show();
+
     }
 
     private void loadRoute(){
@@ -413,20 +499,5 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         }
 
     }
-
-    private void removeRequest(){
-        DatabaseReference ref = db.getReference("requests").child("0bEdwmBMMpSuzycdNfJn0EAvWiw1");
-
-        ref.removeValue();
-
-    }
-
-
-
-
-
-
-
-
 
 }

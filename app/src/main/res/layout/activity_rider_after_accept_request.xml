@@ -25,7 +25,6 @@
             android:layout_height="150dp"
             android:layout_marginLeft="100dp"
             android:layout_alignParentTop="true"
-            android:text="John Doe"
             android:textSize="25sp"
             android:textColor="#000"
             android:textStyle="bold"
@@ -37,7 +36,6 @@
             android:layout_marginLeft="100dp"
             android:layout_marginTop="36dp"
             android:layout_alignParentTop="true"
-            android:text="1858905617"
             android:textSize="25sp"
             android:textColor="#DD252424"
             android:textStyle="bold"
@@ -57,7 +55,8 @@
             android:layout_alignParentTop="true"
             android:text="0"
             android:textSize="25sp"
-            android:textColor="#DD252424" />
+            android:textColor="#DD252424"
+            android:id = "@+id/up_num"/>
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -72,7 +71,8 @@
             android:layout_alignParentTop="true"
             android:text="0"
             android:textSize="25sp"
-            android:textColor="#DD252424" />
+            android:textColor="#DD252424"
+            android:id = "@+id/down_num"/>
 
     </RelativeLayout>
 
