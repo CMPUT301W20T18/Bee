@@ -178,7 +178,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                                     if(cancelValue){
                                         ref.getParent().removeValue();
                                         finishButton.setVisibility(View.VISIBLE);
-                                        RequestStatus.setText("Request has been cancel");
+                                        RequestStatus.setText("Request has been cancelled");
                                         finishButton.setText("BACK");
                                         finishButton.setOnClickListener(new View.OnClickListener() {
                                             @Override
