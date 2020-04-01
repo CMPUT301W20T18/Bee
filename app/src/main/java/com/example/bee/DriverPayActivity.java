@@ -81,7 +81,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
     public void handleResult(Result rawResult) {
         String riderID = rawResult.getText();
         String driverID = userID;
-        if (riderID == currentRiderID) {
+        if (riderID.equals(currentRiderID)) {
             // Make transaction
             // First add money to driver's wallet
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -89,7 +89,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    QRWallet driverWallet = (QRWallet) dataSnapshot.getValue();
+                    QRWallet driverWallet = (QRWallet) dataSnapshot.getValue(QRWallet.class);
                     String driverDescr = String.format("%s owes me $%.2f", currentRider, amount);
                     driverWallet.addTransaction(driverDescr, amount);
                     database.getReference("users").child(userID).setValue(driverWallet);
@@ -106,7 +106,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    QRWallet riderWallet = (QRWallet) dataSnapshot.getValue();
+                    QRWallet riderWallet = (QRWallet) dataSnapshot.getValue(QRWallet.class);
                     String riderDescr = String.format("I owe %s $%.2f", riderWallet.getName(), amount);
                     riderWallet.addTransaction(riderDescr, -1 * amount);
                     database.getReference("users").child(riderID).setValue(riderWallet);
@@ -124,7 +124,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Request request = (Request) dataSnapshot.getValue();
+                    Request request = (Request) dataSnapshot.getValue(Request.class);
                     addRequestToHistory(riderID, request);
                     addRequestToHistory(driverID, request);
                 }
@@ -134,7 +134,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
 
                 }
             });
-
+            ref.removeValue();
             // Then, Start next activity -- RiderConfirmActivity
             Intent intent = new Intent(DriverPayActivity.this, DriverConfirmActivity.class);
             intent.putExtra("amount", amount);
@@ -157,7 +157,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<Request> requests = (ArrayList) dataSnapshot.getValue();
+                ArrayList<Request> requests = (ArrayList) dataSnapshot.getValue(ArrayList.class);
                 requests.add(request);
                 ref.child(ID).setValue(requests);
             }
