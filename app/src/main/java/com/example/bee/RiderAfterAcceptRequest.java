@@ -312,6 +312,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                 dialog.dismiss();
                 DatabaseReference ref = db.getReference("requests").child(userID).child("request").child("cancel");
                 ref.setValue(true);
+                removeRequest();
                 startActivity(new Intent(RiderAfterAcceptRequest.this, EnterAddressMap.class));
             }
         });
@@ -518,9 +519,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     }
 
     private void removeRequest(){
-        DatabaseReference ref = db.getReference("requests").child("0bEdwmBMMpSuzycdNfJn0EAvWiw1");
-
-        ref.removeValue();
+        String userID = user.getUid();
+        DatabaseReference ref = db.getReference("requests").child(userID).child("request");
+        ref.getParent().removeValue();
 
     }
 }
