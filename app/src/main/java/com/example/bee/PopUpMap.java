@@ -79,7 +79,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private FirebaseDatabase firebaseDatabase;
     GoogleMap mapPop;
     MarkerOptions place1;
-    private DatabaseReference ref,userRef;
+    private DatabaseReference ref,riderFirstNameRef, riderLastNameRef;
     String passRiderID;
     MarkerOptions place2;
     private Boolean drew = false;
@@ -236,15 +236,30 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
                     double destLongitude = Double.parseDouble(afterSplitLoc1[1]);
                     LatLng destCoordinate = new LatLng(destLatitude,destLongitude);
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    userRef = database.getReference("users").child(passRiderID).child("Name");;
-                    userRef.addValueEventListener(new ValueEventListener() {
+                    riderFirstNameRef = database.getReference("users").child(passRiderID).child("firstName");;
+                    riderFirstNameRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            riderNameString = dataSnapshot.getValue(String.class);
-                            if(riderNameString != null){
-                                riderName.setText(riderNameString);
+                            String riderFirstNameString = dataSnapshot.getValue(String.class);
+                            if(riderFirstNameString != null){
+                                riderLastNameRef = database.getReference("users").child(passRiderID).child("lastName");
+                                riderLastNameRef.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        String riderLastNameString = dataSnapshot.getValue(String.class);
+                                        if(riderLastNameString != null) {
+                                            riderName.setText(riderFirstNameString + " " + riderLastNameString);
+                                        }else{
+                                            riderName.setText("Invalid rider name");
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
                             }else{
-                                riderName.setText("Invalid rider Name");
+                                riderName.setText("Invalid rider name");
                             }
                         }
 
