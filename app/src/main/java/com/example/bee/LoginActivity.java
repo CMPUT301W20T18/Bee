@@ -1,8 +1,10 @@
 package com.example.bee;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -12,17 +14,24 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+
 /**
  *  This class logs a user in if they already registered in the database
  *  connects to the RegistrationActivity
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends FragmentActivity {
 
     private ImageView logo, ivSignIn;
     private AutoCompleteTextView name, password;
@@ -38,7 +47,17 @@ public class LoginActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        showCovidDialog();
         initializeGUI();
+
+//        Fragment mFragment = null;
+//        mFragment = new CovidHint();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.covidHint, mFragment).commit();
+//        Intent i = new Intent(LoginActivity.this,CovidHint.class);
+//        startActivity(i);
+
 
         user = firebaseAuth.getCurrentUser();
 
@@ -157,4 +176,29 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
+    private void showCovidDialog(){
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        View view = getLayoutInflater().inflate(R.layout.covid_hint,null);
+        TextView title = (TextView) view.findViewById(R.id.dialog_title);
+        title.setText("Flatten the Curve!");
+        Button gotBtn = view.findViewById(R.id.gotBtn);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        gotBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+
+
+    }
+
 }
+
+

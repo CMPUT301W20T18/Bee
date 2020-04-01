@@ -92,7 +92,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     double balance = dataSnapshot.getValue(double.class);
-                    String driverDescr = String.format("%s owes me $%.2f", currentRider, amount);
+                    String driverDescr = String.format("%s owes me $%.2f", riderID, amount);
 
                     // Update Amount and transaction
                     Map<String, Object> childUpdates = new HashMap<>();
