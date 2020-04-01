@@ -170,7 +170,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                 return true;
             case R.id.history:
                 Toast.makeText(EnterAddressMap.this, "History Selected", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(EnterAddressMap.this, ConfirmOfferDialog.class);
+                Intent intent = new Intent(EnterAddressMap.this, RiderHistory.class);
                 intent.putExtra("riderID",userID);
                 startActivity(intent);
                 return true;
@@ -311,7 +311,16 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void onResume() {
         super.onResume();
-        DatabaseReference ref = database.getReference("requests").child(userID).child("request");
+
+        CheckNetwork check = new CheckNetwork(getApplicationContext());
+        boolean result = check.isNetworkAvailable();
+        if (!result){
+            String text = "You are offline, some functionalities may be unavailable";
+            Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+        }
+        /*DatabaseReference ref = database.getReference("requests").child(userID).child("request");
         // Check if the user has post any request
         // If there is a request then jump to the correct activity
         ref.addValueEventListener(new ValueEventListener() {
@@ -340,7 +349,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(TAG, databaseError.toString());
             }
-        });
+        });*/
     }
 
     @Override

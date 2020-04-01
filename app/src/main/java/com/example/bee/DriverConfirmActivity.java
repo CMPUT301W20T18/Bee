@@ -7,10 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class DriverConfirmActivity extends AppCompatActivity {
     private double amount;
     private TextView textView;
-    private Button button;
+    private FloatingActionButton button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
