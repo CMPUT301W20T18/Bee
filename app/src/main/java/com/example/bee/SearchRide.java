@@ -230,9 +230,10 @@ public class SearchRide extends AppCompatActivity {
         }
 
         Collections.sort(offerInfo);
-
+        // the Collections.sort sort the array with descending order, thus use reverse to get ascending order
         Collections.reverse(offerInfo);
-
+        // since offerInfo array is defined within the class, no instance need to return
+        // instead, call arrayAdapter offerAdapter to notify the change of order
         offerAdapter.notifyDataSetChanged();
 
     }
