@@ -285,7 +285,7 @@ public class EnterAddressMap extends FragmentActivity implements OnMapReadyCallb
                             .findFragmentById(R.id.rider_initial_map);
                     mapFragment.getMapAsync(EnterAddressMap.this);
                 } else {
-                    String text = "Poor network connectivity";
+                    String text = "Poor network connection";
                     Toast toast = Toast.makeText(EnterAddressMap.this, text, Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
