@@ -26,6 +26,8 @@
         android:layout_marginTop="82dp"
         android:layout_marginBottom="368dp"
         android:text="TextView"
+        android:textSize="20dp"
+        android:gravity="center"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
         app:layout_constraintEnd_toEndOf="parent"
