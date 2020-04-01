@@ -1,5 +1,6 @@
 package com.example.bee;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -13,18 +14,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RiderHistory extends AppCompatActivity{
     static ArrayList<Request> requests;
     private RequestAdapter rAdapter;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
-    private Request request;
-    FirebaseFirestore db;
-    String userID;
+    private String userID;
 
 
     @Override
@@ -35,7 +34,11 @@ public class RiderHistory extends AppCompatActivity{
         Bundle bundle = getIntent().getExtras();
         userID = bundle.getString("riderID");
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        ListView mList = findViewById(R.id.rList);
+        rAdapter = new RequestAdapter(this, requests);
+        mList.setAdapter(rAdapter);
+
+        /*final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference ref = database.getReference("requests");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -46,10 +49,6 @@ public class RiderHistory extends AppCompatActivity{
                         requests.add(request);
 
                     }
-
-
-
-
                 }
 
             }
@@ -58,15 +57,26 @@ public class RiderHistory extends AppCompatActivity{
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+        });*/
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("history").child(userID);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                    Request request = dsp.getValue(Request.class);
+                    if (request.getRiderID().equals(userID)) {
+                        requests.add(request);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
         });
-
-
-
-
-        ListView mList = findViewById(R.id.rList);
-        rAdapter = new RequestAdapter(this, requests);
-        mList.setAdapter(rAdapter);
-
 
     }
 }
