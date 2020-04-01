@@ -100,7 +100,7 @@ public class RiderPayActivity extends AppCompatActivity {
         ref2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Request request = (Request) dataSnapshot.getValue();
+                Request request = (Request) dataSnapshot.getValue(Request.class);
                 if (request == null) {
                     Intent intent = new Intent(RiderPayActivity.this, RiderRatingActivity.class);
                     intent.putExtra("DriverID", driverID);
