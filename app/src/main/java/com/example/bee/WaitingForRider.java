@@ -127,6 +127,14 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
         }
 
+        riderName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WaitingForRider.this, RiderProfile.class);
+                intent.putExtra("passRiderID",passRiderID);
+                startActivity(intent);
+            }
+        });
         // Depends rider response to process to next activity
         DatabaseReference statusRef = database.getReference("requests").child(passRiderID).child("request").child("status");
         statusRef.addValueEventListener(new ValueEventListener() {
