@@ -46,6 +46,7 @@ public class WaitingForDriver extends AppCompatActivity {
     private int thumbUp;
     private int thumbDown;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,10 +58,8 @@ public class WaitingForDriver extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
-
         FirebaseDatabase database = Utils.getDatabase();
         ref = database.getReference("requests").child(userID).child("request");
-        //ref.child("driverID").setValue("UtuKe7xERVPMOdfDeWLL12sdioJ3");
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -85,10 +84,7 @@ public class WaitingForDriver extends AppCompatActivity {
                                 thumbUp = dataSnapshot.child("thumbUp").getValue(Integer.class);
                                 thumbDown = dataSnapshot.child("thumbDown").getValue(Integer.class);
                                 // Show confirm ride offer dialog
-                                /*new ConfirmOfferDialog(name, phone, thumbUp, thumbDown)
-                                        .show(getSupportFragmentManager(), "show_driver");*/
                                 toConfirmOffer();
-
                             }
 
                             @Override
@@ -96,8 +92,6 @@ public class WaitingForDriver extends AppCompatActivity {
                                 Log.d(TAG, databaseError.toString());
                             }
                         });
-                        //new ConfirmOfferDialog("John Doe", "7801231234", 0, 0)
-                          //      .show(getSupportFragmentManager(), "show_driver");
                     }
                 }
             }

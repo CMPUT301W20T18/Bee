@@ -45,7 +45,6 @@ public class SearchRide extends AppCompatActivity {
 //    initializing local variables
     private static final String TAG = "TAG";
     private String driverId;
-//    private FirebaseUser;
     private DatabaseReference ref;
     String passDistance;
     Request request;
@@ -93,20 +92,27 @@ public class SearchRide extends AppCompatActivity {
                 if (!offerInfo.isEmpty()){
                     offerInfo.clear();
                 }
-                //                Using for loop to obtain all current reqeusts in database and add them into list view
+                //   Using for loop to obtain all current reqeusts in database and add them into list view
 
                 for(DataSnapshot dsp:dataSnapshot.getChildren()){
                     // Adding condition so that driver can't see request made by his/her own account
-                    if (dsp.child("request").exists() && !dsp.getKey().equals(driverId)) {
-                        request = dsp.child("request").getValue(Request.class);
-                        // eliminate requests that already accepted by other driver
-                        if (request.getDriverID()== null) {
-                            System.out.println(request.getDriverID());
-                            String[] latlng = request.getOriginLatlng().split(",");
-                            offerInfo.add(new Offer(request.getOrigin(), request.getDest(), String.format("%.2f", request.getCost()), Double.valueOf(latlng[0]), Double.valueOf(latlng[1]), request.getRiderID()));
-                            //   notify adapter to update listview
-                            offerAdapter.notifyDataSetChanged();
+                    try {
+                        if (dsp.child("request").exists() && !dsp.getKey().equals(driverId)) {
+                            request = dsp.child("request").getValue(Request.class);
+                            // eliminate requests that already accepted by other driver
+                            System.out.println("#####################3-1");
+                            if (request.getDriverID() == null) {
+                                System.out.println(request.getDriverID());
+                                System.out.println("###############");
+                                String[] latlng = request.getOriginLatlng().split(",");
+                                offerInfo.add(new Offer(request.getOrigin(), request.getDest(), String.format("%.2f", request.getCost()), Double.valueOf(latlng[0]), Double.valueOf(latlng[1]), request.getRiderID()));
+                                //   notify adapter to update listview
+                                offerAdapter.notifyDataSetChanged();
+                            }
                         }
+                    }
+                    catch (Exception e){
+                        System.out.println("Error"+e);
                     }
                 }
             }
@@ -187,12 +193,19 @@ public class SearchRide extends AppCompatActivity {
 
     }
 
+    /**
+     * getLatLng method is used to convert a location name into geolocation with type LatLng
+     * @param searchingAddress
+     * @return
+     * LatLng searchPos
+     */
     private LatLng getLatLng(String searchingAddress){
         GeocodingResult[] address;
         try{
             GeoApiContext context = new GeoApiContext.Builder()
                     .apiKey(getString(R.string.google_maps_key))
                     .build();
+            // the GeocodingApi convert location SearchingAddress into array with lat and lng
             address = GeocodingApi.geocode(context,
                     searchingAddress).await();
 
@@ -206,6 +219,13 @@ public class SearchRide extends AppCompatActivity {
         return searchPos;
     }
 
+    /**
+     * sortOffer method is used to sort list array with given latlng information
+     * and sort by distance with ascending order
+     * @param target
+     * Latlng target is the expected latlng infomation given by user
+     * and be used to sort the list array
+     */
     private void sortOffer(LatLng target){
         searchingLat = target.latitude;
         searchingLng = target.longitude;
@@ -217,9 +237,10 @@ public class SearchRide extends AppCompatActivity {
         }
 
         Collections.sort(offerInfo);
-
+        // the Collections.sort sort the array with descending order, thus use reverse to get ascending order
         Collections.reverse(offerInfo);
-
+        // since offerInfo array is defined within the class, no instance need to return
+        // instead, call arrayAdapter offerAdapter to notify the change of order
         offerAdapter.notifyDataSetChanged();
 
     }

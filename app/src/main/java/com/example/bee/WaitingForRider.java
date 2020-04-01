@@ -149,6 +149,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
             }
         });
+        DatabaseReference cancelRef = ref.child("cancel");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -159,21 +160,9 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                         finishButton.setVisibility(View.VISIBLE);
                         RequestStatus.setText("Declined offer");
                         finishButton.setText("BACK");
-                        DatabaseReference cancelRef = ref.child("cancel");
-                        cancelRef.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Boolean cancelValue = dataSnapshot.getValue(Boolean.class);
-                                if(!cancelValue){
-                                    ref.getParent().removeValue();
-                                }
-                            }
+                        ref.getParent().removeValue();
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            }
-                        });
                         finishButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -184,21 +173,49 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
                     }else{
                         if(riderResponse){
-                            RequestStatus.setText("Confirmed ride offer");
-                            finishButton.setVisibility(View.VISIBLE);
-                            DatabaseReference reachRef = ref.child("reached");
-                            finishButton.setOnClickListener(new View.OnClickListener() {
+                            cancelRef.addValueEventListener(new ValueEventListener() {
                                 @Override
-                                public void onClick(View v) {
-                                    reachRef.setValue(true);
-                                    Intent intent = new Intent(WaitingForRider.this, DriverPayActivity.class);
-                                    intent.putExtra("Rider", passRiderName);
-                                    intent.putExtra("RiderID", passRiderID);
-                                    intent.putExtra("amount", Double.parseDouble(passMoneyAmount));
-                                    startActivity(intent);
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    Boolean cancelValue = dataSnapshot.getValue(Boolean.class);
+                                    if(cancelValue){
+                                        ref.getParent().removeValue();
+                                        finishButton.setVisibility(View.VISIBLE);
+                                        RequestStatus.setText("Declined offer");
+                                        finishButton.setText("BACK");
+                                        finishButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                startActivity(new Intent(WaitingForRider.this, SearchRide.class));
+
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        RequestStatus.setText("Confirmed ride offer");
+                                        finishButton.setVisibility(View.VISIBLE);
+                                        DatabaseReference reachRef = ref.child("reached");
+                                        finishButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                reachRef.setValue(true);
+                                                Intent intent = new Intent(WaitingForRider.this, DriverPayActivity.class);
+                                                intent.putExtra("Rider", passRiderName);
+                                                intent.putExtra("RiderID", passRiderID);
+                                                intent.putExtra("amount", Double.parseDouble(passMoneyAmount));
+                                                startActivity(intent);
+                                            }
+                                        });
+
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                 }
                             });
+
                         }
                         if(!riderResponse){
                             finishButton.setVisibility(View.GONE);
