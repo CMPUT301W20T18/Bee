@@ -3,6 +3,7 @@ package com.example.bee;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -43,14 +44,16 @@ public class RiderPayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_pay);
+        String driverID = getIntent().getExtras().getString("DriverID");
 
         //This part is to get the request from the database
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
 
+        // Get the cost from database and generate the QRcode using userID
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         ref = database.getReference("requests").child(userID).child("request");
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Once the functionality of multiple 
@@ -89,5 +92,27 @@ public class RiderPayActivity extends AppCompatActivity {
                 Log.d(TAG, databaseError.toString());
             }
         });
+
+        // After the Driver Scan the QRcode and finish transaction, turn to RiderRatingActivity
+        // When the driver scan the QRcode, the request under uid will be deleted
+        // Once request is deleted go to next activity
+        DatabaseReference ref2 = database.getReference("requests").child(userID).child("request");
+        ref2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Request request = (Request) dataSnapshot.getValue();
+                if (request == null) {
+                    Intent intent = new Intent(RiderPayActivity.this, RiderRatingActivity.class);
+                    intent.putExtra("DriverID", driverID);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }
