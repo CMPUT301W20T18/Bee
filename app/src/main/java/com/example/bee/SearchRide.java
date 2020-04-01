@@ -92,20 +92,27 @@ public class SearchRide extends AppCompatActivity {
                 if (!offerInfo.isEmpty()){
                     offerInfo.clear();
                 }
-                //                Using for loop to obtain all current reqeusts in database and add them into list view
+                //   Using for loop to obtain all current reqeusts in database and add them into list view
 
                 for(DataSnapshot dsp:dataSnapshot.getChildren()){
                     // Adding condition so that driver can't see request made by his/her own account
-                    if (dsp.child("request").exists() && !dsp.getKey().equals(driverId)) {
-                        request = dsp.child("request").getValue(Request.class);
-                        // eliminate requests that already accepted by other driver
-                        if (request.getDriverID()== null) {
-                            System.out.println(request.getDriverID());
-                            String[] latlng = request.getOriginLatlng().split(",");
-                            offerInfo.add(new Offer(request.getOrigin(), request.getDest(), String.format("%.2f", request.getCost()), Double.valueOf(latlng[0]), Double.valueOf(latlng[1]), request.getRiderID()));
-                            //   notify adapter to update listview
-                            offerAdapter.notifyDataSetChanged();
+                    try {
+                        if (dsp.child("request").exists() && !dsp.getKey().equals(driverId)) {
+                            request = dsp.child("request").getValue(Request.class);
+                            // eliminate requests that already accepted by other driver
+                            System.out.println("#####################3-1");
+                            if (request.getDriverID() == null) {
+                                System.out.println(request.getDriverID());
+                                System.out.println("###############");
+                                String[] latlng = request.getOriginLatlng().split(",");
+                                offerInfo.add(new Offer(request.getOrigin(), request.getDest(), String.format("%.2f", request.getCost()), Double.valueOf(latlng[0]), Double.valueOf(latlng[1]), request.getRiderID()));
+                                //   notify adapter to update listview
+                                offerAdapter.notifyDataSetChanged();
+                            }
                         }
+                    }
+                    catch (Exception e){
+                        System.out.println("Error"+e);
                     }
                 }
             }
