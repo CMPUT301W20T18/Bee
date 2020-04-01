@@ -79,7 +79,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
     private FirebaseDatabase firebaseDatabase;
     GoogleMap mapPop;
     MarkerOptions place1;
-    private DatabaseReference ref,userRef;
+    private DatabaseReference ref,riderFirstNameRef, riderLastNameRef;
     String passRiderID;
     MarkerOptions place2;
     private Boolean drew = false;
@@ -98,31 +98,8 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
 
 //            https://stackoverflow.com/questions/9998221/how-to-pass-double-value-to-a-textview-in-android
-//            FirebaseDatabase database = FirebaseDatabase.getInstance();
-//            ref = database.getReference("requests").child(userID).child("request");
-//            ref.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-////                    for(DataSnapshot s: dataSnapshot.getChildren()){
-////
-////                    }
-//                    Request request = dataSnapshot.getValue(Request.class);
-//                    if(request != null){
-//
-//
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//                    Log.d(TAG, databaseError.toString());
-//                }
-//            });
-
 
             initMap();
-
-
             AcceptButton = findViewById(R.id.accept_button);
             CancelButton = findViewById(R.id.cancel_button);
 //        initialize the map as a pop up window
@@ -131,12 +108,21 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
             int width = displayMetrics.widthPixels;
             int height = displayMetrics.heightPixels;
+//            receive the value from previous activity
             Bundle bundle = getIntent().getExtras();
             String passMoneyAmount = bundle.getString("passMoneyAmount");
             passRiderID = bundle.getString("passRiderID");
             String passDriverID = bundle.getString("passDriverID");
+//            set up the size of the pop up window
             getWindow().setLayout((int) (width * 0.8), (int) (height * .6));
-
+            riderName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PopUpMap.this, RiderProfile.class);
+                    intent.putExtra("passRiderID",passRiderID);
+                    startActivity(intent);
+                }
+            });
 //        set up the accept button
             AcceptButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -158,6 +144,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             CancelButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+//                    go to previous activity
                     final Intent cancel = new Intent(PopUpMap.this, SearchRide.class);
                     startActivity(cancel);
                 }
@@ -203,19 +190,22 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         String passMoneyAmount = bundle.getString("passMoneyAmount");
         passRiderID = bundle.getString("passRiderID");
         requestMoneyAmount.setText("$" + passMoneyAmount);
-
+//        check the passing riderID is valid or not
         if(passRiderID != null){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReference("requests").child(passRiderID).child("request");
             DatabaseReference originLatlngRef = ref.child("originLatlng");
+//              initialize the reference for original location
             originLatlngRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                     String originString = dataSnapshot.getValue(String.class);
                     String[] afterSplitLoc = originString.split(",");
                     double originLatitude = Double.parseDouble(afterSplitLoc[0]);
                     double originLongitude = Double.parseDouble(afterSplitLoc[1]);
                     LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
+//                    set up the origin location on the map
                     place1 = new MarkerOptions().position(originCoordinate).title("Starting position");
 
                 }
@@ -236,15 +226,32 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
                     double destLongitude = Double.parseDouble(afterSplitLoc1[1]);
                     LatLng destCoordinate = new LatLng(destLatitude,destLongitude);
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    userRef = database.getReference("users").child(passRiderID).child("Name");;
-                    userRef.addValueEventListener(new ValueEventListener() {
+                    riderFirstNameRef = database.getReference("users").child(passRiderID).child("firstName");;
+                    riderFirstNameRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            riderNameString = dataSnapshot.getValue(String.class);
-                            if(riderNameString != null){
-                                riderName.setText(riderNameString);
+                            String riderFirstNameString = dataSnapshot.getValue(String.class);
+//                            check the first name is valid or not
+                            if(riderFirstNameString != null){
+                                riderLastNameRef = database.getReference("users").child(passRiderID).child("lastName");
+                                riderLastNameRef.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        String riderLastNameString = dataSnapshot.getValue(String.class);
+//                                  check the last name is valid or not
+                                        if(riderLastNameString != null) {
+                                            riderName.setText(riderFirstNameString + " " + riderLastNameString);
+                                        }else{
+                                            riderName.setText("Invalid rider name");
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
                             }else{
-                                riderName.setText("Invalid rider Name");
+                                riderName.setText("Invalid rider name");
                             }
                         }
 
@@ -253,11 +260,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
                         }
                     });
-
-
-
-
-
+//                             set up the destination location on the map
                     place2 = new MarkerOptions().position(destCoordinate).title("Destination");
                     drew = getPoints(place1, place2);
 
@@ -277,6 +280,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
         }
         boolean result = isNetworkAvailable();
+//        offline mode initialization
         if (!result){
             Toast toast = Toast.makeText(PopUpMap.this, "You are offline", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER,0,0);
@@ -286,14 +290,12 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
         }
 
-
-
-
-
 //        initialize the starting position and destination
 
-
     }
+    /**
+     * This check the network is whether connected or not
+     */
     private boolean isNetworkAvailable() {
 
         ConnectivityManager connectivityManager

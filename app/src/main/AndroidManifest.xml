@@ -33,8 +33,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-<!--        <activity android:name=".MainActivity" />-->
-<!--        <activity android:name=".LoginActivity">-->
+        <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity" />
 
         <activity android:name=".SplashActivity">
@@ -52,6 +51,9 @@
         <activity android:name=".DriverBasicInformation" />
         <activity android:name=".RiderAfterAcceptRequest" />
         <activity android:name=".DriverMain" />
+        <activity android:name=".DriverHistory" />
+        <activity android:name=".RiderHistory" />
+        <activity android:name=".RiderProfile" />
 
         <activity android:name=".WaitingForRider" />
         <activity android:name=".SearchRide" />
