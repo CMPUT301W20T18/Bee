@@ -27,7 +27,7 @@ public class DriverConfirmActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
         button = findViewById(R.id.floatingActionButton);
 
-        textView.setText(String.valueOf(amount));
+        textView.setText("You earn $" + String.valueOf(amount) + "!");
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
