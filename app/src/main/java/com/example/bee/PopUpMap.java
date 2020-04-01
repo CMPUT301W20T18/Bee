@@ -98,26 +98,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
 
 //            https://stackoverflow.com/questions/9998221/how-to-pass-double-value-to-a-textview-in-android
-//            FirebaseDatabase database = FirebaseDatabase.getInstance();
-//            ref = database.getReference("requests").child(userID).child("request");
-//            ref.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-////                    for(DataSnapshot s: dataSnapshot.getChildren()){
-////
-////                    }
-//                    Request request = dataSnapshot.getValue(Request.class);
-//                    if(request != null){
-//
-//
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//                    Log.d(TAG, databaseError.toString());
-//                }
-//            });
 
             initMap();
             AcceptButton = findViewById(R.id.accept_button);
@@ -135,7 +115,14 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             String passDriverID = bundle.getString("passDriverID");
 //            set up the size of the pop up window
             getWindow().setLayout((int) (width * 0.8), (int) (height * .6));
-
+            riderName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PopUpMap.this, RiderProfile.class);
+                    intent.putExtra("passRiderID",passRiderID);
+                    startActivity(intent);
+                }
+            });
 //        set up the accept button
             AcceptButton.setOnClickListener(new View.OnClickListener() {
                 @Override
