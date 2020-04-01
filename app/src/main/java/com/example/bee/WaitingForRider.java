@@ -84,6 +84,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
     MarkerOptions place1;
     MarkerOptions place2;
     Button finishButton;
+    String riderFullName;
     Boolean drew = false;
     private String distance;
     private String time;
@@ -196,7 +197,9 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                                             @Override
                                             public void onClick(View v) {
                                                 reachRef.setValue(true);
-                                                Intent intent = new Intent(WaitingForRider.this, DriverPayActivity.class);
+                                                Intent intent = new Intent(WaitingForRider
+                                                        .this, DriverPayActivity
+                                                        .class);
                                                 intent.putExtra("Rider", passRiderName);
                                                 intent.putExtra("RiderID", passRiderID);
                                                 intent.putExtra("amount", Double.parseDouble(passMoneyAmount));
@@ -236,7 +239,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                 Intent intent = new Intent(WaitingForRider.this, PopUpMap.class);
                 intent.putExtra("passMoneyAmount",passMoneyAmount);
                 intent.putExtra("passRiderID",passRiderID);
-                intent.putExtra("passRiderName",riderNameString);
+                intent.putExtra("passRiderName",riderFullName);
                 startActivity(intent);
 
 
@@ -348,7 +351,8 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         String riderLastNameString = dataSnapshot.getValue(String.class);
                                         if(riderLastNameString != null) {
-                                            riderName.setText(riderFirstNameString + " " + riderLastNameString);
+                                            riderFullName = riderFirstNameString + " " + riderLastNameString;
+                                            riderName.setText(riderFullName);
                                         }else{
                                             riderName.setText("Invalid rider name");
                                         }
