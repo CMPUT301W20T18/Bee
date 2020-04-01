@@ -139,12 +139,6 @@ public class RegistrationActivity extends AppCompatActivity {
                     Toast.makeText(RegistrationActivity.this, "User Created", Toast.LENGTH_SHORT).show();
                     userID = firebaseAuth.getCurrentUser().getUid();
 
-                    // Add by Ruichen, to create a empty ArrayList<Request> for new user
-                    // To store their history requests
-                    final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-                    final DatabaseReference hisRef = database1.getReference("history");
-                    ArrayList<Request> history = new ArrayList<>();
-                    hisRef.child(userID).setValue(history);
 
                     final DatabaseReference usersRef = ref.child(userID);
 
