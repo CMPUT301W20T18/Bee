@@ -150,10 +150,13 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                     if (driverID == null) {
                         finishButton.setVisibility(View.VISIBLE);
                         RequestStatus.setText("Declined offer");
+                        finishButton.setText("BACK");
                         finishButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                ref.getParent().removeValue();
                                 startActivity(new Intent(WaitingForRider.this, SearchRide.class));
+
                             }
                         });
 
@@ -161,14 +164,17 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                         if(riderResponse){
                             RequestStatus.setText("Confirmed ride offer");
                             finishButton.setVisibility(View.VISIBLE);
+                            DatabaseReference reachRef = ref.child("reached");
                             finishButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    reachRef.setValue(true);
                                     Intent intent = new Intent(WaitingForRider.this, DriverPayActivity.class);
                                     intent.putExtra("Rider", passRiderName);
                                     intent.putExtra("RiderID", passRiderID);
                                     intent.putExtra("amount", Double.parseDouble(passMoneyAmount));
                                     startActivity(intent);
+
                                 }
                             });
                         }
@@ -239,15 +245,12 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReference("requests").child(passRiderID).child("request");
             DatabaseReference originLatlngRef = ref.child("originLatlng");
+//            set up the origin on the map
             originLatlngRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     String originString = dataSnapshot.getValue(String.class);
                     String[] afterSplitLoc = originString.split(",");
-//                        LatLng place1_postion = new LatLng();
-//        place1 = new MarkerOptions().position(place1_postion).title("Orientation");
-//        LatLng place2_postion = new LatLng(53.484300,-113.517250);
-//        place2 = new MarkerOptions().position(place2_postion).title("Destination");
                     double originLatitude = Double.parseDouble(afterSplitLoc[0]);
                     double originLongitude = Double.parseDouble(afterSplitLoc[1]);
                     LatLng originCoordinate = new LatLng(originLatitude,originLongitude);
@@ -260,6 +263,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
                 }
             });
+//            retreive destination coordinate from firebase
             DatabaseReference destLatlngRef = ref.child("destLatlng");
             destLatlngRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -273,7 +277,6 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
 
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference userRef = database.getReference("users").child(passRiderID).child("Name");;
                     riderFirstNameRef = database.getReference("users").child(passRiderID).child("firstName");;
                     riderFirstNameRef.addValueEventListener(new ValueEventListener() {
                         @Override
