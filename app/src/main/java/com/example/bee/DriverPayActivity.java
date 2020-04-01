@@ -136,7 +136,7 @@ public class DriverPayActivity extends AppCompatActivity implements ZXingScanner
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Request request = (Request) dataSnapshot.getValue(Request.class);
+                    Request request = (Request) dataSnapshot.child("request").getValue(Request.class);
                     addRequestToHistory(riderID, request);
                     addRequestToHistory(driverID, request);
                 }
