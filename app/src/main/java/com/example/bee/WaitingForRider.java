@@ -79,7 +79,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 //    RiderDecision riderDecision;
     Boolean riderResponse = true;
 //    ArrayList<Request> request;
-    RelativeLayout driverCard;
+    RelativeLayout riderCard;
     Boolean myLocationPermission = false;
     MarkerOptions place1;
     MarkerOptions place2;
@@ -96,7 +96,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.waiting_for_rider);
         // set up the map to the activity
-        driverCard = findViewById(R.id.rider_card);
+        riderCard = findViewById(R.id.rider_card);
 
         RequestMoneyAmount = findViewById(R.id.request_money_amount2);
         initMap();
@@ -233,7 +233,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
             }
         });
 
-        driverCard.setOnClickListener(new View.OnClickListener() {
+        riderCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(WaitingForRider.this, PopUpMap.class);
@@ -310,7 +310,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                             Toast toast = Toast.makeText(WaitingForRider.this, "You are offline", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
-                            driverCard.setEnabled(false);
+                            riderCard.setEnabled(false);
                             RequestStatus.setText("Please check internet activity");
                         }
                     }
@@ -340,7 +340,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                             Toast toast = Toast.makeText(WaitingForRider.this, "You are offline", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
-                            driverCard.setEnabled(false);
+                            riderCard.setEnabled(false);
                             RequestStatus.setText("Please check internet activity");
                         }
                     }
