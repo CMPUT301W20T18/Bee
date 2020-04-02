@@ -8,7 +8,7 @@
     tools:context=".DriverHistory">
 
     <ListView
-        android:id="@+id/hList"
+        android:id="@+id/dList"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>
