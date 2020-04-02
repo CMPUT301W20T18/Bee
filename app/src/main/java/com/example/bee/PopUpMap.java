@@ -190,7 +190,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
         String passMoneyAmount = bundle.getString("passMoneyAmount");
         passRiderID = bundle.getString("passRiderID");
         requestMoneyAmount.setText("$" + passMoneyAmount);
-//        check the passing riderID is valid or not
+//        check the passing riderID is whether exists or not
         if(passRiderID != null){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             ref = database.getReference("requests").child(passRiderID).child("request");
@@ -199,7 +199,6 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
             originLatlngRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                     String originString = dataSnapshot.getValue(String.class);
                     String[] afterSplitLoc = originString.split(",");
                     double originLatitude = Double.parseDouble(afterSplitLoc[0]);
@@ -216,9 +215,11 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
                 }
             });
             DatabaseReference destLatlngRef = ref.child("destLatlng");
+//            retrieve the database reference for destination coordinate
             destLatlngRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    set up the destination coordiante on the map displayed
                     String destStringTemp = dataSnapshot.getValue(String.class);
                     String[] afterSplitLoc1 = destStringTemp.split(",");
 
@@ -233,6 +234,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
                             String riderFirstNameString = dataSnapshot.getValue(String.class);
 //                            check the first name is valid or not
                             if(riderFirstNameString != null){
+//                                set up the rider first name and last name
                                 riderLastNameRef = database.getReference("users").child(passRiderID).child("lastName");
                                 riderLastNameRef.addValueEventListener(new ValueEventListener() {
                                     @Override
@@ -263,7 +265,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 //                             set up the destination location on the map
                     place2 = new MarkerOptions().position(destCoordinate).title("Destination");
                     drew = getPoints(place1, place2);
-
+//                  if the route cannot be generated, address can be invalid
                     if (!drew) {
                         String text = "Invalid Address";
                         Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
@@ -280,7 +282,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
 
         }
         boolean result = isNetworkAvailable();
-//        offline mode initialization
+//        offline mode initialization when the network is unavailable
         if (!result){
             Toast toast = Toast.makeText(PopUpMap.this, "You are offline", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER,0,0);
@@ -350,6 +352,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
                 .from(p1)
                 .to(p2)
                 .transportMode(TransportMode.DRIVING)
+//                retrieve the key for traverse route direction
                 .execute(new DirectionCallback() {
                     @Override
                     public void onDirectionSuccess(Direction direction) {
@@ -366,13 +369,7 @@ public class PopUpMap extends FragmentActivity implements OnMapReadyCallback{
                                             getResources().getColor(R.color.route));
                             mapPop.addPolyline(polylineOptions);
 //                            display the route as line on the map
-//                            Route route = direction.getRouteList().get(0);
-//                            Leg leg = route.getLegList().get(0);
-//                            ArrayList<LatLng> pointList = leg.getDirectionPoint();
-//                            PolylineOptions polylineOptions = DirectionConverter
-//                                    .createPolyline(PopUpMap.this, pointList, 5,
-//                                            getResources().getColor(R.color.yellow));
-//                            mapPop.addPolyline(polylineOptions);
+
                         } else {
                             String text = direction.getStatus();
                             Toast toast = Toast.makeText(PopUpMap.this, text, Toast.LENGTH_SHORT);
