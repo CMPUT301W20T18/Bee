@@ -79,7 +79,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 //    RiderDecision riderDecision;
     Boolean riderResponse = true;
 //    ArrayList<Request> request;
-    RelativeLayout driverCard;
+    RelativeLayout riderCard;
     Boolean myLocationPermission = false;
     MarkerOptions place1;
     MarkerOptions place2;
@@ -96,7 +96,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.waiting_for_rider);
         // set up the map to the activity
-        driverCard = findViewById(R.id.rider_card);
+        riderCard = findViewById(R.id.rider_card);
 
         RequestMoneyAmount = findViewById(R.id.request_money_amount2);
         initMap();
@@ -233,7 +233,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
             }
         });
 
-        driverCard.setOnClickListener(new View.OnClickListener() {
+        riderCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(WaitingForRider.this, PopUpMap.class);
@@ -250,7 +250,11 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
     }
 
     /**
-     * This initialize the map for waiting riders
+     * This initialize the bitmap
+     * @param context
+     * context to load the bitmap
+     * @param vectorResId
+     * The Id to pass the vector into the bitmap
      */
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
@@ -260,6 +264,9 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
+    /**
+     * This inititiazlize the map fragment
+     */
     private void initMap(){
         Log.d(TAG, "Initializing map");
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -303,7 +310,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                             Toast toast = Toast.makeText(WaitingForRider.this, "You are offline", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
-                            driverCard.setEnabled(false);
+                            riderCard.setEnabled(false);
                             RequestStatus.setText("Please check internet activity");
                         }
                     }
@@ -333,7 +340,7 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
                             Toast toast = Toast.makeText(WaitingForRider.this, "You are offline", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
-                            driverCard.setEnabled(false);
+                            riderCard.setEnabled(false);
                             RequestStatus.setText("Please check internet activity");
                         }
                     }
@@ -413,34 +420,9 @@ public class WaitingForRider extends FragmentActivity implements OnMapReadyCallb
 
 
         }
-
-
-
-//
-//        map = googleMap;
-////        LatLng place1_position = new LatLng(53.523220, -113.526321);
-////        LatLng place2_position = new LatLng(53.484300, -113.517250);
-//        getDeviceLocation();
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-//                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            return;
-//        }
-//        map.setMyLocationEnabled(true);
-////        initialize the starting position and destination on the map displayed
-//        place1 = new MarkerOptions().position(place1_position).title("Starting position");
-//
-//        place2 = new MarkerOptions().position(place2_position).title("Destination");
-//
-//        boolean drew = getPoints(place1, place2);
-////      display message of invalid address
-//        if (!drew) {
-//            String text = "Invalid Address";
-//            Toast toast = Toast.makeText(WaitingForRider.this, text, Toast.LENGTH_SHORT);
-//            toast.setGravity(Gravity.CENTER, 0, 0);
-//            toast.show();
-//
-//        }
+    /**
+     * This check the network is connected or not
+     */
 
     private boolean isNetworkAvailable() {
 
