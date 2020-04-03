@@ -65,6 +65,9 @@ import java.util.Objects;
 import static android.app.PendingIntent.getActivity;
 import static android.content.ContentValues.TAG;
 
+
+
+//partial citation can be found in readme
 /**
  * Pop up the map windows to display locations and route
  */
