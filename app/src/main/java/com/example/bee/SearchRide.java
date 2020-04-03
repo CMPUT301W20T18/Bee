@@ -38,7 +38,11 @@ import java.util.Comparator;
 /** This class is is used to show requests that get from firebase
  * into a list view, and allows user to click one of them to see detailed info
  */
-
+/*
+*References List:
+*https://firebase.google.com/docs/database/admin/retrieve-data
+*https://stackoverflow.com/questions/38965731/how-to-get-all-childs-data-in-firebase-database
+ */
 public class SearchRide extends AppCompatActivity {
 
 

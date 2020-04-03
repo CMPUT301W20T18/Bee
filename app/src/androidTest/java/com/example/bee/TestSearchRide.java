@@ -2,6 +2,9 @@ package com.example.bee;
 
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -9,10 +12,13 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.robotium.solo.Solo;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class TestSearchRide {
@@ -39,5 +45,16 @@ public class TestSearchRide {
     }
 
     @Test
-    public 
+    public void checkRequestList(){
+        solo.enterText((EditText)solo.getView(R.id.searchNearBy),"university of alberta");
+        solo.clickOnImage(1);
+        
+        solo.waitForDialogToClose(5000);
+    }
+
+    @After
+    public void tearDown() throws Exception{
+        solo.finishOpenedActivities();
+    }
+
 }
