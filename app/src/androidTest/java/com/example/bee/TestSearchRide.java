@@ -62,7 +62,8 @@ public class TestSearchRide {
     }
 
     /**
-     * 
+     * check if nothing entered to search
+     * "Please Enter a location" would be found as expected
      */
     @Test
     public void checkEmptySearch(){
@@ -71,6 +72,10 @@ public class TestSearchRide {
         assertTrue(solo.searchText("Please Enter a location"));
     }
 
+    /**
+     * Test whether back button works
+     * if turns to DriverMain activity, the function works as expected
+     */
     @Test
     public void checkBackButton(){
         solo.clickOnImage(0);
