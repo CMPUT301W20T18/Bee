@@ -108,6 +108,11 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     }
 
+    /**
+     * This is a method to get information of driver using id, show the driver on the card above the map
+     *
+     */
+
     private void showDriver(String dr){
         DatabaseReference ref = db.getReference("users");
         ref.child(dr)
@@ -137,6 +142,10 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     }
 
+    /**
+     * This is a method to get the information of driver ID from the request
+     */
+
     private void getDriver(){
         String userID = user.getUid();
         DatabaseReference ref = db.getReference("requests");
@@ -161,6 +170,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                     }
                 });
     }
+    /**
+     * This method is to save the driver's information from online
+     */
 
     private void saveDriver(String name,String phone,String mail,String up,String down){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
@@ -172,6 +184,10 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         editor.putString("down",down);
         editor.apply();
     }
+
+    /**
+     * This method is to save the driver's information from online
+     */
 
     private void loadDriver(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
@@ -251,12 +267,20 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 //     * second place
 //     */
 
+    /**
+     * This is a method to draw the route on the map
+     */
     private void drawRoute(ArrayList<LatLng> pointList) {
         PolylineOptions polylineOptions = DirectionConverter
                 .createPolyline(RiderAfterAcceptRequest.this, pointList, 5,
                         getResources().getColor(R.color.route));
         request_accepted_map.addPolyline(polylineOptions);
     }
+
+    /**
+     * This is a method to get points to draw the route from the request
+     * and transfer them to Latlng type arraylist
+     */
 
     private void drawPointsList(){
         String userID = user.getUid();
@@ -292,6 +316,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                 });
     }
 
+    /**
+     * This is a method to cancel the request
+     */
     private void showCancelDialog(){
         final String userID = user.getUid();
 
@@ -311,7 +338,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                 dialog.dismiss();
                 DatabaseReference ref = db.getReference("requests").child(userID).child("request").child("cancel");
                 ref.setValue(true);
-                removeRequest();
+                //removeRequest();
                 startActivity(new Intent(RiderAfterAcceptRequest.this, EnterAddressMap.class));
             }
         });
@@ -324,6 +351,10 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
 
     }
+
+    /**
+     * This is a method to confirm the rider finish th request
+     */
 
     private void showConfirmDialog(){
         Context mcontext = RiderAfterAcceptRequest.this;
@@ -382,6 +413,10 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     }
 
+
+    /**
+     * This is a method to check whether the internet is available
+     */
     //https://stackoverflow.com/questions/4238921/detect-whether-there-is-an-internet-connection-available-on-android
     private boolean isNetworkAvailable() {
 
@@ -391,6 +426,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    /**
+     * This is a method to get the information of origin and destination and draw them on the map
+     */
     private void setOriDest(){
         String userID = user.getUid();
         //Context mcontext = RiderAfterAcceptRequest.this;
@@ -435,6 +473,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
                 });
 
     }
+    /**
+     * This is a method to draw origin and destination on the map
+     */
 
     private void addSign(String ori_list, String dest_list,String ori_name, String dest_name){
         Context mcontext = RiderAfterAcceptRequest.this;
@@ -464,6 +505,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         }
     }
 
+    /**
+     * This is a method to save origin and destination of the request
+     */
     private void saveOriDest(String ori_list, String dest_list, String ori_name,String dest_name){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -475,7 +519,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     }
 
-
+    /**
+     * This is a method to load origin and destination of the request when it is offline
+     */
     private void loadOriDest(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         String ori_list = sharedPreferences.getString("ori_list", "");
@@ -491,7 +537,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
     }
 
 
-
+    /**
+     * This is a method to save the route with ArrayList<Latlng>
+     */
     private void saveRoute(ArrayList<LatLng> points){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -501,7 +549,9 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         editor.apply();
         //Toast.makeText(RiderAfterAcceptRequest.this, "save route", Toast.LENGTH_SHORT).show();
     }
-
+    /**
+     * This is a method to load the route when it is offline
+     */
     private void loadRoute(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         Gson gson = new Gson();
@@ -517,10 +567,10 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
 
     }
 
-    private void removeRequest(){
-        String userID = user.getUid();
-        DatabaseReference ref = db.getReference("requests").child(userID).child("request");
-        ref.getParent().removeValue();
-
-    }
+//    private void removeRequest(){
+//        String userID = user.getUid();
+//        DatabaseReference ref = db.getReference("requests").child(userID).child("request");
+//        ref.getParent().removeValue();
+//
+//    }
 }
