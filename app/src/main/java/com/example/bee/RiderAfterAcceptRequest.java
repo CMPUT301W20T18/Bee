@@ -444,7 +444,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         ori = new MarkerOptions().position(new LatLng(ori_lat,ori_lng)).title(ori_name);
         request_accepted_map.addMarker(ori
                 .position(ori.getPosition())
-                .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_green_placeholder)));
+                .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_red_placeholder)));
 
         String[]parts = dest_list.split(",");
         double dest_lat = Double.parseDouble(parts[0]);
@@ -452,7 +452,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         dest = new MarkerOptions().position(new LatLng(dest_lat,dest_lng)).title(dest_name);
         request_accepted_map.addMarker(dest
                 .position(dest.getPosition())
-                .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_red_placeholder)));
+                .icon(bitmapDescriptorFromVector(mcontext, R.drawable.ic_green_placeholder)));
         if(dest != null && ori != null){
             LatLngBounds latLngBounds = new LatLngBounds.Builder()
                     .include(ori.getPosition())
@@ -499,7 +499,7 @@ public class RiderAfterAcceptRequest extends FragmentActivity implements OnMapRe
         String json = gson.toJson(points);
         editor.putString("route",json);
         editor.apply();
-        Toast.makeText(RiderAfterAcceptRequest.this, "save route", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(RiderAfterAcceptRequest.this, "save route", Toast.LENGTH_SHORT).show();
     }
 
     private void loadRoute(){
