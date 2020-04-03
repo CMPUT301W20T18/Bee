@@ -4,6 +4,11 @@ package com.example.bee;
  * This java file is an Object of offer request
  */
 
+/*
+* References List
+* https://stackoverflow.com/questions/12775772/how-do-i-correctly-implement-comparable-for-list-in-this-instance
+ */
+
 public class Offer implements Comparable<Offer> {
 //    setup local variables and store them later
     private String startingPoint;
