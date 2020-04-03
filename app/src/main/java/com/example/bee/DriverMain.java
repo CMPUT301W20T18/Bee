@@ -41,6 +41,13 @@ import com.google.firebase.auth.FirebaseUser;
 // issue so far is current location is set to googleplex
 // instead of real current location
 
+/*
+    References:
+    https://developers.google.com/maps/documentation/android-sdk/start
+    https://www.youtube.com/watch?v=PVlN_dZhAfw
+    https://www.youtube.com/watch?v=boyyLhXAZAQ
+ */
+
 
 public class DriverMain extends FragmentActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
