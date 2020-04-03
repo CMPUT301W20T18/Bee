@@ -14,11 +14,13 @@ import androidx.test.rule.ActivityTestRule;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
@@ -39,23 +41,34 @@ public class TestSearchRide {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
     }
 
+    /**
+     * start the activity and check if it's the expected one
+     */
     @Test
     public void initialize() throws Exception{
         Activity activity = rule.getActivity();
         solo.assertCurrentActivity("Wrong Activity", SearchRide.class);
     }
 
+    /**
+     * check searching functionality
+     * if it works, Requests sorted would be found
+     */
     @Test
     public void checkRequestList(){
         solo.enterText((EditText)solo.getView(R.id.searchNearBy),"university of alberta");
         solo.clickOnImage(1);
-        solo.searchText("Requests sorted");
+        assertTrue(solo.searchText("Requests sorted"));
     }
+
+    /**
+     * 
+     */
     @Test
     public void checkEmptySearch(){
         solo.clearEditText((EditText) solo.getView(R.id.searchNearBy));
         solo.clickOnImage(1);
-        solo.searchText("Please Enter a location");
+        assertTrue(solo.searchText("Please Enter a location"));
     }
 
     @Test
