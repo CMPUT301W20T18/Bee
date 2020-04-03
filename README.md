@@ -44,5 +44,8 @@ answered by  https://stackoverflow.com/questions/4384890/how-to-disable-an-andro
 posted by Makoto https://stackoverflow.com/users/3867750/makoto
 https://stackoverflow.com/questions/27261670/convert-string-to-latlng/33875637
 
-Google Developers: Manage Users in Firebase
+Google Developers: 
+Manage Users in Firebase
 https://firebase.google.com/docs/auth/web/manage-users
+Read and Write Data on Android
+https://firebase.google.com/docs/database/android/read-and-write
