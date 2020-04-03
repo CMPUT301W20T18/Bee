@@ -39,6 +39,13 @@ import java.util.Comparator;
  * into a list view, and allows user to click one of them to see detailed info
  */
 
+/*
+*References List:
+* https://firebase.google.com/docs/database/admin/retrieve-data
+* https://stackoverflow.com/questions/38965731/how-to-get-all-childs-data-in-firebase-database
+* https://www.geeksforgeeks.org/collections-sort-java-examples/
+* https://developers.google.com/maps/documentation/geocoding/start
+ */
 public class SearchRide extends AppCompatActivity {
 
 
@@ -156,12 +163,15 @@ public class SearchRide extends AppCompatActivity {
             }
         });
 
+
+        // Set up Searching Button with exceptions
         EditText searchText = findViewById(R.id.searchNearBy);
         searchButton = findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchAddress = searchText.getText().toString();
+                // check if editText is empty or not    (exception handling)
                 if(! searchAddress.isEmpty()){
                      searchLatLng  = getLatLng(searchAddress);
                     if(searchLatLng!=null){
@@ -171,6 +181,7 @@ public class SearchRide extends AppCompatActivity {
                         toast.setGravity(Gravity.CENTER,0,0);
                         toast.show();
                     }
+                    // case if the given editText location cannot be found with latitude and longitude
                     else{
                         String text = "Searching Place Not Found";
                         Toast toast = Toast.makeText(SearchRide.this,text,Toast.LENGTH_SHORT);
