@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -48,8 +49,20 @@ public class TestSearchRide {
     public void checkRequestList(){
         solo.enterText((EditText)solo.getView(R.id.searchNearBy),"university of alberta");
         solo.clickOnImage(1);
-        
-        solo.waitForDialogToClose(5000);
+        solo.searchText("Requests sorted");
+    }
+    @Test
+    public void checkEmptySearch(){
+        solo.clearEditText((EditText) solo.getView(R.id.searchNearBy));
+        solo.clickOnImage(1);
+        solo.searchText("Please Enter a location");
+    }
+
+    @Test
+    public void checkBackButton(){
+        solo.clickOnImage(0);
+        solo.assertCurrentActivity("Wrong Activity", DriverMain.class);
+
     }
 
     @After
